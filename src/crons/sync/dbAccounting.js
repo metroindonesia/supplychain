@@ -1,0 +1,73 @@
+import dotenv from 'dotenv';
+import pgp from 'pg-promise';
+
+
+dotenv.config();
+
+// const initOptions = {};
+const initOptions = {
+	async connect(db, dc, useCount) {
+		await db.client.query("SET TIMEZONE = 'Asia/Jakarta'");
+	}
+};
+
+const pgpInstance = pgp(initOptions); // <-- Panggil pgp() hanya satu kali di sini
+
+
+const configDb = {
+	port: process.env.ACT_DB_PORT,
+	host: process.env.ACT_DB_HOST,
+	database: process.env.ACT_DB_NAME,
+	user: process.env.ACT_DB_USER,
+	password: process.env.ACT_DB_PASS,
+}
+
+
+pgpInstance.pg.types.setTypeParser(1082, (stringValue) => stringValue);
+
+const db = pgpInstance(configDb);
+
+
+db.connect()
+	.then(obj => {
+		console.log('Connected to Accounting Database!');
+		obj.done(); // Klien dikembalikan ke pool
+	})
+	.catch(error => {
+		console.error("\n\x1b[31mError!\x1b[0m\ncannot connect to Database:", error.message || error, "\n");
+		process.exit(1);
+	});
+
+
+export default db
+export let dblog = db
+
+
+export function setDbLog() {
+	const configDbLog = {
+		port: process.env.LOGGER_DB_PORT,
+		host: process.env.LOGGER_DB_HOST,
+		database: process.env.LOGGER_DB_NAME,
+		user: process.env.LOGGER_DB_USER,
+		password: process.env.LOGGER_DB_PASS,
+	}
+
+	dblog = pgpInstance(configDbLog);
+	if (configDbLog.host !== undefined) {
+		dblog.connect()
+			.then(obj => {
+				console.log('Connected to Logger Database!');
+				obj.done(); // Klien dikembalikan ke pool
+			})
+			.catch(error => {
+				console.error('\n\x1b[31mError!\x1b[0m cannot\nconnect to Logger Database:', error.message || error, "\n");
+				process.exit(1);
+			});
+	}
+}
+
+
+
+
+
+
