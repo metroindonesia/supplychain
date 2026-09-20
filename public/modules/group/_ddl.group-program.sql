@@ -116,6 +116,26 @@ alter table core."groupprogram"
 comment on column core."groupprogram"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
+-- =============================================
+-- FIELD: _timestamp timestamp with time zone
+-- =============================================
+-- ADD _timestamp
+alter table core."groupprogram" add _timestamp timestamp with time zone not null default now();
+comment on column core."groupprogram"._timestamp is 'data timestamp';
+
+-- MODIFY _timestamp
+alter table core."groupprogram"
+	alter column _timestamp type timestamp with time zone,
+	ALTER COLUMN _timestamp SET DEFAULT now(),
+	ALTER COLUMN _timestamp SET NOT NULL;
+comment on column core."groupprogram"._timestamp is 'data timestamp';
+
+
+-- =============================================
+-- INDEX
+-- =============================================
+DROP INDEX IF EXISTS core.idx$core$groupprogram$_timestamp;
+CREATE INDEX idx$core$groupprogram$_timestamp ON core.groupprogram (_timestamp);
 
 
 -- =============================================
@@ -123,7 +143,6 @@ comment on column core."groupprogram"._modifydate is 'waktu terakhir record dimo
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE core."groupprogram" DROP CONSTRAINT fk$core$groupprogram$program_id;
-ALTER TABLE core."groupprogram" DROP CONSTRAINT fk$core$groupprogram$group_id;
 
 
 -- Add Foreign Key Constraint  
@@ -136,17 +155,6 @@ ALTER TABLE core."groupprogram"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS core.idx_fk$core$groupprogram$program_id;
 CREATE INDEX idx_fk$core$groupprogram$program_id ON core."groupprogram"(program_id);	
-
-
-ALTER TABLE core."groupprogram"
-	ADD CONSTRAINT fk$core$groupprogram$group_id
-	FOREIGN KEY (group_id)
-	REFERENCES core."group"(group_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS core.idx_fk$core$groupprogram$group_id;
-CREATE INDEX idx_fk$core$groupprogram$group_id ON core."groupprogram"(group_id);	
 
 	
 

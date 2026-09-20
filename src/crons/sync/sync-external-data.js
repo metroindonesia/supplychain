@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import uniqid from '@agung_dhewe/webapps/src/uniqid.js'
 import dbTarget from '@agung_dhewe/webapps/src/db.js'
-import dbSource from './dbAccounting.js'
+import dbAccounting from './dbAccounting.js'
 
 
 import syncUser from './user.sync.js'
@@ -26,18 +26,18 @@ try {
 	// console.log(batch_id)
 
 	// sync data mandatory
-	await syncUser(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncAuth(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncStructhrk(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncPartnertype(dbSource, dbTarget, batch_id, { all: isAll })
+	await syncUser(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncAuth(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncStructhrk(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncPartnertype(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncStruct(dbAccounting, dbTarget, batch_id, { all: isAll })
 
-	await syncPartner(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncSite(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncStruct(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncUnit(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncCurr(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncCurrrate(dbSource, dbTarget, batch_id, { all: isAll })
-	await syncItemclass(dbSource, dbTarget, batch_id, { all: isAll })
+	await syncPartner(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncSite(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncUnit(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncCurr(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncCurrrate(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncItemclass(dbAccounting, dbTarget, batch_id, { all: isAll })
 
 
 	console.log('\n')

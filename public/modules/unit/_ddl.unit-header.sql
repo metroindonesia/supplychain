@@ -57,6 +57,21 @@ comment on column public."unit".unit_descr is '';
 
 
 -- =============================================
+-- FIELD: struct_id int
+-- =============================================
+-- ADD struct_id
+alter table public."unit" add struct_id int  ;
+comment on column public."unit".struct_id is '';
+
+-- MODIFY struct_id
+alter table public."unit"
+	alter column struct_id type int,
+	ALTER COLUMN struct_id DROP DEFAULT,
+	ALTER COLUMN struct_id DROP NOT NULL;
+comment on column public."unit".struct_id is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
@@ -116,8 +131,47 @@ alter table public."unit"
 comment on column public."unit"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
+-- =============================================
+-- FIELD: _timestamp timestamp with time zone
+-- =============================================
+-- ADD _timestamp
+alter table public."unit" add _timestamp timestamp with time zone not null default now();
+comment on column public."unit"._timestamp is 'data timestamp';
+
+-- MODIFY _timestamp
+alter table public."unit"
+	alter column _timestamp type timestamp with time zone,
+	ALTER COLUMN _timestamp SET DEFAULT now(),
+	ALTER COLUMN _timestamp SET NOT NULL;
+comment on column public."unit"._timestamp is 'data timestamp';
 
 
+-- =============================================
+-- INDEX
+-- =============================================
+DROP INDEX IF EXISTS public.idx$public$unit$_timestamp;
+CREATE INDEX idx$public$unit$_timestamp ON public.unit (_timestamp);
+
+
+-- =============================================
+-- FOREIGN KEY CONSTRAINT
+-- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."unit" DROP CONSTRAINT fk$public$unit$struct_id;
+
+
+-- Add Foreign Key Constraint  
+ALTER TABLE public."unit"
+	ADD CONSTRAINT fk$public$unit$struct_id
+	FOREIGN KEY (struct_id)
+	REFERENCES public."struct"(struct_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$unit$struct_id;
+CREATE INDEX idx_fk$public$unit$struct_id ON public."unit"(struct_id);	
+
+	
 
 
 -- =============================================

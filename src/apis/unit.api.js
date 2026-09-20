@@ -16,7 +16,8 @@ import * as Extender from './extenders/unit.apiext.js'
 
 const moduleName = 'unit'
 const headerSectionName = 'header'
-const headerTableName = 'public.unit' 	
+const headerTableName = 'public.unit' 
+const headerPrimaryKey = 'unit_id' 	
 
 // api: account
 export default class extends Api {
@@ -177,6 +178,11 @@ async function unit_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: struct_name dari field struct_name pada table public.struct dimana (public.struct.struct_id = public.unit.struct_id)
+			{
+				const { struct_name } = await sqlUtil.lookupdb(db, 'public.struct', 'struct_id', row.struct_id)
+				row.struct_name = struct_name
+			}
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -226,6 +232,11 @@ async function unit_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: struct_name dari field struct_name pada table public.struct dimana (public.struct.struct_id = public.unit.struct_id)
+		{
+			const { struct_name } = await sqlUtil.lookupdb(db, 'public.struct', 'struct_id', data.struct_id)
+			data.struct_name = struct_name
+		}
 		
 
 		// lookup data createby
@@ -266,9 +277,11 @@ async function unit_headerCreate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
+		const data_timestamp = (new Date()).toISOString()
 
 		data._createby = user_id
-		data._createdate = (new Date()).toISOString()
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -335,9 +348,12 @@ async function unit_headerUpdate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
+		const data_timestamp = (new Date()).toISOString()
 
 		data._modifyby = user_id
-		data._modifydate = (new Date()).toISOString()
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)

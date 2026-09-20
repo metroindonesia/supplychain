@@ -46,7 +46,7 @@ async function processBatch(dbSource, dbTarget, batch) {
 async function copyUnit(dbTarget, data) {
 	try {
 		const sql = createSqlUpsert(tableUnit, [pkUnit], [
-			'unit_id', 'unit_isdisabled', 'unit_name', 'unit_descr',
+			'unit_id', 'unit_isdisabled', 'unit_name', 'unit_descr', 'struct_id',
 			'_createby', '_createdate', '_modifyby', '_modifydate', '_timestamp'
 		])
 		await dbTarget.none(sql, data);

@@ -42,21 +42,6 @@ comment on column core."setting".setting_descr is '';
 
 
 -- =============================================
--- FIELD: isdisabled boolean
--- =============================================
--- ADD isdisabled
-alter table core."setting" add isdisabled boolean not null default false;
-comment on column core."setting".isdisabled is '';
-
--- MODIFY isdisabled
-alter table core."setting"
-	alter column isdisabled type boolean,
-	ALTER COLUMN isdisabled SET DEFAULT false,
-	ALTER COLUMN isdisabled SET NOT NULL;
-comment on column core."setting".isdisabled is '';
-
-
--- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
@@ -131,6 +116,11 @@ alter table core."setting"
 comment on column core."setting"._timestamp is 'data timestamp';
 
 
+-- =============================================
+-- INDEX
+-- =============================================
+DROP INDEX IF EXISTS core.idx$core$setting$_timestamp;
+CREATE INDEX idx$core$setting$_timestamp ON core.setting (_timestamp);
 
 
 

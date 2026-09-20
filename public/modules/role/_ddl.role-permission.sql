@@ -101,6 +101,26 @@ alter table core."rolepermission"
 comment on column core."rolepermission"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
+-- =============================================
+-- FIELD: _timestamp timestamp with time zone
+-- =============================================
+-- ADD _timestamp
+alter table core."rolepermission" add _timestamp timestamp with time zone not null default now();
+comment on column core."rolepermission"._timestamp is 'data timestamp';
+
+-- MODIFY _timestamp
+alter table core."rolepermission"
+	alter column _timestamp type timestamp with time zone,
+	ALTER COLUMN _timestamp SET DEFAULT now(),
+	ALTER COLUMN _timestamp SET NOT NULL;
+comment on column core."rolepermission"._timestamp is 'data timestamp';
+
+
+-- =============================================
+-- INDEX
+-- =============================================
+DROP INDEX IF EXISTS core.idx$core$rolepermission$_timestamp;
+CREATE INDEX idx$core$rolepermission$_timestamp ON core.rolepermission (_timestamp);
 
 
 -- =============================================
@@ -108,7 +128,6 @@ comment on column core."rolepermission"._modifydate is 'waktu terakhir record di
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE core."rolepermission" DROP CONSTRAINT fk$core$rolepermission$permission_id;
-ALTER TABLE core."rolepermission" DROP CONSTRAINT fk$core$rolepermission$role_id;
 
 
 -- Add Foreign Key Constraint  
@@ -121,17 +140,6 @@ ALTER TABLE core."rolepermission"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS core.idx_fk$core$rolepermission$permission_id;
 CREATE INDEX idx_fk$core$rolepermission$permission_id ON core."rolepermission"(permission_id);	
-
-
-ALTER TABLE core."rolepermission"
-	ADD CONSTRAINT fk$core$rolepermission$role_id
-	FOREIGN KEY (role_id)
-	REFERENCES core."role"(role_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS core.idx_fk$core$rolepermission$role_id;
-CREATE INDEX idx_fk$core$rolepermission$role_id ON core."rolepermission"(role_id);	
 
 	
 
