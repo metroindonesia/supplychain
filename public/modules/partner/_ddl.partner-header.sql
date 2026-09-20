@@ -236,31 +236,15 @@ alter table public."partner"
 comment on column public."partner"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
--- =============================================
--- FIELD: _timestamp timestamp with time zone
--- =============================================
--- ADD _timestamp
-alter table public."partner" add _timestamp timestamp with time zone not null default now();
-comment on column public."partner"._timestamp is 'data timestamp';
-
--- MODIFY _timestamp
-alter table public."partner"
-	alter column _timestamp type timestamp with time zone,
-	ALTER COLUMN _timestamp SET DEFAULT now(),
-	ALTER COLUMN _timestamp SET NOT NULL;
-comment on column public."partner"._timestamp is 'data timestamp';
-
-
--- =============================================
--- INDEX
--- =============================================
-DROP INDEX IF EXISTS public.idx$public$partner$_timestamp;
-CREATE INDEX idx$public$partner$_timestamp ON public.partner (_timestamp);
 
 
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."partner" DROP CONSTRAINT fk$public$partner$partnertype_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE public."partner"
 	ADD CONSTRAINT fk$public$partner$partnertype_id
@@ -278,6 +262,11 @@ CREATE INDEX idx_fk$public$partner$partnertype_id ON public."partner"(partnertyp
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."partner"
+	drop constraint uq$public$partner$partner_name;
+	
+
 -- Add unique index 
 alter table  public."partner"
 	add constraint uq$public$partner$partner_name unique (partner_name); 

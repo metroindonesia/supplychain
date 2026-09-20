@@ -116,26 +116,6 @@ alter table public."curr"
 comment on column public."curr"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
--- =============================================
--- FIELD: _timestamp timestamp with time zone
--- =============================================
--- ADD _timestamp
-alter table public."curr" add _timestamp timestamp with time zone not null default now();
-comment on column public."curr"._timestamp is 'data timestamp';
-
--- MODIFY _timestamp
-alter table public."curr"
-	alter column _timestamp type timestamp with time zone,
-	ALTER COLUMN _timestamp SET DEFAULT now(),
-	ALTER COLUMN _timestamp SET NOT NULL;
-comment on column public."curr"._timestamp is 'data timestamp';
-
-
--- =============================================
--- INDEX
--- =============================================
-DROP INDEX IF EXISTS public.idx$public$curr$_timestamp;
-CREATE INDEX idx$public$curr$_timestamp ON public.curr (_timestamp);
 
 
 
@@ -143,6 +123,11 @@ CREATE INDEX idx$public$curr$_timestamp ON public.curr (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."curr"
+	drop constraint uq$public$curr$curr_name;
+	
+
 -- Add unique index 
 alter table  public."curr"
 	add constraint uq$public$curr$curr_name unique (curr_name); 

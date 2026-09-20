@@ -15,8 +15,7 @@ import * as Extender from './extenders/partnertype.apiext.js'
 
 const moduleName = 'partnertype'
 const headerSectionName = 'header'
-const headerTableName = 'public.partnertype' 
-const headerPrimaryKey = 'partnertype_id' 	
+const headerTableName = 'public.partnertype' 	
 
 // api: account
 export default class extends Api {
@@ -266,11 +265,9 @@ async function partnertype_headerCreate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._createby = user_id
-		data._createdate = data_timestamp
-		data._timestamp = data_timestamp
+		data._createdate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -321,12 +318,9 @@ async function partnertype_headerUpdate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._modifyby = user_id
-		data._modifydate = data_timestamp
-		data._timestamp = data_timestamp
-
+		data._modifydate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)

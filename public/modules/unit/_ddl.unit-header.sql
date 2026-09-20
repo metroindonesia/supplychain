@@ -116,26 +116,6 @@ alter table public."unit"
 comment on column public."unit"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
--- =============================================
--- FIELD: _timestamp timestamp with time zone
--- =============================================
--- ADD _timestamp
-alter table public."unit" add _timestamp timestamp with time zone not null default now();
-comment on column public."unit"._timestamp is 'data timestamp';
-
--- MODIFY _timestamp
-alter table public."unit"
-	alter column _timestamp type timestamp with time zone,
-	ALTER COLUMN _timestamp SET DEFAULT now(),
-	ALTER COLUMN _timestamp SET NOT NULL;
-comment on column public."unit"._timestamp is 'data timestamp';
-
-
--- =============================================
--- INDEX
--- =============================================
-DROP INDEX IF EXISTS public.idx$public$unit$_timestamp;
-CREATE INDEX idx$public$unit$_timestamp ON public.unit (_timestamp);
 
 
 
@@ -143,6 +123,11 @@ CREATE INDEX idx$public$unit$_timestamp ON public.unit (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."unit"
+	drop constraint uq$public$unit$unit_name;
+	
+
 -- Add unique index 
 alter table  public."unit"
 	add constraint uq$public$unit$unit_name unique (unit_name); 

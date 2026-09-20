@@ -101,26 +101,6 @@ alter table public."structhrk"
 comment on column public."structhrk"._modifydate is 'waktu terakhir record dimodifikasi';
 
 
--- =============================================
--- FIELD: _timestamp timestamp with time zone
--- =============================================
--- ADD _timestamp
-alter table public."structhrk" add _timestamp timestamp with time zone not null default now();
-comment on column public."structhrk"._timestamp is 'data timestamp';
-
--- MODIFY _timestamp
-alter table public."structhrk"
-	alter column _timestamp type timestamp with time zone,
-	ALTER COLUMN _timestamp SET DEFAULT now(),
-	ALTER COLUMN _timestamp SET NOT NULL;
-comment on column public."structhrk"._timestamp is 'data timestamp';
-
-
--- =============================================
--- INDEX
--- =============================================
-DROP INDEX IF EXISTS public.idx$public$structhrk$_timestamp;
-CREATE INDEX idx$public$structhrk$_timestamp ON public.structhrk (_timestamp);
 
 
 
@@ -128,6 +108,11 @@ CREATE INDEX idx$public$structhrk$_timestamp ON public.structhrk (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."structhrk"
+	drop constraint uq$public$structhrk$structhrk_id;
+	
+
 -- Add unique index 
 alter table  public."structhrk"
 	add constraint uq$public$structhrk$structhrk_id unique (structhrk_id); 

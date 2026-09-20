@@ -15,8 +15,7 @@ import * as Extender from './extenders/auth.apiext.js'
 
 const moduleName = 'auth'
 const headerSectionName = 'header'
-const headerTableName = 'core.auth' 
-const headerPrimaryKey = 'auth_id' 	
+const headerTableName = 'core.auth' 	
 
 // api: account
 export default class extends Api {
@@ -286,11 +285,9 @@ async function auth_headerCreate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._createby = user_id
-		data._createdate = data_timestamp
-		data._timestamp = data_timestamp
+		data._createdate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -341,12 +338,9 @@ async function auth_headerUpdate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._modifyby = user_id
-		data._modifydate = data_timestamp
-		data._timestamp = data_timestamp
-
+		data._modifydate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)

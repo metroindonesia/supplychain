@@ -17,7 +17,6 @@ import * as Extender from './extenders/curr.apiext.js'
 const moduleName = 'curr'
 const headerSectionName = 'header'
 const headerTableName = 'public.curr' 
-const headerPrimaryKey = 'curr_id' 
 const rateTableName = 'public.currrate'  	
 
 // api: account
@@ -276,11 +275,9 @@ async function curr_headerCreate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._createby = user_id
-		data._createdate = data_timestamp
-		data._timestamp = data_timestamp
+		data._createdate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -331,12 +328,9 @@ async function curr_headerUpdate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._modifyby = user_id
-		data._modifydate = data_timestamp
-		data._timestamp = data_timestamp
-
+		data._modifydate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -607,11 +601,9 @@ async function curr_rateCreate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._createby = user_id
-		data._createdate = data_timestamp
-		data._timestamp = data_timestamp
+		data._createdate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -645,14 +637,6 @@ async function curr_rateCreate(self, body) {
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
 			const ret = await cmd.execute(data)
 			
-
-			// update timestamp pada header
-			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
-				_timestamp: data_timestamp,
-				pk: data.curr_id
-			})
-
-
 			const logMetadata = {}
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
@@ -685,18 +669,12 @@ async function curr_rateUpdate(self, body) {
 		// parse uploaded data
 		const files = Api.parseUploadData(data, req.files)
 
-		const data_timestamp = (new Date()).toISOString()
 
 		data._modifyby = user_id
-		data._modifydate = data_timestamp
-		data._timestamp = data_timestamp
+		data._modifydate = (new Date()).toISOString()
 
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
-
-			const dataToUpdate = {currrate_id: data.currrate_id}
-			const sql = `select * from ${rateTableName} where currrate_id=\${currrate_id}`
-			const rowrate = await tx.oneOrNone(sql, dataToUpdate)
 
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -708,13 +686,6 @@ async function curr_rateUpdate(self, body) {
 			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['currrate_id'])
 			const ret = await cmd.execute(data)
 			
-
-			// update timestamp pada header
-			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
-				_timestamp: data_timestamp,
-				pk: rowrate.curr_id
-			})
-
 			const logMetadata = {}
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
@@ -744,8 +715,6 @@ async function curr_rateDelete(self, body) {
 
 	try {
 
-		const data_timestamp = (new Date()).toISOString()
-
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
@@ -764,13 +733,6 @@ async function curr_rateDelete(self, body) {
 			const param = {currrate_id: rowrate.currrate_id}
 			const cmd = sqlUtil.createDeleteCommand(rateTableName, ['currrate_id'])
 			const deletedRow = await cmd.execute(param)
-
-
-			// update timestamp pada header
-			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
-				_timestamp: data_timestamp,
-				pk: rowrate.curr_id
-			})
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 			if (typeof Extender.rateDeleted === 'function') {
@@ -801,9 +763,6 @@ async function curr_rateDeleteRows(self, body) {
 
 	try {
 
-
-		const data_timestamp = (new Date()).toISOString()
-
 		let curr_id
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
@@ -827,12 +786,6 @@ async function curr_rateDeleteRows(self, body) {
 				const cmd = sqlUtil.createDeleteCommand(rateTableName, ['currrate_id'])
 				const deletedRow = await cmd.execute(param)
 
-				// update timestamp pada header
-				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
-					_timestamp: data_timestamp,
-					pk: rowrate.curr_id
-				})
-				
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 				if (typeof Extender.rateDeleted === 'function') {
 					// export async function rateDeleted(self, tx, deletedRow, logMetadata) {}
