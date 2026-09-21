@@ -27,11 +27,12 @@ CREATE TABLE IF NOT EXISTS "core"."apps" (
   "apps_url" TEXT,
   "apps_descr" TEXT,
   "apps_isdisabled" BOOLEAN DEFAULT false NOT NULL,
+  "apps_directory" TEXT,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "apps_directory" TEXT,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,
   CONSTRAINT "apps_pk" PRIMARY KEY ("apps_id"),
   CONSTRAINT "uq$core$apps$apps_name" UNIQUE ("apps_name")
 );
@@ -51,6 +52,8 @@ ALTER TABLE "core"."apps"
   ADD COLUMN IF NOT EXISTS "apps_descr" TEXT;
 ALTER TABLE "core"."apps"
   ADD COLUMN IF NOT EXISTS "apps_isdisabled" BOOLEAN DEFAULT false NOT NULL;
+ALTER TABLE "core"."apps"
+  ADD COLUMN IF NOT EXISTS "apps_directory" TEXT;
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."apps"
@@ -64,7 +67,7 @@ ALTER TABLE "core"."apps"
 ALTER TABLE "core"."apps"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."apps"
-  ADD COLUMN IF NOT EXISTS "apps_directory" TEXT;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -103,13 +106,14 @@ CREATE TABLE IF NOT EXISTS "core"."auth" (
   "auth_label" TEXT,
   "auth_descr" TEXT,
   "user_id" INTEGER,
+  "delegate_start" DATE DEFAULT now(),
+  "delegate_end" DATE DEFAULT now(),
+  "delegate_user_id" INTEGER,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "delegate_start" DATE DEFAULT now(),
-  "delegate_end" DATE DEFAULT now(),
-  "delegate_user_id" INTEGER,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,
   CONSTRAINT "auth_pk" PRIMARY KEY ("auth_id"),
   CONSTRAINT "uq$core$auth$auth_label" UNIQUE ("auth_label"),
   CONSTRAINT "uq$core$auth$auth_name" UNIQUE ("auth_name")
@@ -126,6 +130,12 @@ ALTER TABLE "core"."auth"
   ADD COLUMN IF NOT EXISTS "auth_descr" TEXT;
 ALTER TABLE "core"."auth"
   ADD COLUMN IF NOT EXISTS "user_id" INTEGER;
+ALTER TABLE "core"."auth"  
+  ADD COLUMN IF NOT EXISTS "delegate_start" DATE DEFAULT now();
+ALTER TABLE "core"."auth"
+  ADD COLUMN IF NOT EXISTS "delegate_end" DATE DEFAULT now();
+ALTER TABLE "core"."auth"
+  ADD COLUMN IF NOT EXISTS "delegate_user_id" INTEGER;
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."auth"
@@ -139,11 +149,7 @@ ALTER TABLE "core"."auth"
 ALTER TABLE "core"."auth"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."auth"
-  ADD COLUMN IF NOT EXISTS "delegate_start" DATE DEFAULT now();
-ALTER TABLE "core"."auth"
-  ADD COLUMN IF NOT EXISTS "delegate_end" DATE DEFAULT now();
-ALTER TABLE "core"."auth"
-  ADD COLUMN IF NOT EXISTS "delegate_user_id" INTEGER;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -201,12 +207,13 @@ CREATE TABLE IF NOT EXISTS "core"."doc" (
   "doc_name" TEXT,
   "doc_descr" TEXT,
   "doc_seqnum" INTEGER DEFAULT 0 NOT NULL,
+  "doc_seqclust" SMALLINT DEFAULT 0 NOT NULL,
+  "doc_prefix" TEXT,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "doc_seqclust" SMALLINT DEFAULT 0 NOT NULL,
-  "doc_prefix" TEXT,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,
   CONSTRAINT "doc_pk" PRIMARY KEY ("doc_id"),
   CONSTRAINT "uq$core$doc$doc_name" UNIQUE ("doc_name"),
   CONSTRAINT "uq$core$doc$doc_seqnum" UNIQUE ("doc_seqclust", "doc_seqnum")
@@ -225,6 +232,10 @@ ALTER TABLE "core"."doc"
   ADD COLUMN IF NOT EXISTS "doc_descr" TEXT;
 ALTER TABLE "core"."doc"
   ADD COLUMN IF NOT EXISTS "doc_seqnum" INTEGER DEFAULT 0 NOT NULL;
+ALTER TABLE "core"."doc"
+  ADD COLUMN IF NOT EXISTS "doc_seqclust" SMALLINT DEFAULT 0 NOT NULL;
+ALTER TABLE "core"."doc"
+  ADD COLUMN IF NOT EXISTS "doc_prefix" TEXT;
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."doc"
@@ -238,9 +249,8 @@ ALTER TABLE "core"."doc"
 ALTER TABLE "core"."doc"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."doc"
-  ADD COLUMN IF NOT EXISTS "doc_seqclust" SMALLINT DEFAULT 0 NOT NULL;
-ALTER TABLE "core"."doc"
-  ADD COLUMN IF NOT EXISTS "doc_prefix" TEXT;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -364,6 +374,7 @@ CREATE TABLE IF NOT EXISTS "core"."group" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,  
   CONSTRAINT "group_pk" PRIMARY KEY ("group_id"),
   CONSTRAINT "uq$core$group$group_name" UNIQUE ("group_name")
 );
@@ -393,6 +404,10 @@ ALTER TABLE "core"."group"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."group"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."group"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -440,6 +455,7 @@ CREATE TABLE IF NOT EXISTS "core"."groupprogram" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,  
   CONSTRAINT "groupprogram_pk" PRIMARY KEY ("groupprogram_id"),
   CONSTRAINT "uq$core$groupprogram$groupprogram_pair" UNIQUE ("group_id", "program_id")
 );
@@ -469,6 +485,9 @@ ALTER TABLE "core"."groupprogram"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."groupprogram"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."groupprogram"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -516,6 +535,7 @@ CREATE TABLE IF NOT EXISTS "core"."interface" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "interface_pk" PRIMARY KEY ("interface_id"),
   CONSTRAINT "uq$core$interface$interface_name" UNIQUE ("interface_name")
 );
@@ -541,6 +561,9 @@ ALTER TABLE "core"."interface"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."interface"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."interface"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -584,11 +607,12 @@ CREATE TABLE IF NOT EXISTS "core"."permission" (
   "permission_name" TEXT,
   "permission_isdisabled" BOOLEAN DEFAULT false NOT NULL,
   "permission_descr" TEXT,
+  "permission_defaultvalue" TEXT,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "permission_defaultvalue" TEXT,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "permission_pk" PRIMARY KEY ("permission_id"),
   CONSTRAINT "uq$core$permission$permission_name" UNIQUE ("permission_name")
 );
@@ -602,6 +626,8 @@ ALTER TABLE "core"."permission"
   ADD COLUMN IF NOT EXISTS "permission_isdisabled" BOOLEAN DEFAULT false NOT NULL;
 ALTER TABLE "core"."permission"
   ADD COLUMN IF NOT EXISTS "permission_descr" TEXT;
+ALTER TABLE "core"."permission"
+  ADD COLUMN IF NOT EXISTS "permission_defaultvalue" TEXT;
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."permission"
@@ -615,7 +641,8 @@ ALTER TABLE "core"."permission"
 ALTER TABLE "core"."permission"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."permission"
-  ADD COLUMN IF NOT EXISTS "permission_defaultvalue" TEXT;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -665,11 +692,12 @@ CREATE TABLE IF NOT EXISTS "core"."program" (
   "program_descr" TEXT,
   "program_icon" TEXT,
   "program_isdisabled" BOOLEAN DEFAULT false NOT NULL,
+  "generator_id" INTEGER,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "generator_id" INTEGER,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "program_pk" PRIMARY KEY ("program_id"),
   CONSTRAINT "uq$core$program$program_name" UNIQUE ("program_name", "program_variance")
 );
@@ -693,6 +721,8 @@ ALTER TABLE "core"."program"
   ADD COLUMN IF NOT EXISTS "program_icon" TEXT;
 ALTER TABLE "core"."program"
   ADD COLUMN IF NOT EXISTS "program_isdisabled" BOOLEAN DEFAULT false NOT NULL;
+ALTER TABLE "core"."program"
+  ADD COLUMN IF NOT EXISTS "generator_id" INTEGER;  
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."program"
@@ -706,7 +736,7 @@ ALTER TABLE "core"."program"
 ALTER TABLE "core"."program"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."program"
-  ADD COLUMN IF NOT EXISTS "generator_id" INTEGER;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;    
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -755,11 +785,12 @@ CREATE TABLE IF NOT EXISTS "core"."programgroup" (
   "programgroup_pathid" TEXT,
   "programgroup_path" TEXT,
   "programgroup_level" INTEGER DEFAULT 0 NOT NULL,
+  "programgroup_icon" TEXT,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "programgroup_icon" TEXT,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "programgroup_pk" PRIMARY KEY ("programgroup_id"),
   CONSTRAINT "uq$core$programgroup$programgroup_name" UNIQUE ("programgroup_parent", "programgroup_name")
 );
@@ -785,6 +816,8 @@ ALTER TABLE "core"."programgroup"
   ADD COLUMN IF NOT EXISTS "programgroup_path" TEXT;
 ALTER TABLE "core"."programgroup"
   ADD COLUMN IF NOT EXISTS "programgroup_level" INTEGER DEFAULT 0 NOT NULL;
+ALTER TABLE "core"."programgroup"
+  ADD COLUMN IF NOT EXISTS "programgroup_icon" TEXT;  
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."programgroup"
@@ -798,7 +831,9 @@ ALTER TABLE "core"."programgroup"
 ALTER TABLE "core"."programgroup"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."programgroup"
-  ADD COLUMN IF NOT EXISTS "programgroup_icon" TEXT;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;  
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -844,11 +879,12 @@ CREATE TABLE IF NOT EXISTS "core"."role" (
   "role_name" TEXT,
   "role_isdisabled" BOOLEAN DEFAULT false NOT NULL,
   "role_descr" TEXT,
+  "role_priority" INTEGER DEFAULT 0 NOT NULL,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
-  "role_priority" INTEGER DEFAULT 0 NOT NULL,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "role_pk" PRIMARY KEY ("role_id"),
   CONSTRAINT "uq$core$role$role_name" UNIQUE ("role_name")
 );
@@ -862,6 +898,8 @@ ALTER TABLE "core"."role"
   ADD COLUMN IF NOT EXISTS "role_isdisabled" BOOLEAN DEFAULT false NOT NULL;
 ALTER TABLE "core"."role"
   ADD COLUMN IF NOT EXISTS "role_descr" TEXT;
+ALTER TABLE "core"."role"
+  ADD COLUMN IF NOT EXISTS "role_priority" INTEGER DEFAULT 0 NOT NULL;  
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."role"
@@ -875,7 +913,7 @@ ALTER TABLE "core"."role"
 ALTER TABLE "core"."role"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
 ALTER TABLE "core"."role"
-  ADD COLUMN IF NOT EXISTS "role_priority" INTEGER DEFAULT 0 NOT NULL;
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;    
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -923,6 +961,7 @@ CREATE TABLE IF NOT EXISTS "core"."rolepermission" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "rolepermission_pk" PRIMARY KEY ("rolepermission_id"),
   CONSTRAINT "uq$core$rolepermission$rolepermission_pair" UNIQUE ("role_id", "permission_id")
 );
@@ -952,6 +991,8 @@ ALTER TABLE "core"."rolepermission"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."rolepermission"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."rolepermission"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL;      
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1007,6 +1048,7 @@ CREATE TABLE IF NOT EXISTS "core"."sequencer_doc" (
   "_createdate" TIMESTAMPTZ NOT NULL,
   "_modifyby" BIGINT,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL,   
   CONSTRAINT "sequencer_pk" PRIMARY KEY ("sequencer_id"),
   CONSTRAINT "uq$core$sequencer$sequencer_line" UNIQUE ("sequencer_year", "sequencer_month", "sequencer_seqnum", "sequencer_block", "sequencer_cluster")
 );
@@ -1046,6 +1088,9 @@ ALTER TABLE "core"."sequencer_doc"
   ADD COLUMN IF NOT EXISTS "_modifyby" BIGINT;
 ALTER TABLE "core"."sequencer_doc"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."sequencer_doc"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1094,6 +1139,7 @@ CREATE TABLE IF NOT EXISTS "core"."sequencer_line" (
   "_createdate" TIMESTAMPTZ NOT NULL,
   "_modifyby" BIGINT,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "sequencerline_pk" PRIMARY KEY ("sequencer_id")
 );
 
@@ -1130,6 +1176,9 @@ ALTER TABLE "core"."sequencer_line"
   ADD COLUMN IF NOT EXISTS "_modifyby" BIGINT;
 ALTER TABLE "core"."sequencer_line"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."sequencer_line"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1161,6 +1210,7 @@ CREATE TABLE IF NOT EXISTS "core"."setting" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "setting_pk" PRIMARY KEY ("setting_id")
 );
 
@@ -1175,6 +1225,8 @@ ALTER TABLE "core"."setting"
   ADD COLUMN IF NOT EXISTS "setting_value" TEXT;
 ALTER TABLE "core"."setting"
   ADD COLUMN IF NOT EXISTS "setting_descr" TEXT;
+ALTER TABLE "core"."setting"
+  ADD COLUMN IF NOT EXISTS "isdisabled" BOOLEAN DEFAULT false NOT NULL;  
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."setting"
@@ -1187,6 +1239,9 @@ ALTER TABLE "core"."setting"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."setting"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."setting"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1227,6 +1282,7 @@ CREATE TABLE IF NOT EXISTS "core"."user" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "user_pk" PRIMARY KEY ("user_id"),
   CONSTRAINT "uq$core$user$user_name" UNIQUE ("user_name")
 );
@@ -1268,6 +1324,10 @@ ALTER TABLE "core"."user"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."user"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."user"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1314,6 +1374,7 @@ CREATE TABLE IF NOT EXISTS "core"."userfavouriteprogram" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "userfavouriteprogram_pk" PRIMARY KEY ("userfavouriteprogram_id"),
   CONSTRAINT "uq$core$userfavouriteprogram$userfavouriteprogram_pair" UNIQUE ("userfavouriteprogram_id", "program_id")
 );
@@ -1341,6 +1402,10 @@ ALTER TABLE "core"."userfavouriteprogram"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."userfavouriteprogram"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."userfavouriteprogram"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1390,6 +1455,7 @@ CREATE TABLE IF NOT EXISTS "core"."usergroup" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "usergroup_pk" PRIMARY KEY ("usergroup_id")
 );
 
@@ -1418,6 +1484,9 @@ ALTER TABLE "core"."usergroup"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."usergroup"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."usergroup"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1455,6 +1524,7 @@ CREATE TABLE IF NOT EXISTS "core"."userlogin" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "userlogin_pk" PRIMARY KEY ("userlogin_id"),
   CONSTRAINT "uq$core$userlogin$userlogin_name" UNIQUE ("userlogin_name")
 );
@@ -1482,6 +1552,10 @@ ALTER TABLE "core"."userlogin"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."userlogin"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."userlogin"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1530,6 +1604,7 @@ CREATE TABLE IF NOT EXISTS "core"."userprop" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "userprop_pk" PRIMARY KEY ("userprop_id"),
   CONSTRAINT "uq$core$userprop$userprop_name" UNIQUE ("userprop_id", "userprop_name")
 );
@@ -1559,6 +1634,10 @@ ALTER TABLE "core"."userprop"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."userprop"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."userprop"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
@@ -1606,6 +1685,7 @@ CREATE TABLE IF NOT EXISTS "core"."userrole" (
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
   "_modifydate" TIMESTAMPTZ,
+  "_timestamp" TIMESTAMPTZ  DEFAULT now() NOT NULL, 
   CONSTRAINT "userrole_pk" PRIMARY KEY ("userrole_id"),
   CONSTRAINT "uq$core$userrole$userrole_pair" UNIQUE ("user_id", "role_id")
 );
@@ -1633,6 +1713,10 @@ ALTER TABLE "core"."userrole"
   ADD COLUMN IF NOT EXISTS "_modifyby" INTEGER;
 ALTER TABLE "core"."userrole"
   ADD COLUMN IF NOT EXISTS "_modifydate" TIMESTAMPTZ;
+ALTER TABLE "core"."userrole"
+  ADD COLUMN IF NOT EXISTS "_timestamp" TIMESTAMPTZ DEFAULT now() NOT NULL; 
+
+
 
 -- Step 3: Add PK / unique / check constraints if not exists
 DO $$ BEGIN
