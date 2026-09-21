@@ -143,6 +143,7 @@ CREATE INDEX idx$core$groupprogram$_timestamp ON core.groupprogram (_timestamp);
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE core."groupprogram" DROP CONSTRAINT fk$core$groupprogram$program_id;
+ALTER TABLE core."groupprogram" DROP CONSTRAINT fk$core$groupprogram$group_id;
 
 
 -- Add Foreign Key Constraint  

@@ -57,6 +57,36 @@ comment on column public."brand".brand_descr is '';
 
 
 -- =============================================
+-- FIELD: unit_id int
+-- =============================================
+-- ADD unit_id
+alter table public."brand" add unit_id int  ;
+comment on column public."brand".unit_id is '';
+
+-- MODIFY unit_id
+alter table public."brand"
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column public."brand".unit_id is '';
+
+
+-- =============================================
+-- FIELD: struct_id int
+-- =============================================
+-- ADD struct_id
+alter table public."brand" add struct_id int  ;
+comment on column public."brand".struct_id is '';
+
+-- MODIFY struct_id
+alter table public."brand"
+	alter column struct_id type int,
+	ALTER COLUMN struct_id DROP DEFAULT,
+	ALTER COLUMN struct_id DROP NOT NULL;
+comment on column public."brand".struct_id is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
@@ -138,8 +168,48 @@ DROP INDEX IF EXISTS public.idx$public$brand$_timestamp;
 CREATE INDEX idx$public$brand$_timestamp ON public.brand (_timestamp);
 
 
+-- =============================================
+-- FOREIGN KEY CONSTRAINT
+-- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."brand" DROP CONSTRAINT fk$public$brand$unit_id;
+ALTER TABLE public."brand" DROP CONSTRAINT fk$public$brand$struct_id;
+
+
+-- Add Foreign Key Constraint  
+ALTER TABLE public."brand"
+	ADD CONSTRAINT fk$public$brand$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES public."unit"(unit_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$brand$unit_id;
+CREATE INDEX idx_fk$public$brand$unit_id ON public."brand"(unit_id);	
+
+
+ALTER TABLE public."brand"
+	ADD CONSTRAINT fk$public$brand$struct_id
+	FOREIGN KEY (struct_id)
+	REFERENCES public."struct"(struct_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$brand$struct_id;
+CREATE INDEX idx_fk$public$brand$struct_id ON public."brand"(struct_id);	
+
+	
 
 
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."brand"
+	drop constraint uq$public$brand$brand_name;
+	
+
+-- Add unique index 
+alter table  public."brand"
+	add constraint uq$public$brand$brand_name unique (brand_name); 
+

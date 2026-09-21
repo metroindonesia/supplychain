@@ -112,8 +112,8 @@ INSERT INTO "core"."program" ("program_id", "program_title", "apps_id", "program
 VALUES (250100007, 'Setting', 'accounting', 'setting', NULL, 100, 'setting', 'public/modules/setting/setting.svg', FALSE, 240100000, '2026-02-01T10:10:57.886Z', NULL, NULL, NULL, '2026-02-01T10:10:57.886Z')
 ON CONFLICT ("program_id") DO NOTHING;
 INSERT INTO "core"."program" ("program_id", "program_title", "apps_id", "program_name", "program_variance", "programgroup_id", "program_descr", "program_icon", "program_isdisabled", "_createby", "_createdate", "_modifyby", "_modifydate", "generator_id", "_timestamp")
-VALUES (250100008, 'Authorization', 'accounting', 'auth', NULL, 100, '', 'public/modules/auth/auth.svg', FALSE, 240100000, '2026-02-01T11:11:34.099Z', NULL, NULL, NULL)
+VALUES (250100008, 'Authorization', 'accounting', 'auth', NULL, 100, '', 'public/modules/auth/auth.svg', FALSE, 240100000, '2026-02-01T11:11:34.099Z', NULL, NULL, NULL, '2026-02-01T10:10:57.886Z')
 ON CONFLICT ("program_id") DO NOTHING;
 INSERT INTO "core"."program" ("program_id", "program_title", "apps_id", "program_name", "program_variance", "programgroup_id", "program_descr", "program_icon", "program_isdisabled", "_createby", "_createdate", "_modifyby", "_modifydate", "generator_id", "_timestamp")
-VALUES (250100030, 'Program Generator', 'accounting', 'generator', NULL, 5, 'program generator', 'generator/generator.svg', TRUE, 240100000, '2026-02-13T03:12:05.062Z', 240100000, '2026-06-01T13:45:51.217Z', NULL)
+VALUES (250100030, 'Program Generator', 'accounting', 'generator', NULL, 5, 'program generator', 'generator/generator.svg', TRUE, 240100000, '2026-02-13T03:12:05.062Z', NULL, NULL, NULL, '2026-02-01T10:10:57.886Z')
 ON CONFLICT ("program_id") DO NOTHING;

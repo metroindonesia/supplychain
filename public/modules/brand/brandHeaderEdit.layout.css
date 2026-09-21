@@ -41,6 +41,18 @@
 		grid-column: 1 / span 6;
 		
 	}
+	
+	#brandHeaderEdit-obj_unit_id-container {
+		grid-row: 4;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#brandHeaderEdit-obj_struct_id-container {
+		grid-row: 4;
+		grid-column: 3 / span 4;
+		
+	}
 		
 
 

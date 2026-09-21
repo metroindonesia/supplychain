@@ -156,10 +156,6 @@ CREATE INDEX idx$public$itemclassstruct$_timestamp ON public.itemclassstruct (_t
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
--- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."itemclassstruct" DROP CONSTRAINT fk$public$itemclassstruct$struct_id;
-
-
 -- Add Foreign Key Constraint  
 ALTER TABLE public."itemclassstruct"
 	ADD CONSTRAINT fk$public$itemclassstruct$struct_id

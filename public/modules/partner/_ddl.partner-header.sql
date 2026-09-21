@@ -261,10 +261,6 @@ CREATE INDEX idx$public$partner$_timestamp ON public.partner (_timestamp);
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
--- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."partner" DROP CONSTRAINT fk$public$partner$partnertype_id;
-
-
 -- Add Foreign Key Constraint  
 ALTER TABLE public."partner"
 	ADD CONSTRAINT fk$public$partner$partnertype_id
@@ -282,11 +278,6 @@ CREATE INDEX idx_fk$public$partner$partnertype_id ON public."partner"(partnertyp
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
--- Drop existing unique index 
-alter table public."partner"
-	drop constraint uq$public$partner$partner_name;
-	
-
 -- Add unique index 
 alter table  public."partner"
 	add constraint uq$public$partner$partner_name unique (partner_name); 

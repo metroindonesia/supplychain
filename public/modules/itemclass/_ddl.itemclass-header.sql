@@ -156,10 +156,6 @@ CREATE INDEX idx$public$itemclass$_timestamp ON public.itemclass (_timestamp);
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
--- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."itemclass" DROP CONSTRAINT fk$public$itemclass$owner_struct_id;
-
-
 -- Add Foreign Key Constraint  
 ALTER TABLE public."itemclass"
 	ADD CONSTRAINT fk$public$itemclass$owner_struct_id
@@ -177,11 +173,6 @@ CREATE INDEX idx_fk$public$itemclass$owner_struct_id ON public."itemclass"(owner
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
--- Drop existing unique index 
-alter table public."itemclass"
-	drop constraint uq$public$itemclass$itemclass_name;
-	
-
 -- Add unique index 
 alter table  public."itemclass"
 	add constraint uq$public$itemclass$itemclass_name unique (itemclass_name); 

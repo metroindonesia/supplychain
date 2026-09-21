@@ -1520,6 +1520,7 @@ CREATE TABLE IF NOT EXISTS "core"."userlogin" (
   "userlogin_id" BIGINT NOT NULL,
   "userlogin_name" TEXT,
   "user_id" INTEGER,
+  "_todelete" BOOLEAN DEFAULT false NOT NULL,
   "_createby" INTEGER NOT NULL,
   "_createdate" TIMESTAMPTZ DEFAULT now() NOT NULL,
   "_modifyby" INTEGER,
@@ -1540,6 +1541,8 @@ ALTER TABLE "core"."userlogin"
   ADD COLUMN IF NOT EXISTS "userlogin_name" TEXT;
 ALTER TABLE "core"."userlogin"
   ADD COLUMN IF NOT EXISTS "user_id" INTEGER;
+ALTER TABLE "core"."userlogin"
+  ADD COLUMN IF NOT EXISTS "_todelete" BOOLEAN DEFAULT false NOT NULL;
 -- WARNING: "_createby" is NOT NULL without DEFAULT.
 -- Adding as NULL first; you must backfill before setting NOT NULL.
 ALTER TABLE "core"."userlogin"
