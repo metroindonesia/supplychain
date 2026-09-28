@@ -1,0 +1,32 @@
+#user-change-password {
+	margin-top: 60px;
+	display: flex;
+	row-gap: 8px;
+	flex-direction: column;
+}
+
+
+
+#user-change-password {
+	border: 1px solid #ccc;
+	padding: 15px;
+	border-radius: 7px;
+}
+
+
+#user-change-password input {
+	padding: 5px 10px;
+	width: 200px;
+	height: 22px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+
+
+}
+
+
+#user-change-password button {
+	margin-top: 8px;
+	height: 32px;
+	padding-right: 10px;
+}

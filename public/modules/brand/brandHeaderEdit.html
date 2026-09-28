@@ -24,6 +24,8 @@
 				
 			maxlength="30"
 				
+			disabled
+				
 					>
 		</div>
 		
@@ -62,7 +64,7 @@
 				
 			autocomplete="off" spellcheck="false"
 				
-			maxlength="90"
+			maxlength="255"
 				
 					>
 		</div>
@@ -74,13 +76,33 @@
 				Descr
 			</label>
 			<input id="brandHeaderEdit-obj_brand_descr" fgta5-component="Textbox"
-				placeholder="descr" autocomplete="off" spellcheck="false"
+				placeholder="description" autocomplete="off" spellcheck="false"
 				binding="brand_descr" 
 			data-tabindex="4"
 				
 			autocomplete="off" spellcheck="false"
 				
 			maxlength="255"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: unit_id-->
+		<div id="brandHeaderEdit-obj_unit_id-container" class="input-field" field="brandHeaderEdit-obj_unit_id">
+			<label for="brandHeaderEdit-obj_unit_id">
+				Unit
+			</label>
+			<input id="brandHeaderEdit-obj_unit_id" fgta5-component="Combobox"
+				placeholder="unit" autocomplete="off" spellcheck="false"
+				binding="unit_id" 
+			data-tabindex="5"
+				
+			required
+				
+			invalid-message-required="unit harus diisi"
+				
+			data-display="unit_name"
 				
 					>
 		</div>

@@ -43,6 +43,7 @@ async function main(self, args) {
 			}
 		}
 
+
 		// setup Application Manager
 		appmgr.setTitle(Context.title)
 		appmgr.setUser({ userid: Context.userId, displayname: Context.userFullname, profilepic: '' })

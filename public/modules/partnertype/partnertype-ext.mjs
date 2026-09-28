@@ -1,11 +1,7 @@
 import Context from './partnertype-context.mjs'
 
-
 export const extenderHeader = null
 
-
-
-const VIEW_VARIANCE = 'view'
 
 export async function init(self, args) {
 	console.log('initializing partnertypeExtender ...')
@@ -24,6 +20,8 @@ export async function init(self, args) {
 	}
 	*/	
 
+
+	
 	/* // contoh menambahkan custom validator
 	// pada html, tambahkan validator="cobaFunction:paramValue"
 	const frm = self.Modules.coaHeaderEdit.getHeaderForm()
@@ -37,11 +35,8 @@ export async function init(self, args) {
 
 
 	*/
+
+
 }
 
 
-export function setupActionButtonEvent(self, frm, CurrentState, buttons) {
-	const onView = Context.variance == VIEW_VARIANCE
-	CurrentState.Actions.newdata.suspend(onView)
-	CurrentState.Actions.edit.suspend(onView)
-}

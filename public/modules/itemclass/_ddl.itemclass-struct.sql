@@ -42,21 +42,6 @@ comment on column public."itemclassstruct".itemclassstruct_isdisabled is '';
 
 
 -- =============================================
--- FIELD: _todelete boolean
--- =============================================
--- ADD _todelete
-alter table public."itemclassstruct" add _todelete boolean not null default false;
-comment on column public."itemclassstruct"._todelete is '';
-
--- MODIFY _todelete
-alter table public."itemclassstruct"
-	alter column _todelete type boolean,
-	ALTER COLUMN _todelete SET DEFAULT false,
-	ALTER COLUMN _todelete SET NOT NULL;
-comment on column public."itemclassstruct"._todelete is '';
-
-
--- =============================================
 -- FIELD: itemclass_id int
 -- =============================================
 -- ADD itemclass_id

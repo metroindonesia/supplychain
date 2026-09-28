@@ -426,6 +426,10 @@ async function  frm_locked(self, evt) {
 	// trigger lock event di contact
 	self.Modules.partnerContactList.headerLocked(self)
 	self.Modules.partnerContactEdit.headerLocked(self)
+	
+	// trigger lock event di ref
+	self.Modules.partnerRefList.headerLocked(self)
+	self.Modules.partnerRefEdit.headerLocked(self)
 		
 
 }
@@ -474,6 +478,10 @@ async function  frm_unlocked(self, evt) {
 	// trigger unlock event di contact
 	self.Modules.partnerContactList.headerUnlocked(self)
 	self.Modules.partnerContactEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di ref
+	self.Modules.partnerRefList.headerUnlocked(self)
+	self.Modules.partnerRefEdit.headerUnlocked(self)	
 		
 }
 

@@ -57,21 +57,6 @@ comment on column public."structmember".struct_id is '';
 
 
 -- =============================================
--- FIELD: _todelete boolean
--- =============================================
--- ADD _todelete
-alter table public."structmember" add _todelete boolean not null default false;
-comment on column public."structmember"._todelete is '';
-
--- MODIFY _todelete
-alter table public."structmember"
-	alter column _todelete type boolean,
-	ALTER COLUMN _todelete SET DEFAULT false,
-	ALTER COLUMN _todelete SET NOT NULL;
-comment on column public."structmember"._todelete is '';
-
-
--- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby

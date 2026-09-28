@@ -42,21 +42,6 @@ comment on column core."userlogin".user_id is '';
 
 
 -- =============================================
--- FIELD: _todelete boolean
--- =============================================
--- ADD _todelete
-alter table core."userlogin" add _todelete boolean not null default false;
-comment on column core."userlogin"._todelete is '';
-
--- MODIFY _todelete
-alter table core."userlogin"
-	alter column _todelete type boolean,
-	ALTER COLUMN _todelete SET DEFAULT false,
-	ALTER COLUMN _todelete SET NOT NULL;
-comment on column core."userlogin"._todelete is '';
-
-
--- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
