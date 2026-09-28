@@ -120,16 +120,12 @@ async function main() {
 async function settingInit(db, setting) {
 	const results = await Promise.allSettled([
 		requireSetting(db, setting, 'COMPANY_CODE', 'kode perusahaan, 2 digit numerik, untuk keperluan konsolidasi bisa sistem dipakai di beberapa anak perusahaan'),
-		requireSetting(db, setting, 'COMPANY_ADDR1', ''),
 		requireSetting(db, setting, 'COMPANY_NAME', ''),
+		requireSetting(db, setting, 'COMPANY_ADDR1', ''),
 		requireSetting(db, setting, 'COMPANY_ADDR2', ''),
 		requireSetting(db, setting, 'COMPANY_ADDR3', ''),
 		requireSetting(db, setting, 'COMPANY_PHONE', ''),
 		requireSetting(db, setting, 'COMPANY_PRINTLOGO', 'path url untuk logo yang dicetak di report, misalnya /public/images/logo.svg'),
-		requireSetting(db, setting, 'COMPANY_PARTNER_ID', 'kode partner yang menunjuk ke diri sendiri '),
-		requireSetting(db, setting, 'TAX_PARTNER_ID', 'kode partner untuk kas negara'),
-		requireSetting(db, setting, 'RE_COA_ID', 'kode coa untuk retain earning'),
-		requireSetting(db, setting, 'COA_LENGTH', 'panjang coa'),
 		requireSetting(db, setting, 'ICON_MENU_URL', 'icon menu kanan atas'),
 		requireSetting(db, setting, 'THEME_CSS_URL', 'CSS theme application'),
 

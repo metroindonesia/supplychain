@@ -179,11 +179,11 @@ async function unit_headerList(self, body) {
 			if (i>max_rows) { break }
 
 			// lookup: struct_name dari field struct_name pada table public.struct dimana (public.struct.struct_id = public.unit.struct_id)
-			{
+			if (row.struct_id !== undefined) {
 				const { struct_name } = await sqlUtil.lookupdb(db, 'public.struct', 'struct_id', row.struct_id)
-				row.struct_name = struct_name
+				row.struct_name = struct_name ?? null
 			}
-			
+			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
 				// export async function headerListRow(self, row, args) {}
@@ -233,20 +233,19 @@ async function unit_headerOpen(self, body) {
 		}	
 
 		// lookup: struct_name dari field struct_name pada table public.struct dimana (public.struct.struct_id = public.unit.struct_id)
-		{
+		if (data.struct_id !== undefined) {
 			const { struct_name } = await sqlUtil.lookupdb(db, 'public.struct', 'struct_id', data.struct_id)
-			data.struct_name = struct_name
+			data.struct_name = struct_name ?? null
 		}
-		
-
+		 
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}
