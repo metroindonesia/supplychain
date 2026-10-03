@@ -6,6 +6,8 @@
 import Context from './regitemtype-context.mjs'  
 import * as regitemtypeHeaderList from './regitemtypeHeaderList.mjs' 
 import * as regitemtypeHeaderEdit from './regitemtypeHeaderEdit.mjs' 
+import * as regitemtypeSettingList from './regitemtypeSettingList.mjs' 
+import * as regitemtypeSettingEdit from './regitemtypeSettingEdit.mjs' 
 import * as Extender from './regitemtype-ext.mjs'
 
 const app = Context.app
@@ -49,6 +51,8 @@ export default class extends Module {
 		self.Modules = { 
 			regitemtypeHeaderList, 
 			regitemtypeHeaderEdit, 
+			regitemtypeSettingList, 
+			regitemtypeSettingEdit, 
 		}
 
 		try {
@@ -71,6 +75,8 @@ export default class extends Module {
 			await Promise.all([ 
 				regitemtypeHeaderList.init(self, args), 
 				regitemtypeHeaderEdit.init(self, args), 
+				regitemtypeSettingList.init(self, args), 
+				regitemtypeSettingEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -82,7 +88,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['regitemtypeHeaderEdit']
+			const modNameList = ['regitemtypeHeaderEdit', 'regitemtypeSettingEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false

@@ -44,7 +44,11 @@ const obj_user_nickname = frm.Inputs['userHeaderEdit-obj_user_nickname']
 const obj_user_email = frm.Inputs['userHeaderEdit-obj_user_email']
 const obj_user_password = frm.Inputs['userHeaderEdit-obj_user_password']
 const obj_user_isdev = frm.Inputs['userHeaderEdit-obj_user_isdev']
-const obj_user_isshowallprogram = frm.Inputs['userHeaderEdit-obj_user_isshowallprogram']	
+const obj_user_isshowallprogram = frm.Inputs['userHeaderEdit-obj_user_isshowallprogram']
+const obj_user_isallowallunit = frm.Inputs['userHeaderEdit-obj_user_isallowallunit']
+const obj_user_isallowallbrandunit = frm.Inputs['userHeaderEdit-obj_user_isallowallbrandunit']
+const obj_user_isallowallbrand = frm.Inputs['userHeaderEdit-obj_user_isallowallbrand']
+const obj_user_isallowallsite = frm.Inputs['userHeaderEdit-obj_user_isallowallsite']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -345,6 +349,18 @@ async function  frm_locked(self, evt) {
 	// trigger lock event di role
 	self.Modules.userRoleList.headerLocked(self)
 	self.Modules.userRoleEdit.headerLocked(self)
+	
+	// trigger lock event di unit
+	self.Modules.userUnitList.headerLocked(self)
+	self.Modules.userUnitEdit.headerLocked(self)
+	
+	// trigger lock event di brand
+	self.Modules.userBrandList.headerLocked(self)
+	self.Modules.userBrandEdit.headerLocked(self)
+	
+	// trigger lock event di site
+	self.Modules.userSiteList.headerLocked(self)
+	self.Modules.userSiteEdit.headerLocked(self)
 		
 
 }
@@ -405,6 +421,18 @@ async function  frm_unlocked(self, evt) {
 	// trigger unlock event di role
 	self.Modules.userRoleList.headerUnlocked(self)
 	self.Modules.userRoleEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di unit
+	self.Modules.userUnitList.headerUnlocked(self)
+	self.Modules.userUnitEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di brand
+	self.Modules.userBrandList.headerUnlocked(self)
+	self.Modules.userBrandEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di site
+	self.Modules.userSiteList.headerUnlocked(self)
+	self.Modules.userSiteEdit.headerUnlocked(self)	
 		
 }
 

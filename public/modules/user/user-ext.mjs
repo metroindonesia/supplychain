@@ -13,8 +13,15 @@ const DETILONLY_VARIANCE = 'detilonly'
 
 
 const _user_name = 'userHeaderEdit-obj_user_name'
+const _user_fullname = 'userHeaderEdit-obj_user_fullname'
 const _user_password = 'userHeaderEdit-obj_user_password'
+const _user_nickname = 'userHeaderEdit-obj_user_nickname'
+const _user_email = 'userHeaderEdit-obj_user_email'
+const _user_isdev = 'userHeaderEdit-obj_user_isdev'
+const _user_isshowallprogram = 'userHeaderEdit-obj_user_isshowallprogram'
+const _user_isdisabled = 'userHeaderEdit-obj_user_isdisabled'
 
+let PASSIVE_MODE = false
 
 export async function init(self, args) {
 	console.log('initializing userExtender ...')
@@ -39,6 +46,17 @@ export async function init(self, args) {
 		}
 	}
 
+
+	// hide tombol add dan romove row pada detil
+	const faveAddRow = document.querySelectorAll('button[data-action="userFavourite-addrow"]')
+	const faveDelRows = document.getElementById('userFavouriteList-btn_delrow')
+	const faveEdit = document.getElementById('userFavouriteEdit-btn_edit')
+	const loginAddRow = document.querySelectorAll('button[data-action="userLogin-addrow"]')
+	const loginDelRows = document.getElementById('userLoginList-btn_delrow')
+	const loginEdit = document.getElementById('userLoginEdit-btn_edit')
+	for (let btn of [...faveAddRow, faveDelRows, faveEdit, ...loginAddRow, loginDelRows, loginEdit]) {
+		btn.classList.add('hidden')
+	}
 
 
 	// tambahkan tombol di user password
@@ -88,6 +106,26 @@ export async function init(self, args) {
 
 }
 
+export async function userHeaderEdit_init(self, CurrentState) {
+	// const PASSIVE_MODE = Context.setting.program.PASSIVE_MODE?.value?.trim().toUpperCase() === 'TRUE'
+	PASSIVE_MODE = Context.setting.program.PASSIVE_MODE?.value?.trim().toUpperCase() === 'TRUE'
+	if (PASSIVE_MODE) {
+		// disable beberapa data yang
+		const editModule = self.Modules.userHeaderEdit
+		const frm = editModule.getHeaderForm()
+
+		frm.Inputs[_user_fullname].disabled = true
+		frm.Inputs[_user_nickname].disabled = true
+		frm.Inputs[_user_email].disabled = true
+		frm.Inputs[_user_isdev].disabled = true
+		frm.Inputs[_user_isshowallprogram].disabled = true
+		frm.Inputs[_user_isdisabled].disabled = true
+
+	}
+}
+
+
+
 
 async function btnChangePasswordClick(self, passwordInput, password) {
 	try {
@@ -124,6 +162,11 @@ function frm_unlocked(self, evt) {
 
 
 function showPasswordButton(visible) {
+	// const PASSIVE_MODE = Context.setting.program.PASSIVE_MODE?.value?.trim().toUpperCase() === 'TRUE'
+	if (PASSIVE_MODE) {
+		visible = false
+	}
+
 	const btn = document.getElementById('btn_resetpassword')
 	if (visible) {
 		btn.classList.remove('hidden')
@@ -157,6 +200,9 @@ export function setupActionButtonEvent(self, frm, CurrentState, buttons) {
 	CurrentState.Actions.newdata.suspend(onView || onDetilOnly)
 	CurrentState.Actions.edit.suspend(onView)
 
+	// const PASSIVE_MODE = Context.setting.program.PASSIVE_MODE?.value?.trim().toUpperCase() === 'TRUE'
+	CurrentState.Actions.delete.suspend(PASSIVE_MODE)
+	CurrentState.Actions.newdata.suspend(PASSIVE_MODE)
 }
 
 
@@ -189,8 +235,8 @@ export function userHeaderEdit_formOpened(self, frm, CurrentState) {
 		}
 
 	}
-	// CurrentState.Actions.newdata.suspend(onView)
-	// CurrentState.Actions.edit.suspend(onView)
+
+
 }
 
 export async function userHeaderEdit_newData(self, datainit, frm) {
@@ -204,3 +250,10 @@ export async function userHeaderEdit_dataSaved(self, data, frm) {
 }
 
 
+
+export function userLoginList_openList(self, headerForm) {
+	console.log('open list login')
+
+	// sembun
+
+}

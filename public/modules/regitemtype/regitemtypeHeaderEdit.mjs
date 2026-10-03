@@ -320,6 +320,10 @@ async function  frm_locked(self, evt) {
 		btn_edit.disabled = true
 	}
 
+	
+	// trigger lock event di setting
+	self.Modules.regitemtypeSettingList.headerLocked(self)
+	self.Modules.regitemtypeSettingEdit.headerLocked(self)
 		
 
 }
@@ -360,6 +364,10 @@ async function  frm_unlocked(self, evt) {
 		fn(self, frm, CurrentState)
 	}
 
+	
+	// trigger unlock event di setting
+	self.Modules.regitemtypeSettingList.headerUnlocked(self)
+	self.Modules.regitemtypeSettingEdit.headerUnlocked(self)	
 		
 }
 

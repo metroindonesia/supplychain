@@ -15,9 +15,13 @@ export default {
 	Sections: { 
 		regitemtypeHeaderList: 'regitemtypeHeaderList-section', 
 		regitemtypeHeaderEdit: 'regitemtypeHeaderEdit-section', 
+		regitemtypeSettingList: 'regitemtypeSettingList-section', 
+		regitemtypeSettingEdit: 'regitemtypeSettingEdit-section', 
 	},
 	SectionMap: { 
 		'regitemtypeHeaderList-section' : 'regitemtypeHeaderList', 
 		'regitemtypeHeaderEdit-section' : 'regitemtypeHeaderEdit', 
+		'regitemtypeSettingList-section' : 'regitemtypeSettingList', 
+		'regitemtypeSettingEdit-section' : 'regitemtypeSettingEdit', 
 	}
 }

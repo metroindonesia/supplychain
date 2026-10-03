@@ -16,6 +16,12 @@ import * as userFavouriteList from './userFavouriteList.mjs'
 import * as userFavouriteEdit from './userFavouriteEdit.mjs' 
 import * as userRoleList from './userRoleList.mjs' 
 import * as userRoleEdit from './userRoleEdit.mjs' 
+import * as userUnitList from './userUnitList.mjs' 
+import * as userUnitEdit from './userUnitEdit.mjs' 
+import * as userBrandList from './userBrandList.mjs' 
+import * as userBrandEdit from './userBrandEdit.mjs' 
+import * as userSiteList from './userSiteList.mjs' 
+import * as userSiteEdit from './userSiteEdit.mjs' 
 import * as Extender from './user-ext.mjs'
 
 const app = Context.app
@@ -69,6 +75,12 @@ export default class extends Module {
 			userFavouriteEdit, 
 			userRoleList, 
 			userRoleEdit, 
+			userUnitList, 
+			userUnitEdit, 
+			userBrandList, 
+			userBrandEdit, 
+			userSiteList, 
+			userSiteEdit, 
 		}
 
 		try {
@@ -101,6 +113,12 @@ export default class extends Module {
 				userFavouriteEdit.init(self, args), 
 				userRoleList.init(self, args), 
 				userRoleEdit.init(self, args), 
+				userUnitList.init(self, args), 
+				userUnitEdit.init(self, args), 
+				userBrandList.init(self, args), 
+				userBrandEdit.init(self, args), 
+				userSiteList.init(self, args), 
+				userSiteEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -112,7 +130,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['userHeaderEdit', 'userLoginEdit', 'userPropEdit', 'userGroupEdit', 'userFavouriteEdit', 'userRoleEdit']
+			const modNameList = ['userHeaderEdit', 'userLoginEdit', 'userPropEdit', 'userGroupEdit', 'userFavouriteEdit', 'userRoleEdit', 'userUnitEdit', 'userBrandEdit', 'userSiteEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false

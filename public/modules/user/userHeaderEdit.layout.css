@@ -71,6 +71,30 @@
 		grid-column: 1 / span 2;
 		
 	}
+	
+	#userHeaderEdit-obj_user_isallowallunit-container {
+		grid-row: 5;
+		grid-column: 3 / span 2;
+		
+	}
+	
+	#userHeaderEdit-obj_user_isallowallbrandunit-container {
+		grid-row: 6;
+		grid-column: 3 / span 2;
+		
+	}
+	
+	#userHeaderEdit-obj_user_isallowallbrand-container {
+		grid-row: 7;
+		grid-column: 3 / span 2;
+		
+	}
+	
+	#userHeaderEdit-obj_user_isallowallsite-container {
+		grid-row: 8;
+		grid-column: 3 / span 2;
+		
+	}
 		
 
 
