@@ -17,7 +17,6 @@ export async function init(self, args) {
 
 export function headerList_initSearchParams(self, SearchParams) {
 
-	// Structure
 	SearchParams['unit_id'].addEventListener('selecting', async (evt) => {
 		const cbo = evt.detail.sender
 		const dialog = evt.detail.dialog
@@ -27,7 +26,6 @@ export function headerList_initSearchParams(self, SearchParams) {
 
 		cbo.wait()
 		try {
-			// cek apakah user punya role PAYMREQ
 			const result = await Module.apiCall(url, {
 				sort,
 				criteria,
