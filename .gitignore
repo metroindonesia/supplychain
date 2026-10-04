@@ -142,26 +142,17 @@ vite.config.ts.timestamp-*
 
 public/modules/--*
 
-
-
-
 production.config.js
 
 run-prod.sh
 
 package-lock.json
 
-
-
 fgta5framework.code-workspace
-
-
 
 containers/.data
 
-
-DS_Store
-
+.DS_Store
 .vscode
 
 public/local

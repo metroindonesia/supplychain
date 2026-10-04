@@ -13,15 +13,15 @@ import { getProgramSetting } from '@agung_dhewe/webapps/src/helper.js'
 import logger from '@agung_dhewe/webapps/src/logger.js'
 import { createSequencerLine } from '@agung_dhewe/webapps/src/sequencerline.js' 
 
-import * as Extender from './extenders/regitemtype.apiext.js'
+import * as Extender from './extenders/regtype.apiext.js'
 
-const moduleName = 'regitemtype'
+const moduleName = 'regtype'
 const headerSectionName = 'header'
-const headerTableName = 'public.regitemtype' 
-const headerPrimaryKey = 'regitemtype_id' 
-const brandTableName = 'public.regitemtypebrand'  
-const unitTableName = 'public.regitemtypeunit'  
-const settingTableName = 'public.regitemtypesetting'  	
+const headerTableName = 'public.regtype' 
+const headerPrimaryKey = 'regtype_id' 
+const brandTableName = 'public.regtypebrand'  
+const unitTableName = 'public.regtypeunit'  
+const settingTableName = 'public.regtypesetting'  	
 
 // api: account
 export default class extends Api {
@@ -34,47 +34,47 @@ export default class extends Api {
 	// dipanggil dengan model snake syntax
 	// contoh: header-list
 	//         header-open-data
-	async init(body) { return await regitemtype_init(this, body) }
+	async init(body) { return await regtype_init(this, body) }
 
 	// extender call
-	async execute(body) { return await regitemtype_execute(this, body) }
+	async execute(body) { return await regtype_execute(this, body) }
 
 	// header
-	async headerList(body) { return await regitemtype_headerList(this, body) }
-	async headerOpen(body) { return await regitemtype_headerOpen(this, body) }
-	async headerUpdate(body) { return await regitemtype_headerUpdate(this, body)}
-	async headerCreate(body) { return await regitemtype_headerCreate(this, body)}
-	async headerDelete(body) { return await regitemtype_headerDelete(this, body) }
+	async headerList(body) { return await regtype_headerList(this, body) }
+	async headerOpen(body) { return await regtype_headerOpen(this, body) }
+	async headerUpdate(body) { return await regtype_headerUpdate(this, body)}
+	async headerCreate(body) { return await regtype_headerCreate(this, body)}
+	async headerDelete(body) { return await regtype_headerDelete(this, body) }
 
 	
 	// brand	
-	async brandList(body) { return await regitemtype_brandList(this, body) }
-	async brandOpen(body) { return await regitemtype_brandOpen(this, body) }
-	async brandUpdate(body) { return await regitemtype_brandUpdate(this, body)}
-	async brandCreate(body) { return await regitemtype_brandCreate(this, body) }
-	async brandDelete(body) { return await regitemtype_brandDelete(this, body) }
-	async brandDeleteRows(body) { return await regitemtype_brandDeleteRows(this, body) }
+	async brandList(body) { return await regtype_brandList(this, body) }
+	async brandOpen(body) { return await regtype_brandOpen(this, body) }
+	async brandUpdate(body) { return await regtype_brandUpdate(this, body)}
+	async brandCreate(body) { return await regtype_brandCreate(this, body) }
+	async brandDelete(body) { return await regtype_brandDelete(this, body) }
+	async brandDeleteRows(body) { return await regtype_brandDeleteRows(this, body) }
 	
 	// unit	
-	async unitList(body) { return await regitemtype_unitList(this, body) }
-	async unitOpen(body) { return await regitemtype_unitOpen(this, body) }
-	async unitUpdate(body) { return await regitemtype_unitUpdate(this, body)}
-	async unitCreate(body) { return await regitemtype_unitCreate(this, body) }
-	async unitDelete(body) { return await regitemtype_unitDelete(this, body) }
-	async unitDeleteRows(body) { return await regitemtype_unitDeleteRows(this, body) }
+	async unitList(body) { return await regtype_unitList(this, body) }
+	async unitOpen(body) { return await regtype_unitOpen(this, body) }
+	async unitUpdate(body) { return await regtype_unitUpdate(this, body)}
+	async unitCreate(body) { return await regtype_unitCreate(this, body) }
+	async unitDelete(body) { return await regtype_unitDelete(this, body) }
+	async unitDeleteRows(body) { return await regtype_unitDeleteRows(this, body) }
 	
 	// setting	
-	async settingList(body) { return await regitemtype_settingList(this, body) }
-	async settingOpen(body) { return await regitemtype_settingOpen(this, body) }
-	async settingUpdate(body) { return await regitemtype_settingUpdate(this, body)}
-	async settingCreate(body) { return await regitemtype_settingCreate(this, body) }
-	async settingDelete(body) { return await regitemtype_settingDelete(this, body) }
-	async settingDeleteRows(body) { return await regitemtype_settingDeleteRows(this, body) }
+	async settingList(body) { return await regtype_settingList(this, body) }
+	async settingOpen(body) { return await regtype_settingOpen(this, body) }
+	async settingUpdate(body) { return await regtype_settingUpdate(this, body)}
+	async settingCreate(body) { return await regtype_settingCreate(this, body) }
+	async settingDelete(body) { return await regtype_settingDelete(this, body) }
+	async settingDeleteRows(body) { return await regtype_settingDeleteRows(this, body) }
 			
 }	
 
 // init module
-async function regitemtype_init(self, body) {
+async function regtype_init(self, body) {
 	const req = self.req
 
 	// set sid untuk session ini, diperlukan ini agar session aktif
@@ -109,9 +109,9 @@ async function regitemtype_init(self, body) {
 			}
 		}
 		
-		if (typeof Extender.regitemtype_init === 'function') {
-			// export async function regitemtype_init(self, initialData) {}
-			await Extender.regitemtype_init(self, initialData)
+		if (typeof Extender.regtype_init === 'function') {
+			// export async function regtype_init(self, initialData) {}
+			await Extender.regtype_init(self, initialData)
 		}
 
 		return initialData
@@ -123,7 +123,7 @@ async function regitemtype_init(self, body) {
 
 
 // execute extender function
-async function regitemtype_execute(self, body) {
+async function regtype_execute(self, body) {
 	const { fnName } = body
 
 	if (fnName==null || fnName=='') {
@@ -131,8 +131,8 @@ async function regitemtype_execute(self, body) {
 	}
 
 	if (typeof Extender[fnName] === 'function') {
-		// export async function [fnName](self, db, body, regitemtype_log) {}
-		return await Extender[fnName](self, db, body, regitemtype_log)
+		// export async function [fnName](self, db, body, regtype_log) {}
+		return await Extender[fnName](self, db, body, regtype_log)
 	} else {
 		// api function extender tidak ditemukan
 		throw new Error(`${fnName} tidak ditmukan di extender`)
@@ -141,7 +141,7 @@ async function regitemtype_execute(self, body) {
 
 
 // data logging
-async function regitemtype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
+async function regtype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
 	const { source } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -160,11 +160,11 @@ async function regitemtype_log(self, body, startTime, tablename, id, action, dat
 
 
 
-async function regitemtype_headerList(self, body) {
+async function regtype_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `regitemtype_name ILIKE '%' || \${searchtext} || '%'`,
+		searchtext: `regtype_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {
@@ -238,13 +238,13 @@ async function regitemtype_headerList(self, body) {
 	}
 }
 
-async function regitemtype_headerOpen(self, body) {
+async function regtype_headerOpen(self, body) {
 	const tablename = headerTableName
 
 	try {
 		const { id } = body 
-		const criteria = { regitemtype_id: id }
-		const searchMap = { regitemtype_id: `regitemtype_id = \${regitemtype_id}`}
+		const criteria = { regtype_id: id }
+		const searchMap = { regtype_id: `regtype_id = \${regtype_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename: tablename, 
@@ -287,8 +287,8 @@ async function regitemtype_headerOpen(self, body) {
 }
 
 
-async function regitemtype_headerCreate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_headerCreate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -318,7 +318,7 @@ async function regitemtype_headerCreate(self, body) {
 				await Extender.headerCreating(self, tx, data, null, args)
 			}
 
-			const cmd = sqlUtil.createInsertCommand(tablename, data, ['regitemtype_id'])
+			const cmd = sqlUtil.createInsertCommand(tablename, data, ['regtype_id'])
 			const ret = await cmd.execute(data)
 
 			
@@ -331,7 +331,7 @@ async function regitemtype_headerCreate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, ret.regitemtype_id, 'CREATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, ret.regtype_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -342,8 +342,8 @@ async function regitemtype_headerCreate(self, body) {
 	}
 }
 
-async function regitemtype_headerUpdate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_headerUpdate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -372,7 +372,7 @@ async function regitemtype_headerUpdate(self, body) {
 			}
 
 			// eksekusi update
-			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['regitemtype_id'])
+			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['regtype_id'])
 			const ret = await cmd.execute(data)
 
 			
@@ -385,7 +385,7 @@ async function regitemtype_headerUpdate(self, body) {
 			}			
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, data.regitemtype_id, 'UPDATE')
+			regtype_log(self, body, startTime, tablename, data.regtype_id, 'UPDATE')
 
 			return ret
 		})
@@ -398,7 +398,7 @@ async function regitemtype_headerUpdate(self, body) {
 }
 
 
-async function regitemtype_headerDelete(self, body) {
+async function regtype_headerDelete(self, body) {
 	const { source, id } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -410,7 +410,7 @@ async function regitemtype_headerDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {regitemtype_id: id}
+			const dataToRemove = {regtype_id: id}
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
@@ -421,7 +421,7 @@ async function regitemtype_headerDelete(self, body) {
 			
 			// hapus data brand
 			{
-				const sql = `select * from ${brandTableName} where regitemtype_id=\${regitemtype_id}`
+				const sql = `select * from ${brandTableName} where regtype_id=\${regtype_id}`
 				const rows = await tx.any(sql, dataToRemove)
 				for (let rowbrand of rows) {
 					
@@ -433,8 +433,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
 					}
 
-					const param = {regitemtypebrand_id: rowbrand.regitemtypebrand_id}
-					const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regitemtypebrand_id'])
+					const param = {regtypebrand_id: rowbrand.regtypebrand_id}
+					const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regtypebrand_id'])
 					const deletedRow = await cmd.execute(param)
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -443,8 +443,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
-					regitemtype_log(self, body, startTime, brandTableName, rowbrand.regitemtypebrand_id, 'DELETE', {rowdata: deletedRow})
-					regitemtype_log(self, body, startTime, headerTableName, rowbrand.regitemtype_id, 'DELETE ROW BRAND', {regitemtypebrand_id: rowbrand.regitemtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regitemtypebrand_id}`)
+					regtype_log(self, body, startTime, brandTableName, rowbrand.regtypebrand_id, 'DELETE', {rowdata: deletedRow})
+					regtype_log(self, body, startTime, headerTableName, rowbrand.regtype_id, 'DELETE ROW BRAND', {regtypebrand_id: rowbrand.regtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regtypebrand_id}`)
 
 
 				}	
@@ -452,7 +452,7 @@ async function regitemtype_headerDelete(self, body) {
 
 			// hapus data unit
 			{
-				const sql = `select * from ${unitTableName} where regitemtype_id=\${regitemtype_id}`
+				const sql = `select * from ${unitTableName} where regtype_id=\${regtype_id}`
 				const rows = await tx.any(sql, dataToRemove)
 				for (let rowunit of rows) {
 					
@@ -464,8 +464,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.unitDeleting(self, tx, rowunit, logMetadata)
 					}
 
-					const param = {regitemtypeunit_id: rowunit.regitemtypeunit_id}
-					const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regitemtypeunit_id'])
+					const param = {regtypeunit_id: rowunit.regtypeunit_id}
+					const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regtypeunit_id'])
 					const deletedRow = await cmd.execute(param)
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -474,8 +474,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
-					regitemtype_log(self, body, startTime, unitTableName, rowunit.regitemtypeunit_id, 'DELETE', {rowdata: deletedRow})
-					regitemtype_log(self, body, startTime, headerTableName, rowunit.regitemtype_id, 'DELETE ROW UNIT', {regitemtypeunit_id: rowunit.regitemtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regitemtypeunit_id}`)
+					regtype_log(self, body, startTime, unitTableName, rowunit.regtypeunit_id, 'DELETE', {rowdata: deletedRow})
+					regtype_log(self, body, startTime, headerTableName, rowunit.regtype_id, 'DELETE ROW UNIT', {regtypeunit_id: rowunit.regtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regtypeunit_id}`)
 
 
 				}	
@@ -483,7 +483,7 @@ async function regitemtype_headerDelete(self, body) {
 
 			// hapus data setting
 			{
-				const sql = `select * from ${settingTableName} where regitemtype_id=\${regitemtype_id}`
+				const sql = `select * from ${settingTableName} where regtype_id=\${regtype_id}`
 				const rows = await tx.any(sql, dataToRemove)
 				for (let rowsetting of rows) {
 					
@@ -495,8 +495,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.settingDeleting(self, tx, rowsetting, logMetadata)
 					}
 
-					const param = {regitemtypesetting_id: rowsetting.regitemtypesetting_id}
-					const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regitemtypesetting_id'])
+					const param = {regtypesetting_id: rowsetting.regtypesetting_id}
+					const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regtypesetting_id'])
 					const deletedRow = await cmd.execute(param)
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -505,8 +505,8 @@ async function regitemtype_headerDelete(self, body) {
 						await Extender.settingDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
-					regitemtype_log(self, body, startTime, settingTableName, rowsetting.regitemtypesetting_id, 'DELETE', {rowdata: deletedRow})
-					regitemtype_log(self, body, startTime, headerTableName, rowsetting.regitemtype_id, 'DELETE ROW SETTING', {regitemtypesetting_id: rowsetting.regitemtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regitemtypesetting_id}`)
+					regtype_log(self, body, startTime, settingTableName, rowsetting.regtypesetting_id, 'DELETE', {rowdata: deletedRow})
+					regtype_log(self, body, startTime, headerTableName, rowsetting.regtype_id, 'DELETE ROW SETTING', {regtypesetting_id: rowsetting.regtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regtypesetting_id}`)
 
 
 				}	
@@ -516,7 +516,7 @@ async function regitemtype_headerDelete(self, body) {
 			
 
 			// hapus data header
-			const cmd = sqlUtil.createDeleteCommand(tablename, ['regitemtype_id'])
+			const cmd = sqlUtil.createDeleteCommand(tablename, ['regtype_id'])
 			const deletedRow = await cmd.execute(dataToRemove)
 
 			const logMetadata = {}
@@ -528,7 +528,7 @@ async function regitemtype_headerDelete(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
+			regtype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
 
 			return deletedRow
 		})
@@ -544,16 +544,16 @@ async function regitemtype_headerDelete(self, body) {
 
 // brand	
 
-async function regitemtype_brandList(self, body) {
+async function regtype_brandList(self, body) {
 	const tablename = brandTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		regitemtype_id: `regitemtype_id=try_cast_bigint(\${regitemtype_id}, 0)`,
+		regtype_id: `regtype_id=try_cast_bigint(\${regtype_id}, 0)`,
 	};
 
 
 	if (Object.keys(sort).length === 0) {
-		sort.regitemtypebrand_id = 'asc'
+		sort.regtypebrand_id = 'asc'
 	}
 
 
@@ -594,7 +594,7 @@ async function regitemtype_brandList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.regitemtype.brand_id)
+			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.regtype.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
 				row.brand_name = brand_name ?? null
@@ -602,8 +602,8 @@ async function regitemtype_brandList(self, body) {
 			 
 			// field dengan tipedata json/jsonb	
 			{
-				if (row.regitemtypebrand_data) {
-					row.regitemtypebrand_data = JSON.stringify(row.regitemtypebrand_data)
+				if (row.regtypebrand_data) {
+					row.regtypebrand_data = JSON.stringify(row.regtypebrand_data)
 				}
 			}
 			
@@ -640,13 +640,13 @@ async function regitemtype_brandList(self, body) {
 	}
 }
 
-async function regitemtype_brandOpen(self, body) {
+async function regtype_brandOpen(self, body) {
 	const tablename = brandTableName
 
 	try {
 		const { id } = body 
-		const criteria = { regitemtypebrand_id: id }
-		const searchMap = { regitemtypebrand_id: `regitemtypebrand_id = \${regitemtypebrand_id}`}
+		const criteria = { regtypebrand_id: id }
+		const searchMap = { regtypebrand_id: `regtypebrand_id = \${regtypebrand_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename, 
@@ -663,7 +663,7 @@ async function regitemtype_brandOpen(self, body) {
 		}	
 
 
-		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.regitemtype.brand_id)
+		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.regtype.brand_id)
 		if (data.brand_id !== undefined) {
 			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
 			data.brand_name = brand_name ?? null
@@ -671,8 +671,8 @@ async function regitemtype_brandOpen(self, body) {
 		  
 		// field dengan tipedata json/jsonb	
 		{
-			if (data.regitemtypebrand_data) {
-				data.regitemtypebrand_data = JSON.stringify(data.regitemtypebrand_data)
+			if (data.regtypebrand_data) {
+				data.regtypebrand_data = JSON.stringify(data.regtypebrand_data)
 			}
 		}
 		
@@ -702,8 +702,8 @@ async function regitemtype_brandOpen(self, body) {
 	}
 }
 
-async function regitemtype_brandCreate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_brandCreate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -741,7 +741,7 @@ async function regitemtype_brandCreate(self, body) {
 
 
 			const seqdata = await sequencer.increment(args.doc_id)
-			data.regitemtypebrand_id = seqdata.id
+			data.regtypebrand_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.brandCreating === 'function') {
@@ -756,7 +756,7 @@ async function regitemtype_brandCreate(self, body) {
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: data.regitemtype_id
+				pk: data.regtype_id
 			})
 
 
@@ -769,7 +769,7 @@ async function regitemtype_brandCreate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, ret.regitemtypebrand_id, 'CREATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, ret.regtypebrand_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -780,8 +780,8 @@ async function regitemtype_brandCreate(self, body) {
 	}
 }
 
-async function regitemtype_brandUpdate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_brandUpdate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -801,8 +801,8 @@ async function regitemtype_brandUpdate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToUpdate = {regitemtypebrand_id: data.regitemtypebrand_id}
-			const sql = `select * from ${brandTableName} where regitemtypebrand_id=\${regitemtypebrand_id}`
+			const dataToUpdate = {regtypebrand_id: data.regtypebrand_id}
+			const sql = `select * from ${brandTableName} where regtypebrand_id=\${regtypebrand_id}`
 			const rowbrand = await tx.oneOrNone(sql, dataToUpdate)
 
 
@@ -812,14 +812,14 @@ async function regitemtype_brandUpdate(self, body) {
 				await Extender.brandUpdating(self, tx, data)
 			}			
 			
-			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regitemtypebrand_id'])
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regtypebrand_id'])
 			const ret = await cmd.execute(data)
 			
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowbrand.regitemtype_id
+				pk: rowbrand.regtype_id
 			})
 
 			const logMetadata = {}
@@ -831,7 +831,7 @@ async function regitemtype_brandUpdate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, data.regitemtypebrand_id, 'UPDATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, data.regtypebrand_id, 'UPDATE', logMetadata)
 
 			return ret
 		})
@@ -842,7 +842,7 @@ async function regitemtype_brandUpdate(self, body) {
 	}
 }
 
-async function regitemtype_brandDelete(self, body) {
+async function regtype_brandDelete(self, body) {
 	const { source, id } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -856,8 +856,8 @@ async function regitemtype_brandDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {regitemtypebrand_id: id}
-			const sql = `select * from ${brandTableName} where regitemtypebrand_id=\${regitemtypebrand_id}`
+			const dataToRemove = {regtypebrand_id: id}
+			const sql = `select * from ${brandTableName} where regtypebrand_id=\${regtypebrand_id}`
 			const rowbrand = await tx.oneOrNone(sql, dataToRemove)
 
 			const logMetadata = {}
@@ -868,15 +868,15 @@ async function regitemtype_brandDelete(self, body) {
 				await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
 			}
 
-			const param = {regitemtypebrand_id: rowbrand.regitemtypebrand_id}
-			const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regitemtypebrand_id'])
+			const param = {regtypebrand_id: rowbrand.regtypebrand_id}
+			const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regtypebrand_id'])
 			const deletedRow = await cmd.execute(param)
 
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowbrand.regitemtype_id
+				pk: rowbrand.regtype_id
 			})
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -885,8 +885,8 @@ async function regitemtype_brandDelete(self, body) {
 				await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
-			regitemtype_log(self, body, startTime, brandTableName, rowbrand.regitemtypebrand_id, 'DELETE', {rowdata: deletedRow})
-			regitemtype_log(self, body, startTime, headerTableName, rowbrand.regitemtype_id, 'DELETE ROW BRAND', {regitemtypebrand_id: rowbrand.regitemtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regitemtypebrand_id}`)
+			regtype_log(self, body, startTime, brandTableName, rowbrand.regtypebrand_id, 'DELETE', {rowdata: deletedRow})
+			regtype_log(self, body, startTime, headerTableName, rowbrand.regtype_id, 'DELETE ROW BRAND', {regtypebrand_id: rowbrand.regtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regtypebrand_id}`)
 
 			return deletedRow
 		})
@@ -898,7 +898,7 @@ async function regitemtype_brandDelete(self, body) {
 	}
 }
 
-async function regitemtype_brandDeleteRows(self, body) {
+async function regtype_brandDeleteRows(self, body) {
 	const { data } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -911,15 +911,15 @@ async function regitemtype_brandDeleteRows(self, body) {
 
 		const data_timestamp = (new Date()).toISOString()
 
-		let regitemtype_id
+		let regtype_id
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
 			for (let id of data) {
-				const dataToRemove = {regitemtypebrand_id: id}
-				const sql = `select * from ${brandTableName} where regitemtypebrand_id=\${regitemtypebrand_id}`
+				const dataToRemove = {regtypebrand_id: id}
+				const sql = `select * from ${brandTableName} where regtypebrand_id=\${regtypebrand_id}`
 				const rowbrand = await tx.oneOrNone(sql, dataToRemove)
-				regitemtype_id = rowbrand.regitemtype_id
+				regtype_id = rowbrand.regtype_id
 
 				const logMetadata = {}
 
@@ -930,14 +930,14 @@ async function regitemtype_brandDeleteRows(self, body) {
 					await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
 				}
 
-				const param = {regitemtypebrand_id: rowbrand.regitemtypebrand_id}
-				const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regitemtypebrand_id'])
+				const param = {regtypebrand_id: rowbrand.regtypebrand_id}
+				const cmd = sqlUtil.createDeleteCommand(brandTableName, ['regtypebrand_id'])
 				const deletedRow = await cmd.execute(param)
 
 				// update timestamp pada header
 				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 					_timestamp: data_timestamp,
-					pk: rowbrand.regitemtype_id
+					pk: rowbrand.regtype_id
 				})
 				
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -946,15 +946,15 @@ async function regitemtype_brandDeleteRows(self, body) {
 					await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
 				}					
 
-				regitemtype_log(self, body, startTime, brandTableName, rowbrand.regitemtypebrand_id, 'DELETE', {rowdata: deletedRow})
-				regitemtype_log(self, body, startTime, headerTableName, rowbrand.regitemtype_id, 'DELETE ROW BRAND', {regitemtypebrand_id: rowbrand.regitemtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regitemtypebrand_id}`)
+				regtype_log(self, body, startTime, brandTableName, rowbrand.regtypebrand_id, 'DELETE', {rowdata: deletedRow})
+				regtype_log(self, body, startTime, headerTableName, rowbrand.regtype_id, 'DELETE ROW BRAND', {regtypebrand_id: rowbrand.regtypebrand_id, tablename: brandTableName}, `removed: ${rowbrand.regtypebrand_id}`)
 			}
 		})
 		
 
 		const res = {
 			deleted: true,
-			regitemtype_id: regitemtype_id,
+			regtype_id: regtype_id,
 			message: ''
 		}
 
@@ -975,16 +975,16 @@ async function regitemtype_brandDeleteRows(self, body) {
 
 // unit	
 
-async function regitemtype_unitList(self, body) {
+async function regtype_unitList(self, body) {
 	const tablename = unitTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		regitemtype_id: `regitemtype_id=try_cast_bigint(\${regitemtype_id}, 0)`,
+		regtype_id: `regtype_id=try_cast_bigint(\${regtype_id}, 0)`,
 	};
 
 
 	if (Object.keys(sort).length === 0) {
-		sort.regitemtypeunit_id = 'asc'
+		sort.regtypeunit_id = 'asc'
 	}
 
 
@@ -1025,7 +1025,7 @@ async function regitemtype_unitList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.regitemtype.unit_id)
+			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.regtype.unit_id)
 			if (row.unit_id !== undefined) {
 				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
 				row.unit_name = unit_name ?? null
@@ -1033,8 +1033,8 @@ async function regitemtype_unitList(self, body) {
 			 
 			// field dengan tipedata json/jsonb	
 			{
-				if (row.regitemtypeunit_data) {
-					row.regitemtypeunit_data = JSON.stringify(row.regitemtypeunit_data)
+				if (row.regtypeunit_data) {
+					row.regtypeunit_data = JSON.stringify(row.regtypeunit_data)
 				}
 			}
 			
@@ -1071,13 +1071,13 @@ async function regitemtype_unitList(self, body) {
 	}
 }
 
-async function regitemtype_unitOpen(self, body) {
+async function regtype_unitOpen(self, body) {
 	const tablename = unitTableName
 
 	try {
 		const { id } = body 
-		const criteria = { regitemtypeunit_id: id }
-		const searchMap = { regitemtypeunit_id: `regitemtypeunit_id = \${regitemtypeunit_id}`}
+		const criteria = { regtypeunit_id: id }
+		const searchMap = { regtypeunit_id: `regtypeunit_id = \${regtypeunit_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename, 
@@ -1094,7 +1094,7 @@ async function regitemtype_unitOpen(self, body) {
 		}	
 
 
-		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.regitemtype.unit_id)
+		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.regtype.unit_id)
 		if (data.unit_id !== undefined) {
 			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
 			data.unit_name = unit_name ?? null
@@ -1102,8 +1102,8 @@ async function regitemtype_unitOpen(self, body) {
 		  
 		// field dengan tipedata json/jsonb	
 		{
-			if (data.regitemtypeunit_data) {
-				data.regitemtypeunit_data = JSON.stringify(data.regitemtypeunit_data)
+			if (data.regtypeunit_data) {
+				data.regtypeunit_data = JSON.stringify(data.regtypeunit_data)
 			}
 		}
 		
@@ -1133,8 +1133,8 @@ async function regitemtype_unitOpen(self, body) {
 	}
 }
 
-async function regitemtype_unitCreate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_unitCreate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -1172,7 +1172,7 @@ async function regitemtype_unitCreate(self, body) {
 
 
 			const seqdata = await sequencer.increment(args.doc_id)
-			data.regitemtypeunit_id = seqdata.id
+			data.regtypeunit_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.unitCreating === 'function') {
@@ -1187,7 +1187,7 @@ async function regitemtype_unitCreate(self, body) {
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: data.regitemtype_id
+				pk: data.regtype_id
 			})
 
 
@@ -1200,7 +1200,7 @@ async function regitemtype_unitCreate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, ret.regitemtypeunit_id, 'CREATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, ret.regtypeunit_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -1211,8 +1211,8 @@ async function regitemtype_unitCreate(self, body) {
 	}
 }
 
-async function regitemtype_unitUpdate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_unitUpdate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -1232,8 +1232,8 @@ async function regitemtype_unitUpdate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToUpdate = {regitemtypeunit_id: data.regitemtypeunit_id}
-			const sql = `select * from ${unitTableName} where regitemtypeunit_id=\${regitemtypeunit_id}`
+			const dataToUpdate = {regtypeunit_id: data.regtypeunit_id}
+			const sql = `select * from ${unitTableName} where regtypeunit_id=\${regtypeunit_id}`
 			const rowunit = await tx.oneOrNone(sql, dataToUpdate)
 
 
@@ -1243,14 +1243,14 @@ async function regitemtype_unitUpdate(self, body) {
 				await Extender.unitUpdating(self, tx, data)
 			}			
 			
-			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regitemtypeunit_id'])
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regtypeunit_id'])
 			const ret = await cmd.execute(data)
 			
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowunit.regitemtype_id
+				pk: rowunit.regtype_id
 			})
 
 			const logMetadata = {}
@@ -1262,7 +1262,7 @@ async function regitemtype_unitUpdate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, data.regitemtypeunit_id, 'UPDATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, data.regtypeunit_id, 'UPDATE', logMetadata)
 
 			return ret
 		})
@@ -1273,7 +1273,7 @@ async function regitemtype_unitUpdate(self, body) {
 	}
 }
 
-async function regitemtype_unitDelete(self, body) {
+async function regtype_unitDelete(self, body) {
 	const { source, id } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -1287,8 +1287,8 @@ async function regitemtype_unitDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {regitemtypeunit_id: id}
-			const sql = `select * from ${unitTableName} where regitemtypeunit_id=\${regitemtypeunit_id}`
+			const dataToRemove = {regtypeunit_id: id}
+			const sql = `select * from ${unitTableName} where regtypeunit_id=\${regtypeunit_id}`
 			const rowunit = await tx.oneOrNone(sql, dataToRemove)
 
 			const logMetadata = {}
@@ -1299,15 +1299,15 @@ async function regitemtype_unitDelete(self, body) {
 				await Extender.unitDeleting(self, tx, rowunit, logMetadata)
 			}
 
-			const param = {regitemtypeunit_id: rowunit.regitemtypeunit_id}
-			const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regitemtypeunit_id'])
+			const param = {regtypeunit_id: rowunit.regtypeunit_id}
+			const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regtypeunit_id'])
 			const deletedRow = await cmd.execute(param)
 
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowunit.regitemtype_id
+				pk: rowunit.regtype_id
 			})
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -1316,8 +1316,8 @@ async function regitemtype_unitDelete(self, body) {
 				await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
-			regitemtype_log(self, body, startTime, unitTableName, rowunit.regitemtypeunit_id, 'DELETE', {rowdata: deletedRow})
-			regitemtype_log(self, body, startTime, headerTableName, rowunit.regitemtype_id, 'DELETE ROW UNIT', {regitemtypeunit_id: rowunit.regitemtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regitemtypeunit_id}`)
+			regtype_log(self, body, startTime, unitTableName, rowunit.regtypeunit_id, 'DELETE', {rowdata: deletedRow})
+			regtype_log(self, body, startTime, headerTableName, rowunit.regtype_id, 'DELETE ROW UNIT', {regtypeunit_id: rowunit.regtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regtypeunit_id}`)
 
 			return deletedRow
 		})
@@ -1329,7 +1329,7 @@ async function regitemtype_unitDelete(self, body) {
 	}
 }
 
-async function regitemtype_unitDeleteRows(self, body) {
+async function regtype_unitDeleteRows(self, body) {
 	const { data } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -1342,15 +1342,15 @@ async function regitemtype_unitDeleteRows(self, body) {
 
 		const data_timestamp = (new Date()).toISOString()
 
-		let regitemtype_id
+		let regtype_id
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
 			for (let id of data) {
-				const dataToRemove = {regitemtypeunit_id: id}
-				const sql = `select * from ${unitTableName} where regitemtypeunit_id=\${regitemtypeunit_id}`
+				const dataToRemove = {regtypeunit_id: id}
+				const sql = `select * from ${unitTableName} where regtypeunit_id=\${regtypeunit_id}`
 				const rowunit = await tx.oneOrNone(sql, dataToRemove)
-				regitemtype_id = rowunit.regitemtype_id
+				regtype_id = rowunit.regtype_id
 
 				const logMetadata = {}
 
@@ -1361,14 +1361,14 @@ async function regitemtype_unitDeleteRows(self, body) {
 					await Extender.unitDeleting(self, tx, rowunit, logMetadata)
 				}
 
-				const param = {regitemtypeunit_id: rowunit.regitemtypeunit_id}
-				const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regitemtypeunit_id'])
+				const param = {regtypeunit_id: rowunit.regtypeunit_id}
+				const cmd = sqlUtil.createDeleteCommand(unitTableName, ['regtypeunit_id'])
 				const deletedRow = await cmd.execute(param)
 
 				// update timestamp pada header
 				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 					_timestamp: data_timestamp,
-					pk: rowunit.regitemtype_id
+					pk: rowunit.regtype_id
 				})
 				
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -1377,15 +1377,15 @@ async function regitemtype_unitDeleteRows(self, body) {
 					await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
 				}					
 
-				regitemtype_log(self, body, startTime, unitTableName, rowunit.regitemtypeunit_id, 'DELETE', {rowdata: deletedRow})
-				regitemtype_log(self, body, startTime, headerTableName, rowunit.regitemtype_id, 'DELETE ROW UNIT', {regitemtypeunit_id: rowunit.regitemtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regitemtypeunit_id}`)
+				regtype_log(self, body, startTime, unitTableName, rowunit.regtypeunit_id, 'DELETE', {rowdata: deletedRow})
+				regtype_log(self, body, startTime, headerTableName, rowunit.regtype_id, 'DELETE ROW UNIT', {regtypeunit_id: rowunit.regtypeunit_id, tablename: unitTableName}, `removed: ${rowunit.regtypeunit_id}`)
 			}
 		})
 		
 
 		const res = {
 			deleted: true,
-			regitemtype_id: regitemtype_id,
+			regtype_id: regtype_id,
 			message: ''
 		}
 
@@ -1406,16 +1406,16 @@ async function regitemtype_unitDeleteRows(self, body) {
 
 // setting	
 
-async function regitemtype_settingList(self, body) {
+async function regtype_settingList(self, body) {
 	const tablename = settingTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		regitemtype_id: `regitemtype_id=try_cast_bigint(\${regitemtype_id}, 0)`,
+		regtype_id: `regtype_id=try_cast_bigint(\${regtype_id}, 0)`,
 	};
 
 
 	if (Object.keys(sort).length === 0) {
-		sort.regitemtypesetting_id = 'asc'
+		sort.regtypesetting_id = 'asc'
 	}
 
 
@@ -1497,13 +1497,13 @@ async function regitemtype_settingList(self, body) {
 	}
 }
 
-async function regitemtype_settingOpen(self, body) {
+async function regtype_settingOpen(self, body) {
 	const tablename = settingTableName
 
 	try {
 		const { id } = body 
-		const criteria = { regitemtypesetting_id: id }
-		const searchMap = { regitemtypesetting_id: `regitemtypesetting_id = \${regitemtypesetting_id}`}
+		const criteria = { regtypesetting_id: id }
+		const searchMap = { regtypesetting_id: `regtypesetting_id = \${regtypesetting_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename, 
@@ -1554,8 +1554,8 @@ async function regitemtype_settingOpen(self, body) {
 	}
 }
 
-async function regitemtype_settingCreate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_settingCreate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -1593,7 +1593,7 @@ async function regitemtype_settingCreate(self, body) {
 
 
 			const seqdata = await sequencer.increment(args.doc_id)
-			data.regitemtypesetting_id = seqdata.id
+			data.regtypesetting_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.settingCreating === 'function') {
@@ -1608,7 +1608,7 @@ async function regitemtype_settingCreate(self, body) {
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: data.regitemtype_id
+				pk: data.regtype_id
 			})
 
 
@@ -1621,7 +1621,7 @@ async function regitemtype_settingCreate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, ret.regitemtypesetting_id, 'CREATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, ret.regtypesetting_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -1632,8 +1632,8 @@ async function regitemtype_settingCreate(self, body) {
 	}
 }
 
-async function regitemtype_settingUpdate(self, body) {
-	const { source='regitemtype', data={} } = body
+async function regtype_settingUpdate(self, body) {
+	const { source='regtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -1653,8 +1653,8 @@ async function regitemtype_settingUpdate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToUpdate = {regitemtypesetting_id: data.regitemtypesetting_id}
-			const sql = `select * from ${settingTableName} where regitemtypesetting_id=\${regitemtypesetting_id}`
+			const dataToUpdate = {regtypesetting_id: data.regtypesetting_id}
+			const sql = `select * from ${settingTableName} where regtypesetting_id=\${regtypesetting_id}`
 			const rowsetting = await tx.oneOrNone(sql, dataToUpdate)
 
 
@@ -1664,14 +1664,14 @@ async function regitemtype_settingUpdate(self, body) {
 				await Extender.settingUpdating(self, tx, data)
 			}			
 			
-			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regitemtypesetting_id'])
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['regtypesetting_id'])
 			const ret = await cmd.execute(data)
 			
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowsetting.regitemtype_id
+				pk: rowsetting.regtype_id
 			})
 
 			const logMetadata = {}
@@ -1683,7 +1683,7 @@ async function regitemtype_settingUpdate(self, body) {
 			}
 
 			// record log
-			regitemtype_log(self, body, startTime, tablename, data.regitemtypesetting_id, 'UPDATE', logMetadata)
+			regtype_log(self, body, startTime, tablename, data.regtypesetting_id, 'UPDATE', logMetadata)
 
 			return ret
 		})
@@ -1694,7 +1694,7 @@ async function regitemtype_settingUpdate(self, body) {
 	}
 }
 
-async function regitemtype_settingDelete(self, body) {
+async function regtype_settingDelete(self, body) {
 	const { source, id } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -1708,8 +1708,8 @@ async function regitemtype_settingDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {regitemtypesetting_id: id}
-			const sql = `select * from ${settingTableName} where regitemtypesetting_id=\${regitemtypesetting_id}`
+			const dataToRemove = {regtypesetting_id: id}
+			const sql = `select * from ${settingTableName} where regtypesetting_id=\${regtypesetting_id}`
 			const rowsetting = await tx.oneOrNone(sql, dataToRemove)
 
 			const logMetadata = {}
@@ -1720,15 +1720,15 @@ async function regitemtype_settingDelete(self, body) {
 				await Extender.settingDeleting(self, tx, rowsetting, logMetadata)
 			}
 
-			const param = {regitemtypesetting_id: rowsetting.regitemtypesetting_id}
-			const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regitemtypesetting_id'])
+			const param = {regtypesetting_id: rowsetting.regtypesetting_id}
+			const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regtypesetting_id'])
 			const deletedRow = await cmd.execute(param)
 
 
 			// update timestamp pada header
 			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 				_timestamp: data_timestamp,
-				pk: rowsetting.regitemtype_id
+				pk: rowsetting.regtype_id
 			})
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -1737,8 +1737,8 @@ async function regitemtype_settingDelete(self, body) {
 				await Extender.settingDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
-			regitemtype_log(self, body, startTime, settingTableName, rowsetting.regitemtypesetting_id, 'DELETE', {rowdata: deletedRow})
-			regitemtype_log(self, body, startTime, headerTableName, rowsetting.regitemtype_id, 'DELETE ROW SETTING', {regitemtypesetting_id: rowsetting.regitemtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regitemtypesetting_id}`)
+			regtype_log(self, body, startTime, settingTableName, rowsetting.regtypesetting_id, 'DELETE', {rowdata: deletedRow})
+			regtype_log(self, body, startTime, headerTableName, rowsetting.regtype_id, 'DELETE ROW SETTING', {regtypesetting_id: rowsetting.regtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regtypesetting_id}`)
 
 			return deletedRow
 		})
@@ -1750,7 +1750,7 @@ async function regitemtype_settingDelete(self, body) {
 	}
 }
 
-async function regitemtype_settingDeleteRows(self, body) {
+async function regtype_settingDeleteRows(self, body) {
 	const { data } = body 
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -1763,15 +1763,15 @@ async function regitemtype_settingDeleteRows(self, body) {
 
 		const data_timestamp = (new Date()).toISOString()
 
-		let regitemtype_id
+		let regtype_id
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
 			for (let id of data) {
-				const dataToRemove = {regitemtypesetting_id: id}
-				const sql = `select * from ${settingTableName} where regitemtypesetting_id=\${regitemtypesetting_id}`
+				const dataToRemove = {regtypesetting_id: id}
+				const sql = `select * from ${settingTableName} where regtypesetting_id=\${regtypesetting_id}`
 				const rowsetting = await tx.oneOrNone(sql, dataToRemove)
-				regitemtype_id = rowsetting.regitemtype_id
+				regtype_id = rowsetting.regtype_id
 
 				const logMetadata = {}
 
@@ -1782,14 +1782,14 @@ async function regitemtype_settingDeleteRows(self, body) {
 					await Extender.settingDeleting(self, tx, rowsetting, logMetadata)
 				}
 
-				const param = {regitemtypesetting_id: rowsetting.regitemtypesetting_id}
-				const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regitemtypesetting_id'])
+				const param = {regtypesetting_id: rowsetting.regtypesetting_id}
+				const cmd = sqlUtil.createDeleteCommand(settingTableName, ['regtypesetting_id'])
 				const deletedRow = await cmd.execute(param)
 
 				// update timestamp pada header
 				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
 					_timestamp: data_timestamp,
-					pk: rowsetting.regitemtype_id
+					pk: rowsetting.regtype_id
 				})
 				
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
@@ -1798,15 +1798,15 @@ async function regitemtype_settingDeleteRows(self, body) {
 					await Extender.settingDeleted(self, tx, deletedRow, logMetadata)
 				}					
 
-				regitemtype_log(self, body, startTime, settingTableName, rowsetting.regitemtypesetting_id, 'DELETE', {rowdata: deletedRow})
-				regitemtype_log(self, body, startTime, headerTableName, rowsetting.regitemtype_id, 'DELETE ROW SETTING', {regitemtypesetting_id: rowsetting.regitemtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regitemtypesetting_id}`)
+				regtype_log(self, body, startTime, settingTableName, rowsetting.regtypesetting_id, 'DELETE', {rowdata: deletedRow})
+				regtype_log(self, body, startTime, headerTableName, rowsetting.regtype_id, 'DELETE ROW SETTING', {regtypesetting_id: rowsetting.regtypesetting_id, tablename: settingTableName}, `removed: ${rowsetting.regtypesetting_id}`)
 			}
 		})
 		
 
 		const res = {
 			deleted: true,
-			regitemtype_id: regitemtype_id,
+			regtype_id: regtype_id,
 			message: ''
 		}
 
