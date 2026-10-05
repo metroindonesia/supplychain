@@ -9,6 +9,7 @@ import db from '@agung_dhewe/webapps/src/db.js'
 import Api from '@agung_dhewe/webapps/src/api.js'
 import sqlUtil from '@agung_dhewe/pgsqlc'
 import context from '@agung_dhewe/webapps/src/context.js'  
+import { getProgramSetting } from '@agung_dhewe/webapps/src/helper.js'
 import logger from '@agung_dhewe/webapps/src/logger.js'
 import { createSequencerLine } from '@agung_dhewe/webapps/src/sequencerline.js' 
 
@@ -22,7 +23,10 @@ const loginTableName = 'core.userlogin'
 const propTableName = 'core.userprop'  
 const groupTableName = 'core.usergroup'  
 const favouriteTableName = 'core.userfavouriteprogram'  
-const roleTableName = 'core.userrole'  	
+const roleTableName = 'core.userrole'  
+const unitTableName = 'public.userunit'  
+const brandTableName = 'public.userbrand'  
+const siteTableName = 'public.usersite'  	
 
 // api: account
 export default class extends Api {
@@ -87,6 +91,30 @@ export default class extends Api {
 	async roleCreate(body) { return await user_roleCreate(this, body) }
 	async roleDelete(body) { return await user_roleDelete(this, body) }
 	async roleDeleteRows(body) { return await user_roleDeleteRows(this, body) }
+	
+	// unit	
+	async unitList(body) { return await user_unitList(this, body) }
+	async unitOpen(body) { return await user_unitOpen(this, body) }
+	async unitUpdate(body) { return await user_unitUpdate(this, body)}
+	async unitCreate(body) { return await user_unitCreate(this, body) }
+	async unitDelete(body) { return await user_unitDelete(this, body) }
+	async unitDeleteRows(body) { return await user_unitDeleteRows(this, body) }
+	
+	// brand	
+	async brandList(body) { return await user_brandList(this, body) }
+	async brandOpen(body) { return await user_brandOpen(this, body) }
+	async brandUpdate(body) { return await user_brandUpdate(this, body)}
+	async brandCreate(body) { return await user_brandCreate(this, body) }
+	async brandDelete(body) { return await user_brandDelete(this, body) }
+	async brandDeleteRows(body) { return await user_brandDeleteRows(this, body) }
+	
+	// site	
+	async siteList(body) { return await user_siteList(this, body) }
+	async siteOpen(body) { return await user_siteOpen(this, body) }
+	async siteUpdate(body) { return await user_siteUpdate(this, body)}
+	async siteCreate(body) { return await user_siteCreate(this, body) }
+	async siteDelete(body) { return await user_siteDelete(this, body) }
+	async siteDeleteRows(body) { return await user_siteDeleteRows(this, body) }
 			
 }	
 
@@ -109,6 +137,9 @@ async function user_init(self, body) {
 			}
 		}
 
+		const programName = req.params.modulename;
+		const variance = req.query.variance;
+		const programSetting = await getProgramSetting(db, programName, variance)
 		const initialData = {
 			userId: req.session.user.userId,
 			userName: req.session.user.userName,
@@ -118,7 +149,9 @@ async function user_init(self, body) {
 			notifierSocket: req.app.locals.appConfig.notifierSocket,
 			appName: req.app.locals.appConfig.appName,
 			appsUrls: appsUrls,
-			setting: {}
+			setting: {
+				program: programSetting
+			}
 		}
 		
 		if (typeof Extender.user_init === 'function') {
@@ -223,7 +256,7 @@ async function user_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			
+			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
 				// export async function headerListRow(self, row, args) {}
@@ -272,16 +305,15 @@ async function user_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
-		
-
+		 
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}
@@ -603,6 +635,99 @@ async function user_headerDelete(self, body) {
 				}	
 			}
 
+			// hapus data unit
+			{
+				const sql = `select * from ${unitTableName} where user_id=\${user_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowunit of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.unitDeleting === 'function') {
+						// export async function unitDeleting(self, tx, rowunit, logMetadata) {}
+						await Extender.unitDeleting(self, tx, rowunit, logMetadata)
+					}
+
+					const param = {userunit_id: rowunit.userunit_id}
+					const cmd = sqlUtil.createDeleteCommand(unitTableName, ['userunit_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.unitDeleted === 'function') {
+						// export async function unitDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					user_log(self, body, startTime, unitTableName, rowunit.userunit_id, 'DELETE', {rowdata: deletedRow})
+					user_log(self, body, startTime, headerTableName, rowunit.user_id, 'DELETE ROW UNIT', {userunit_id: rowunit.userunit_id, tablename: unitTableName}, `removed: ${rowunit.userunit_id}`)
+
+
+				}	
+			}
+
+			// hapus data brand
+			{
+				const sql = `select * from ${brandTableName} where user_id=\${user_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowbrand of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.brandDeleting === 'function') {
+						// export async function brandDeleting(self, tx, rowbrand, logMetadata) {}
+						await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
+					}
+
+					const param = {userbrand_id: rowbrand.userbrand_id}
+					const cmd = sqlUtil.createDeleteCommand(brandTableName, ['userbrand_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.brandDeleted === 'function') {
+						// export async function brandDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					user_log(self, body, startTime, brandTableName, rowbrand.userbrand_id, 'DELETE', {rowdata: deletedRow})
+					user_log(self, body, startTime, headerTableName, rowbrand.user_id, 'DELETE ROW BRAND', {userbrand_id: rowbrand.userbrand_id, tablename: brandTableName}, `removed: ${rowbrand.userbrand_id}`)
+
+
+				}	
+			}
+
+			// hapus data site
+			{
+				const sql = `select * from ${siteTableName} where user_id=\${user_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowsite of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.siteDeleting === 'function') {
+						// export async function siteDeleting(self, tx, rowsite, logMetadata) {}
+						await Extender.siteDeleting(self, tx, rowsite, logMetadata)
+					}
+
+					const param = {usersite_id: rowsite.usersite_id}
+					const cmd = sqlUtil.createDeleteCommand(siteTableName, ['usersite_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.siteDeleted === 'function') {
+						// export async function siteDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.siteDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					user_log(self, body, startTime, siteTableName, rowsite.usersite_id, 'DELETE', {rowdata: deletedRow})
+					user_log(self, body, startTime, headerTableName, rowsite.user_id, 'DELETE ROW SITE', {usersite_id: rowsite.usersite_id, tablename: siteTableName}, `removed: ${rowsite.usersite_id}`)
+
+
+				}	
+			}
+
 			
 			
 
@@ -685,8 +810,7 @@ async function user_loginList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			
-
+			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
 				// export async function detilListRow(self, row, args) {}
@@ -743,16 +867,15 @@ async function user_loginOpen(self, body) {
 		}	
 
 
-		
-
+		  
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}	
@@ -795,7 +918,7 @@ async function user_loginCreate(self, body) {
 
 			const args = { 
 				section: 'login', 
-				prefix: 'USER'	
+				doc_id: 'USER'	
 			}
 
 			const sequencer = createSequencerLine(tx, {})
@@ -809,7 +932,7 @@ async function user_loginCreate(self, body) {
 			}
 
 
-			const seqdata = await sequencer.increment(args.prefix)
+			const seqdata = await sequencer.increment(args.doc_id)
 			data.userlogin_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -1094,8 +1217,7 @@ async function user_propList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			
-
+			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
 				// export async function detilListRow(self, row, args) {}
@@ -1152,16 +1274,15 @@ async function user_propOpen(self, body) {
 		}	
 
 
-		
-
+		  
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}	
@@ -1204,7 +1325,7 @@ async function user_propCreate(self, body) {
 
 			const args = { 
 				section: 'prop', 
-				prefix: 'USER'	
+				doc_id: 'USER'	
 			}
 
 			const sequencer = createSequencerLine(tx, {})
@@ -1218,7 +1339,7 @@ async function user_propCreate(self, body) {
 			}
 
 
-			const seqdata = await sequencer.increment(args.prefix)
+			const seqdata = await sequencer.increment(args.doc_id)
 			data.userprop_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -1504,12 +1625,11 @@ async function user_groupList(self, body) {
 			if (i>max_rows) { break }
 
 			// lookup: group_name dari field group_name pada table core.group dimana (core.group.group_id = core.user.group_id)
-			{
+			if (row.group_id !== undefined) {
 				const { group_name } = await sqlUtil.lookupdb(db, 'core.group', 'group_id', row.group_id)
-				row.group_name = group_name
+				row.group_name = group_name ?? null
 			}
-			
-
+			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
 				// export async function detilListRow(self, row, args) {}
@@ -1567,20 +1687,19 @@ async function user_groupOpen(self, body) {
 
 
 		// lookup: group_name dari field group_name pada table core.group dimana (core.group.group_id = core.user.group_id)
-		{
+		if (data.group_id !== undefined) {
 			const { group_name } = await sqlUtil.lookupdb(db, 'core.group', 'group_id', data.group_id)
-			data.group_name = group_name
+			data.group_name = group_name ?? null
 		}
-		
-
+		  
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}	
@@ -1623,7 +1742,7 @@ async function user_groupCreate(self, body) {
 
 			const args = { 
 				section: 'group', 
-				prefix: 'USER'	
+				doc_id: 'USER'	
 			}
 
 			const sequencer = createSequencerLine(tx, {})
@@ -1637,7 +1756,7 @@ async function user_groupCreate(self, body) {
 			}
 
 
-			const seqdata = await sequencer.increment(args.prefix)
+			const seqdata = await sequencer.increment(args.doc_id)
 			data.usergroup_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -1923,12 +2042,11 @@ async function user_favouriteList(self, body) {
 			if (i>max_rows) { break }
 
 			// lookup: program_name dari field program_name pada table core.program dimana (core.program.program_id = core.user.program_id)
-			{
+			if (row.program_id !== undefined) {
 				const { program_name } = await sqlUtil.lookupdb(db, 'core.program', 'program_id', row.program_id)
-				row.program_name = program_name
+				row.program_name = program_name ?? null
 			}
-			
-
+			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
 				// export async function detilListRow(self, row, args) {}
@@ -1986,20 +2104,19 @@ async function user_favouriteOpen(self, body) {
 
 
 		// lookup: program_name dari field program_name pada table core.program dimana (core.program.program_id = core.user.program_id)
-		{
+		if (data.program_id !== undefined) {
 			const { program_name } = await sqlUtil.lookupdb(db, 'core.program', 'program_id', data.program_id)
-			data.program_name = program_name
+			data.program_name = program_name ?? null
 		}
-		
-
+		  
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}	
@@ -2042,7 +2159,7 @@ async function user_favouriteCreate(self, body) {
 
 			const args = { 
 				section: 'favourite', 
-				prefix: 'USER'	
+				doc_id: 'USER'	
 			}
 
 			const sequencer = createSequencerLine(tx, {})
@@ -2056,7 +2173,7 @@ async function user_favouriteCreate(self, body) {
 			}
 
 
-			const seqdata = await sequencer.increment(args.prefix)
+			const seqdata = await sequencer.increment(args.doc_id)
 			data.userfavouriteprogram_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -2342,12 +2459,11 @@ async function user_roleList(self, body) {
 			if (i>max_rows) { break }
 
 			// lookup: role_name dari field role_name pada table core.role dimana (core.role.role_id = core.user.role_id)
-			{
+			if (row.role_id !== undefined) {
 				const { role_name } = await sqlUtil.lookupdb(db, 'core.role', 'role_id', row.role_id)
-				row.role_name = role_name
+				row.role_name = role_name ?? null
 			}
-			
-
+			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
 				// export async function detilListRow(self, row, args) {}
@@ -2405,20 +2521,19 @@ async function user_roleOpen(self, body) {
 
 
 		// lookup: role_name dari field role_name pada table core.role dimana (core.role.role_id = core.user.role_id)
-		{
+		if (data.role_id !== undefined) {
 			const { role_name } = await sqlUtil.lookupdb(db, 'core.role', 'role_id', data.role_id)
-			data.role_name = role_name
+			data.role_name = role_name ?? null
 		}
-		
-
+		  
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}	
@@ -2461,7 +2576,7 @@ async function user_roleCreate(self, body) {
 
 			const args = { 
 				section: 'role', 
-				prefix: 'USER'	
+				doc_id: 'USER'	
 			}
 
 			const sequencer = createSequencerLine(tx, {})
@@ -2475,7 +2590,7 @@ async function user_roleCreate(self, body) {
 			}
 
 
-			const seqdata = await sequencer.increment(args.prefix)
+			const seqdata = await sequencer.increment(args.doc_id)
 			data.userrole_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
@@ -2698,6 +2813,1299 @@ async function user_roleDeleteRows(self, body) {
 		const fn = Extender[fn_name]
 		if (typeof fn === 'function') {
 			// export async function roleRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// unit	
+
+async function user_unitList(self, body) {
+	const tablename = unitTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		user_id: `user_id=try_cast_bigint(\${user_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.userunit_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.unitListCriteria === 'function') {
+			// export async function unitListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.unitListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = core.user.unit_id)
+			if (row.unit_id !== undefined) {
+				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name ?? null
+			}
+			 
+			// field dengan tipedata json/jsonb	
+			{
+				if (row.userunit_data) {
+					row.userunit_data = JSON.stringify(row.userunit_data)
+				}
+			}
+			
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_unitOpen(self, body) {
+	const tablename = unitTableName
+
+	try {
+		const { id } = body 
+		const criteria = { userunit_id: id }
+		const searchMap = { userunit_id: `userunit_id = \${userunit_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = core.user.unit_id)
+		if (data.unit_id !== undefined) {
+			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name ?? null
+		}
+		  
+		// field dengan tipedata json/jsonb	
+		{
+			if (data.userunit_data) {
+				data.userunit_data = JSON.stringify(data.userunit_data)
+			}
+		}
+		
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function unitOpen(self, db, data) {}
+		if (typeof Extender.unitOpen === 'function') {
+			// export async function unitOpen(self, db, data) {}
+			await Extender.unitOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_unitCreate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = unitTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'unit', 
+				doc_id: 'USER'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.userunit_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.unitCreating === 'function') {
+				// export async function unitCreating(self, tx, data, seqdata, args) {}
+				await Extender.unitCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.user_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.unitCreated === 'function') {
+				// export async function unitCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.unitCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, ret.userunit_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_unitUpdate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = unitTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {userunit_id: data.userunit_id}
+			const sql = `select * from ${unitTableName} where userunit_id=\${userunit_id}`
+			const rowunit = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.unitUpdating === 'function') {
+				// export async function unitUpdating(self, tx, data) {}
+				await Extender.unitUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['userunit_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowunit.user_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.unitUpdated === 'function') {
+				// export async function unitUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.unitUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, data.userunit_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_unitDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = unitTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {userunit_id: id}
+			const sql = `select * from ${unitTableName} where userunit_id=\${userunit_id}`
+			const rowunit = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.unitDeleting === 'function') {
+				// export async function unitDeleting(self, tx, rowunit, logMetadata) {}
+				await Extender.unitDeleting(self, tx, rowunit, logMetadata)
+			}
+
+			const param = {userunit_id: rowunit.userunit_id}
+			const cmd = sqlUtil.createDeleteCommand(unitTableName, ['userunit_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowunit.user_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.unitDeleted === 'function') {
+				// export async function unitDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			user_log(self, body, startTime, unitTableName, rowunit.userunit_id, 'DELETE', {rowdata: deletedRow})
+			user_log(self, body, startTime, headerTableName, rowunit.user_id, 'DELETE ROW UNIT', {userunit_id: rowunit.userunit_id, tablename: unitTableName}, `removed: ${rowunit.userunit_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_unitDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = unitTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let user_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {userunit_id: id}
+				const sql = `select * from ${unitTableName} where userunit_id=\${userunit_id}`
+				const rowunit = await tx.oneOrNone(sql, dataToRemove)
+				user_id = rowunit.user_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.unitDeleting === 'function') {
+					// async function unitDeleting(self, tx, rowunit, logMetadata) {}
+					await Extender.unitDeleting(self, tx, rowunit, logMetadata)
+				}
+
+				const param = {userunit_id: rowunit.userunit_id}
+				const cmd = sqlUtil.createDeleteCommand(unitTableName, ['userunit_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowunit.user_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.unitDeleted === 'function') {
+					// export async function unitDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.unitDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				user_log(self, body, startTime, unitTableName, rowunit.userunit_id, 'DELETE', {rowdata: deletedRow})
+				user_log(self, body, startTime, headerTableName, rowunit.user_id, 'DELETE ROW UNIT', {userunit_id: rowunit.userunit_id, tablename: unitTableName}, `removed: ${rowunit.userunit_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			user_id: user_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'unitRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function unitRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// brand	
+
+async function user_brandList(self, body) {
+	const tablename = brandTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		user_id: `user_id=try_cast_bigint(\${user_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.userbrand_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.brandListCriteria === 'function') {
+			// export async function brandListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.brandListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = core.user.brand_id)
+			if (row.brand_id !== undefined) {
+				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
+				row.brand_name = brand_name ?? null
+			}
+			 
+			// field dengan tipedata json/jsonb	
+			{
+				if (row.userbrand_data) {
+					row.userbrand_data = JSON.stringify(row.userbrand_data)
+				}
+			}
+			
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_brandOpen(self, body) {
+	const tablename = brandTableName
+
+	try {
+		const { id } = body 
+		const criteria = { userbrand_id: id }
+		const searchMap = { userbrand_id: `userbrand_id = \${userbrand_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = core.user.brand_id)
+		if (data.brand_id !== undefined) {
+			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
+			data.brand_name = brand_name ?? null
+		}
+		  
+		// field dengan tipedata json/jsonb	
+		{
+			if (data.userbrand_data) {
+				data.userbrand_data = JSON.stringify(data.userbrand_data)
+			}
+		}
+		
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function brandOpen(self, db, data) {}
+		if (typeof Extender.brandOpen === 'function') {
+			// export async function brandOpen(self, db, data) {}
+			await Extender.brandOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_brandCreate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = brandTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'brand', 
+				doc_id: 'USER'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.userbrand_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.brandCreating === 'function') {
+				// export async function brandCreating(self, tx, data, seqdata, args) {}
+				await Extender.brandCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.user_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.brandCreated === 'function') {
+				// export async function brandCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.brandCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, ret.userbrand_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_brandUpdate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = brandTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {userbrand_id: data.userbrand_id}
+			const sql = `select * from ${brandTableName} where userbrand_id=\${userbrand_id}`
+			const rowbrand = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.brandUpdating === 'function') {
+				// export async function brandUpdating(self, tx, data) {}
+				await Extender.brandUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['userbrand_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowbrand.user_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.brandUpdated === 'function') {
+				// export async function brandUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.brandUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, data.userbrand_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_brandDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = brandTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {userbrand_id: id}
+			const sql = `select * from ${brandTableName} where userbrand_id=\${userbrand_id}`
+			const rowbrand = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.brandDeleting === 'function') {
+				// export async function brandDeleting(self, tx, rowbrand, logMetadata) {}
+				await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
+			}
+
+			const param = {userbrand_id: rowbrand.userbrand_id}
+			const cmd = sqlUtil.createDeleteCommand(brandTableName, ['userbrand_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowbrand.user_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.brandDeleted === 'function') {
+				// export async function brandDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			user_log(self, body, startTime, brandTableName, rowbrand.userbrand_id, 'DELETE', {rowdata: deletedRow})
+			user_log(self, body, startTime, headerTableName, rowbrand.user_id, 'DELETE ROW BRAND', {userbrand_id: rowbrand.userbrand_id, tablename: brandTableName}, `removed: ${rowbrand.userbrand_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_brandDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = brandTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let user_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {userbrand_id: id}
+				const sql = `select * from ${brandTableName} where userbrand_id=\${userbrand_id}`
+				const rowbrand = await tx.oneOrNone(sql, dataToRemove)
+				user_id = rowbrand.user_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.brandDeleting === 'function') {
+					// async function brandDeleting(self, tx, rowbrand, logMetadata) {}
+					await Extender.brandDeleting(self, tx, rowbrand, logMetadata)
+				}
+
+				const param = {userbrand_id: rowbrand.userbrand_id}
+				const cmd = sqlUtil.createDeleteCommand(brandTableName, ['userbrand_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowbrand.user_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.brandDeleted === 'function') {
+					// export async function brandDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.brandDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				user_log(self, body, startTime, brandTableName, rowbrand.userbrand_id, 'DELETE', {rowdata: deletedRow})
+				user_log(self, body, startTime, headerTableName, rowbrand.user_id, 'DELETE ROW BRAND', {userbrand_id: rowbrand.userbrand_id, tablename: brandTableName}, `removed: ${rowbrand.userbrand_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			user_id: user_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'brandRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function brandRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// site	
+
+async function user_siteList(self, body) {
+	const tablename = siteTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		user_id: `user_id=try_cast_bigint(\${user_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.usersite_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.siteListCriteria === 'function') {
+			// export async function siteListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.siteListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = core.user.site_id)
+			if (row.site_id !== undefined) {
+				const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', row.site_id)
+				row.site_name = site_name ?? null
+			}
+			 
+			// field dengan tipedata json/jsonb	
+			{
+				if (row.usersite_data) {
+					row.usersite_data = JSON.stringify(row.usersite_data)
+				}
+			}
+			
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_siteOpen(self, body) {
+	const tablename = siteTableName
+
+	try {
+		const { id } = body 
+		const criteria = { usersite_id: id }
+		const searchMap = { usersite_id: `usersite_id = \${usersite_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = core.user.site_id)
+		if (data.site_id !== undefined) {
+			const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', data.site_id)
+			data.site_name = site_name ?? null
+		}
+		  
+		// field dengan tipedata json/jsonb	
+		{
+			if (data.usersite_data) {
+				data.usersite_data = JSON.stringify(data.usersite_data)
+			}
+		}
+		
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function siteOpen(self, db, data) {}
+		if (typeof Extender.siteOpen === 'function') {
+			// export async function siteOpen(self, db, data) {}
+			await Extender.siteOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_siteCreate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = siteTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'site', 
+				doc_id: 'USER'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.usersite_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.siteCreating === 'function') {
+				// export async function siteCreating(self, tx, data, seqdata, args) {}
+				await Extender.siteCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.user_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.siteCreated === 'function') {
+				// export async function siteCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.siteCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, ret.usersite_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_siteUpdate(self, body) {
+	const { source='user', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = siteTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {usersite_id: data.usersite_id}
+			const sql = `select * from ${siteTableName} where usersite_id=\${usersite_id}`
+			const rowsite = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.siteUpdating === 'function') {
+				// export async function siteUpdating(self, tx, data) {}
+				await Extender.siteUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['usersite_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowsite.user_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.siteUpdated === 'function') {
+				// export async function siteUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.siteUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			user_log(self, body, startTime, tablename, data.usersite_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_siteDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = siteTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {usersite_id: id}
+			const sql = `select * from ${siteTableName} where usersite_id=\${usersite_id}`
+			const rowsite = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.siteDeleting === 'function') {
+				// export async function siteDeleting(self, tx, rowsite, logMetadata) {}
+				await Extender.siteDeleting(self, tx, rowsite, logMetadata)
+			}
+
+			const param = {usersite_id: rowsite.usersite_id}
+			const cmd = sqlUtil.createDeleteCommand(siteTableName, ['usersite_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowsite.user_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.siteDeleted === 'function') {
+				// export async function siteDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.siteDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			user_log(self, body, startTime, siteTableName, rowsite.usersite_id, 'DELETE', {rowdata: deletedRow})
+			user_log(self, body, startTime, headerTableName, rowsite.user_id, 'DELETE ROW SITE', {usersite_id: rowsite.usersite_id, tablename: siteTableName}, `removed: ${rowsite.usersite_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function user_siteDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = siteTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let user_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {usersite_id: id}
+				const sql = `select * from ${siteTableName} where usersite_id=\${usersite_id}`
+				const rowsite = await tx.oneOrNone(sql, dataToRemove)
+				user_id = rowsite.user_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.siteDeleting === 'function') {
+					// async function siteDeleting(self, tx, rowsite, logMetadata) {}
+					await Extender.siteDeleting(self, tx, rowsite, logMetadata)
+				}
+
+				const param = {usersite_id: rowsite.usersite_id}
+				const cmd = sqlUtil.createDeleteCommand(siteTableName, ['usersite_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowsite.user_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.siteDeleted === 'function') {
+					// export async function siteDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.siteDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				user_log(self, body, startTime, siteTableName, rowsite.usersite_id, 'DELETE', {rowdata: deletedRow})
+				user_log(self, body, startTime, headerTableName, rowsite.user_id, 'DELETE ROW SITE', {usersite_id: rowsite.usersite_id, tablename: siteTableName}, `removed: ${rowsite.usersite_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			user_id: user_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'siteRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function siteRowsDeleted(self, db, res) {}
 			await fn(self, db, res)
 		}
 

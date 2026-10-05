@@ -12,33 +12,40 @@ export async function init(self, args) {
 
 	// tambahkan extender inisiasi module brand
 
-
-	/* // contoh menambahkan content dari template extender
-	{
-		const target = secRec.querySelector('#fRecord-section div[name="column"][exteder]')
-		const tpl = document.getElementById('tpl-record-panel')
-		if (tpl!=null) {
-			const clone = tpl.content.cloneNode(true); // salin isi template
-			target.prepend(clone)
-		}
-	}
-	*/	
-
-	/* // contoh menambahkan custom validator
-	// pada html, tambahkan validator="cobaFunction:paramValue"
-	const frm = self.Modules.coaHeaderEdit.getHeaderForm()
-	const obj_coa_normal = frm.Inputs['coaHeaderEdit-obj_coa_normal']
-	$validators.addCustomValidator('cobaFunction', (v, param)=>{
-	 	console.log(v)
-	 	setTimeout(()=>{
-	 		obj_coa_normal.setError('ini error')
-	 	}, 500)
-	})	
-
-
-	*/
 }
 
+
+export function headerList_initSearchParams(self, SearchParams) {
+
+	SearchParams['unit_id'].addEventListener('selecting', async (evt) => {
+		const cbo = evt.detail.sender
+		const dialog = evt.detail.dialog
+		const url = 'unit/header-list'
+		const sort = { unit_name: 'desc' }
+		const criteria = {}
+
+		cbo.wait()
+		try {
+			const result = await Module.apiCall(url, {
+				sort,
+				criteria,
+				offset: evt.detail.offset,
+				limit: evt.detail.limit,
+			})
+
+			for (var row of result.data) {
+				evt.detail.addRow(row.unit_id, row.unit_name, row)
+			}
+
+			dialog.setNext(result.nextoffset, result.limit)
+		} catch (err) {
+			$fgta5.MessageBox.error(err.message)
+		} finally {
+			cbo.wait(false)
+		}
+
+	})
+}
 
 export function setupActionButtonEvent(self, frm, CurrentState, buttons) {
 	const onView = Context.variance == VIEW_VARIANCE

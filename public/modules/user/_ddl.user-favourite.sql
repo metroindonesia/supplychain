@@ -128,7 +128,6 @@ CREATE INDEX idx$core$userfavouriteprogram$_timestamp ON core.userfavouriteprogr
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE core."userfavouriteprogram" DROP CONSTRAINT fk$core$userfavouriteprogram$program_id;
-ALTER TABLE core."userfavouriteprogram" DROP CONSTRAINT fk$core$userfavouriteprogram$user_id;
 
 
 -- Add Foreign Key Constraint  

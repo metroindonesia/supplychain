@@ -132,6 +132,66 @@ comment on column core."user".user_isshowallprogram is '';
 
 
 -- =============================================
+-- FIELD: user_isallowallunit boolean
+-- =============================================
+-- ADD user_isallowallunit
+alter table core."user" add user_isallowallunit boolean not null default false;
+comment on column core."user".user_isallowallunit is '';
+
+-- MODIFY user_isallowallunit
+alter table core."user"
+	alter column user_isallowallunit type boolean,
+	ALTER COLUMN user_isallowallunit SET DEFAULT false,
+	ALTER COLUMN user_isallowallunit SET NOT NULL;
+comment on column core."user".user_isallowallunit is '';
+
+
+-- =============================================
+-- FIELD: user_isallowallbrandunit boolean
+-- =============================================
+-- ADD user_isallowallbrandunit
+alter table core."user" add user_isallowallbrandunit boolean not null default false;
+comment on column core."user".user_isallowallbrandunit is '';
+
+-- MODIFY user_isallowallbrandunit
+alter table core."user"
+	alter column user_isallowallbrandunit type boolean,
+	ALTER COLUMN user_isallowallbrandunit SET DEFAULT false,
+	ALTER COLUMN user_isallowallbrandunit SET NOT NULL;
+comment on column core."user".user_isallowallbrandunit is '';
+
+
+-- =============================================
+-- FIELD: user_isallowallbrand boolean
+-- =============================================
+-- ADD user_isallowallbrand
+alter table core."user" add user_isallowallbrand boolean not null default false;
+comment on column core."user".user_isallowallbrand is '';
+
+-- MODIFY user_isallowallbrand
+alter table core."user"
+	alter column user_isallowallbrand type boolean,
+	ALTER COLUMN user_isallowallbrand SET DEFAULT false,
+	ALTER COLUMN user_isallowallbrand SET NOT NULL;
+comment on column core."user".user_isallowallbrand is '';
+
+
+-- =============================================
+-- FIELD: user_isallowallsite boolean
+-- =============================================
+-- ADD user_isallowallsite
+alter table core."user" add user_isallowallsite boolean not null default false;
+comment on column core."user".user_isallowallsite is '';
+
+-- MODIFY user_isallowallsite
+alter table core."user"
+	alter column user_isallowallsite type boolean,
+	ALTER COLUMN user_isallowallsite SET DEFAULT false,
+	ALTER COLUMN user_isallowallsite SET NOT NULL;
+comment on column core."user".user_isallowallsite is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby

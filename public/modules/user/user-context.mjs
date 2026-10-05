@@ -25,6 +25,12 @@ export default {
 		userFavouriteEdit: 'userFavouriteEdit-section', 
 		userRoleList: 'userRoleList-section', 
 		userRoleEdit: 'userRoleEdit-section', 
+		userUnitList: 'userUnitList-section', 
+		userUnitEdit: 'userUnitEdit-section', 
+		userBrandList: 'userBrandList-section', 
+		userBrandEdit: 'userBrandEdit-section', 
+		userSiteList: 'userSiteList-section', 
+		userSiteEdit: 'userSiteEdit-section', 
 	},
 	SectionMap: { 
 		'userHeaderList-section' : 'userHeaderList', 
@@ -39,5 +45,11 @@ export default {
 		'userFavouriteEdit-section' : 'userFavouriteEdit', 
 		'userRoleList-section' : 'userRoleList', 
 		'userRoleEdit-section' : 'userRoleEdit', 
+		'userUnitList-section' : 'userUnitList', 
+		'userUnitEdit-section' : 'userUnitEdit', 
+		'userBrandList-section' : 'userBrandList', 
+		'userBrandEdit-section' : 'userBrandEdit', 
+		'userSiteList-section' : 'userSiteList', 
+		'userSiteEdit-section' : 'userSiteEdit', 
 	}
 }

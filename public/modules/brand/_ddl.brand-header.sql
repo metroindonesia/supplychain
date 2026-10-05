@@ -8,7 +8,7 @@ create table public."brand" (
 	brand_id int not null,
 	constraint brand_pk primary key (brand_id)
 );
-comment on table public."brand" is 'daftar brand';	
+comment on table public."brand" is '';	
 
 
 -- =============================================
@@ -177,12 +177,3 @@ CREATE INDEX idx_fk$public$brand$unit_id ON public."brand"(unit_id);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
--- Drop existing unique index 
-alter table public."brand"
-	drop constraint uq$public$brand$brand_name;
-	
-
--- Add unique index 
-alter table  public."brand"
-	add constraint uq$public$brand$brand_name unique (brand_name); 
-

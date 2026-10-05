@@ -9,6 +9,7 @@ import db from '@agung_dhewe/webapps/src/db.js'
 import Api from '@agung_dhewe/webapps/src/api.js'
 import sqlUtil from '@agung_dhewe/pgsqlc'
 import context from '@agung_dhewe/webapps/src/context.js'  
+import { getProgramSetting } from '@agung_dhewe/webapps/src/helper.js'
 import logger from '@agung_dhewe/webapps/src/logger.js'
 import { createSequencerLine } from '@agung_dhewe/webapps/src/sequencerline.js' 
 
@@ -64,6 +65,9 @@ async function brand_init(self, body) {
 			}
 		}
 
+		const programName = req.params.modulename;
+		const variance = req.query.variance;
+		const programSetting = await getProgramSetting(db, programName, variance)
 		const initialData = {
 			userId: req.session.user.userId,
 			userName: req.session.user.userName,
@@ -73,7 +77,9 @@ async function brand_init(self, body) {
 			notifierSocket: req.app.locals.appConfig.notifierSocket,
 			appName: req.app.locals.appConfig.appName,
 			appsUrls: appsUrls,
-			setting: {}
+			setting: {
+				program: programSetting
+			}
 		}
 		
 		if (typeof Extender.brand_init === 'function') {
@@ -131,7 +137,7 @@ async function brand_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `brand_name ILIKE '%' || \${searchtext} || '%'`,
+		searchtext: `brand_id=try_cast_int(\${searchtext}, 0) OR brand_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {
@@ -179,11 +185,11 @@ async function brand_headerList(self, body) {
 			if (i>max_rows) { break }
 
 			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.brand.unit_id)
-			{
+			if (row.unit_id !== undefined) {
 				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
-				row.unit_name = unit_name
+				row.unit_name = unit_name ?? null
 			}
-			
+			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
 				// export async function headerListRow(self, row, args) {}
@@ -233,20 +239,19 @@ async function brand_headerOpen(self, body) {
 		}	
 
 		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.brand.unit_id)
-		{
+		if (data.unit_id !== undefined) {
 			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
-			data.unit_name = unit_name
+			data.unit_name = unit_name ?? null
 		}
-		
-
+		 
 		// lookup data createby
-		{
+		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
 			data._createby = user_fullname ?? ''
 		}
 
 		// lookup data modifyby
-		{
+		if (data._modifyby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
 			data._modifyby = user_fullname ?? ''
 		}
@@ -287,7 +292,7 @@ async function brand_headerCreate(self, body) {
 			sqlUtil.connect(tx)
 
 
-			const args = { section: 'header', doc_id:'BRAN' }
+			const args = { section: 'header', doc_id:'' }
 
 			
 			// buat short sequencer	
@@ -300,7 +305,7 @@ async function brand_headerCreate(self, body) {
 				await Extender.sequencerSetup(self, tx, sequencer, data, args)
 			}
 
-			// generate short id sesuai prefix (default: BRAN) reset pertahun
+			// generate short id sesuai prefix (default: ) reset pertahun
 			const seqdata = await sequencer.yearlyshort(args.doc_id)
 			data.brand_id = seqdata.id
 
