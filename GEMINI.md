@@ -4,7 +4,7 @@ Dokumen ini adalah panduan konteks bagi asisten AI (Gemini) untuk memahami atura
 
 ---
 ## 🏗️ Project Overview & Architecture
-- **Type:** Web-based Enterprise Accounting
+- **Type:** Web-based Supply Chain Management System
 - **Backend:** Node.js (Express.js) - Full ES6 Modules (`import/export`)
 - **Database:** PostgreSQL 16 (Relational Integrity)
 - **Cache/Session:** Redis (Speed & Token Blacklisting)

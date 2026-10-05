@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "name": "supplychain",
+      "name": "Supply Chain Management",
       "path": "."
     }
   ],
@@ -16,6 +16,24 @@
     },
     "files.watcherExclude": {
       "**/node_modules": true
+    },
+    "remote.autoForwardPorts": false,
+    "remote.autoForwardPortsSource": "hybrid",
+    "remote.restoreForwardedPorts": false,
+    "remote.forwardOnOpen": true,
+    "remote.portsAttributes": {
+      "3005": {
+        "label": "Supplychain Server",
+        "onAutoForward": "notify"
+      },
+      "6379": {
+        "label": "Redis Server",
+        "onAutoForward": "silent"
+      },
+      "8080": {
+        "label": "HTTP Service (8080)",
+        "onAutoForward": "silent"
+      }
     }
   },
   "launch": {

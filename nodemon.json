@@ -3,7 +3,7 @@
     "src"
   ],
   "ext": "js",
-  "exec": "npx kill-port 3003 && node src/index.js",
+  "exec": "npx kill-port 3005 && node src/index.js",
   "signal": "SIGTERM",
   "delay": "1000"
 }
