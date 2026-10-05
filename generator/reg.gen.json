@@ -1,10 +1,10 @@
 {
   "appname": "supplychain",
   "name": "reg",
-  "directory": "/Volumes/Development/metroindonesia/supplychain",
+  "directory": "/home/ubuntu/Development/metroindonesia/supplychain",
   "title": "Register Item",
   "description": "registrasi barang baru",
-  "icon": "",
+  "icon": "url(\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgd2lkdGg9IjQ4IgogICBoZWlnaHQ9IjQ4IgogICB2aWV3Qm94PSIwIDAgNDggNDgiCiAgIGZpbGw9Im5vbmUiCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzQiCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnMKICAgICBpZD0iZGVmczQiIC8+CiAgPHBhdGgKICAgICBpZD0icGF0aDEtOSIKICAgICBzdHlsZT0iYmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtvcGFjaXR5OjE7dmVjdG9yLWVmZmVjdDpub25lO2ZpbGw6I2U2ZTZlNjtzdHJva2UtbGluZWNhcDpyb3VuZDtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlO3N0b3AtY29sb3I6IzAwMDAwMDtzdG9wLW9wYWNpdHk6MSIKICAgICBkPSJtIDIzLjk3ODUxNiwzLjIyMjY1NjMgYyAtNS4yODQ5MSwwIC05LjUyMzA5MSwzLjk1MTk0MjEgLTEwLjQwMDM5MSw4Ljk5OTk5OTcgaCAtMi41OTk2MDkgYyAtMy4xNjE1MDM3LDAgLTUuNzU5NzY2LDIuNTk4MjI0IC01Ljc1OTc2Niw1Ljc1OTc2NiB2IDIwIGMgMCw0LjI1NjQ0MiAzLjUwMzMyMzgsNy43NTk3NjYgNy43NTk3NjYsNy43NTk3NjUgaCAyMiBjIDQuMjU2NDQxLDAgNy43NTk3NjUsLTMuNTAzMzIzIDcuNzU5NzY1LC03Ljc1OTc2NSB2IC0yMCBjIDAsLTMuMTYxNTI3IC0yLjU5ODIzOCwtNS43NTk3NjYgLTUuNzU5NzY1LC01Ljc1OTc2NiBoIC0yLjU5OTYxIEMgMzMuNTAxNjA2LDcuMTc0NTk4NCAyOS4yNjM0MjUsMy4yMjI2NTYyIDIzLjk3ODUxNiwzLjIyMjY1NjMgWiBtIDAsNy41MTk1MzE3IGMgMS4xNzI4NTgsMCAyLjExMzMxNSwwLjU5ODQ2NiAyLjY3OTY4NywxLjQ4MDQ2OCBoIC01LjM1OTM3NSBjIDAuNTY2MzcyLC0wLjg4MjAwMiAxLjUwNjgyOSwtMS40ODA0NjggMi42Nzk2ODgsLTEuNDgwNDY4IHoiIC8+CiAgPHBhdGgKICAgICBzdHlsZT0iYmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtvcGFjaXR5OjE7dmVjdG9yLWVmZmVjdDpub25lO2ZpbGw6IzBkOTQ4ODtzdHJva2UtbGluZWNhcDpyb3VuZDtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlO3N0b3AtY29sb3I6IzAwMDAwMDtzdG9wLW9wYWNpdHk6MSIKICAgICBkPSJtIDI0LDUuNzUgYyAtNC41NDE1NDgsMCAtOC4yNSwzLjcwODQ1MjUgLTguMjUsOC4yNSB2IDIgQSAxLjI1LDEuMjUgMCAwIDAgMTcsMTcuMjUgMS4yNSwxLjI1IDAgMCAwIDE4LjI1LDE2IHYgLTIgYyAwLC0zLjE5MDQ1MiAyLjU1OTU0OCwtNS43NSA1Ljc1LC01Ljc1IDMuMTkwNDUyLDAgNS43NSwyLjU1OTU0OCA1Ljc1LDUuNzUgdiAyIEEgMS4yNSwxLjI1IDAgMCAwIDMxLDE3LjI1IDEuMjUsMS4yNSAwIDAgMCAzMi4yNSwxNiBWIDE0IEMgMzIuMjUsOS40NTg0NTI1IDI4LjU0MTU0OCw1Ljc1IDI0LDUuNzUgWiIKICAgICBpZD0icGF0aDEiIC8+CiAgPHBhdGgKICAgICBzdHlsZT0iYmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTt2ZWN0b3ItZWZmZWN0Om5vbmU7ZmlsbDojZjBmZGZhO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGU7c3RvcC1jb2xvcjojMDAwMDAwIgogICAgIGQ9Im0gMTEsMTYgaCAyNiBjIDEuMTA0NiwwIDIsMC44OTU0IDIsMiB2IDIwIGMgMCwyLjIwOTEgLTEuNzkwOSw0IC00LDQgSCAxMyBDIDEwLjc5MDksNDIgOSw0MC4yMDkxIDksMzggViAxOCBjIDAsLTEuMTA0NiAwLjg5NTQzLC0yIDIsLTIgeiIKICAgICBpZD0icGF0aDciIC8+CiAgPHBhdGgKICAgICBzdHlsZT0iYmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTt2ZWN0b3ItZWZmZWN0Om5vbmU7ZmlsbDojMGQ5NDg4O2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGU7c3RvcC1jb2xvcjojMDAwMDAwIgogICAgIGQ9Im0gMTEsMTQuNzUgYyAtMS43ODAwOTY4LDAgLTMuMjUsMS40Njk4NjkgLTMuMjUsMy4yNSB2IDIwIGMgMCwyLjg4NDY3NyAyLjM2NTMyMyw1LjI1IDUuMjUsNS4yNSBoIDIyIGMgMi44ODQ2NzcsMCA1LjI1LC0yLjM2NTMyMyA1LjI1LC01LjI1IFYgMTggYyAwLC0xLjc4MDEwOCAtMS40Njk4OTIsLTMuMjUgLTMuMjUsLTMuMjUgeiBtIDAsMi41IGggMjYgYyAwLjQyOTA5MiwwIDAuNzUsMC4zMjA5MDggMC43NSwwLjc1IHYgMjAgYyAwLDEuNTMzNTIzIC0xLjIxNjQ3NywyLjc1IC0yLjc1LDIuNzUgSCAxMyBjIC0xLjUzMzUyMywwIC0yLjc1LC0xLjIxNjQ3NyAtMi43NSwtMi43NSBWIDE4IGMgMCwtMC40MjkwNjkgMC4zMjA5NTcsLTAuNzUgMC43NSwtMC43NSB6IgogICAgIGlkPSJwYXRoOCIgLz4KICA8cGF0aAogICAgIGlkPSJjaXJjbGUyIgogICAgIHN0eWxlPSJmaWxsOiMwZDk0ODgiCiAgICAgZD0ibSAzMSwyOSBhIDcsNyAwIDAgMSAtNyw3IDcsNyAwIDAgMSAtNywtNyA3LDcgMCAwIDEgNywtNyA3LDcgMCAwIDEgNyw3IHoiIC8+CiAgPHBhdGgKICAgICBzdHlsZT0iYmFzZWxpbmUtc2hpZnQ6YmFzZWxpbmU7ZGlzcGxheTppbmxpbmU7b3ZlcmZsb3c6dmlzaWJsZTtvcGFjaXR5OjE7dmVjdG9yLWVmZmVjdDpub25lO2ZpbGw6I2ZmZmZmZjtzdHJva2UtbGluZWNhcDpyb3VuZDtlbmFibGUtYmFja2dyb3VuZDphY2N1bXVsYXRlO3N0b3AtY29sb3I6IzAwMDAwMDtzdG9wLW9wYWNpdHk6MSIKICAgICBkPSJtIDI0LDI0IGEgMSwxIDAgMCAwIC0xLDEgdiAzIGggLTMgYSAxLDEgMCAwIDAgLTEsMSAxLDEgMCAwIDAgMSwxIGggMyB2IDMgYSAxLDEgMCAwIDAgMSwxIDEsMSAwIDAgMCAxLC0xIHYgLTMgaCAzIGEgMSwxIDAgMCAwIDEsLTEgMSwxIDAgMCAwIC0xLC0xIGggLTMgdiAtMyBhIDEsMSAwIDAgMCAtMSwtMSB6IgogICAgIGlkPSJwYXRoMyIgLz4KICA8cGF0aAogICAgIHN0eWxlPSJiYXNlbGluZS1zaGlmdDpiYXNlbGluZTtkaXNwbGF5OmlubGluZTtvdmVyZmxvdzp2aXNpYmxlO29wYWNpdHk6MC41O3ZlY3Rvci1lZmZlY3Q6bm9uZTtmaWxsOiMwZDk0ODg7c3Ryb2tlLWRhc2hhcnJheToyLCAyO2VuYWJsZS1iYWNrZ3JvdW5kOmFjY3VtdWxhdGU7c3RvcC1jb2xvcjojMDAwMDAwO3N0b3Atb3BhY2l0eToxIgogICAgIGQ9Im0gOSwyMS41IHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IG0gNCwwIHYgMSBoIDIgdiAtMSB6IgogICAgIGlkPSJwYXRoNCIgLz4KPC9zdmc+Cg==\")",
   "primary_entity_id": "en-mu9sje7n-7fd7w",
   "primary_entity_name": "header",
   "actions": [
@@ -714,10 +714,10 @@
             "loadingdata": false
           }
         },
-        "commitby": {
+        "_commitby": {
           "component": "Textbox",
-          "data_fieldname": "commitby",
-          "name": "commitby",
+          "data_fieldname": "_commitby",
+          "name": "_commitby",
           "data_type": "bigint",
           "data_length": "30",
           "data_precision": "0",
@@ -781,10 +781,10 @@
             "loadingdata": false
           }
         },
-        "commitdate": {
+        "_commitdate": {
           "component": "Textbox",
-          "data_fieldname": "commitdate",
-          "name": "commitdate",
+          "data_fieldname": "_commitdate",
+          "name": "_commitdate",
           "data_type": "timestamp",
           "data_length": "30",
           "data_precision": "0",
@@ -848,10 +848,10 @@
             "loadingdata": false
           }
         },
-        "generateby": {
+        "_generateby": {
           "component": "Textbox",
-          "data_fieldname": "generateby",
-          "name": "generateby",
+          "data_fieldname": "_generateby",
+          "name": "_generateby",
           "data_type": "bigint",
           "data_length": "30",
           "data_precision": "0",
@@ -915,10 +915,10 @@
             "loadingdata": false
           }
         },
-        "generatedate": {
+        "_generatedate": {
           "component": "Textbox",
-          "data_fieldname": "generatedate",
-          "name": "generatedate",
+          "data_fieldname": "_generatedate",
+          "name": "_generatedate",
           "data_type": "timestamp",
           "data_length": "30",
           "data_precision": "0",

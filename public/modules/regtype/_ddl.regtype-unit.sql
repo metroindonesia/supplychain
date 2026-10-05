@@ -141,6 +141,10 @@ CREATE INDEX idx$public$regtypeunit$_timestamp ON public.regtypeunit (_timestamp
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."regtypeunit" DROP CONSTRAINT fk$public$regtypeunit$unit_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE public."regtypeunit"
 	ADD CONSTRAINT fk$public$regtypeunit$unit_id
@@ -158,6 +162,11 @@ CREATE INDEX idx_fk$public$regtypeunit$unit_id ON public."regtypeunit"(unit_id);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."regtypeunit"
+	drop constraint uq$public$regtypeunit$regtypeunit_pair;
+	
+
 -- Add unique index 
 alter table  public."regtypeunit"
 	add constraint uq$public$regtypeunit$regtypeunit_pair unique (regtype_id, unit_id); 

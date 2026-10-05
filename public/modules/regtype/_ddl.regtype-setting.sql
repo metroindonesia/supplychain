@@ -173,6 +173,11 @@ CREATE INDEX idx$public$regtypesetting$_timestamp ON public.regtypesetting (_tim
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."regtypesetting"
+	drop constraint uq$public$regtypesetting$regtypesetting_pair;
+	
+
 -- Add unique index 
 alter table  public."regtypesetting"
 	add constraint uq$public$regtypesetting$regtypesetting_pair unique (regtype_id, setting_name); 

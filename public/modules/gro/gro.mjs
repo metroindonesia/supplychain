@@ -3,16 +3,10 @@
  * DO NOT modify this script! All modification will lost on regeneration
  **************************************************************** */
 
-import Context from './regtype-context.mjs'  
-import * as regtypeHeaderList from './regtypeHeaderList.mjs' 
-import * as regtypeHeaderEdit from './regtypeHeaderEdit.mjs' 
-import * as regtypeBrandList from './regtypeBrandList.mjs' 
-import * as regtypeBrandEdit from './regtypeBrandEdit.mjs' 
-import * as regtypeUnitList from './regtypeUnitList.mjs' 
-import * as regtypeUnitEdit from './regtypeUnitEdit.mjs' 
-import * as regtypeSettingList from './regtypeSettingList.mjs' 
-import * as regtypeSettingEdit from './regtypeSettingEdit.mjs' 
-import * as Extender from './regtype-ext.mjs'
+import Context from './gro-context.mjs'  
+import * as groHeaderList from './groHeaderList.mjs' 
+import * as groHeaderEdit from './groHeaderEdit.mjs' 
+import * as Extender from './gro-ext.mjs'
 
 const app = Context.app
 const Crsl = Context.Crsl
@@ -26,7 +20,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('Register Item Type')
+		app.setTitle('Item Group')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true
@@ -53,14 +47,8 @@ export default class extends Module {
 		// jangan import lagi module-module ini di dalam mjs tersebut
 		// karena akan terjadi cyclic redudancy pada saat di rollup
 		self.Modules = { 
-			regtypeHeaderList, 
-			regtypeHeaderEdit, 
-			regtypeBrandList, 
-			regtypeBrandEdit, 
-			regtypeUnitList, 
-			regtypeUnitEdit, 
-			regtypeSettingList, 
-			regtypeSettingEdit, 
+			groHeaderList, 
+			groHeaderEdit, 
 		}
 
 		try {
@@ -81,14 +69,8 @@ export default class extends Module {
 			} 
 
 			await Promise.all([ 
-				regtypeHeaderList.init(self, args), 
-				regtypeHeaderEdit.init(self, args), 
-				regtypeBrandList.init(self, args), 
-				regtypeBrandEdit.init(self, args), 
-				regtypeUnitList.init(self, args), 
-				regtypeUnitEdit.init(self, args), 
-				regtypeSettingList.init(self, args), 
-				regtypeSettingEdit.init(self, args), 
+				groHeaderList.init(self, args), 
+				groHeaderEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -100,7 +82,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['regtypeHeaderEdit', 'regtypeBrandEdit', 'regtypeUnitEdit', 'regtypeSettingEdit']
+			const modNameList = ['groHeaderEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -131,7 +113,7 @@ async function render(self) {
 		Module.renderFooterButtons(footerButtonsContainer)
 	
 		// Setup Icon
-		Crsl.setIconUrl('public/modules/regtype/regtype.svg')
+		Crsl.setIconUrl('public/modules/gro/gro.svg')
 
 
 		// Set listener untuk section carousel
@@ -200,7 +182,7 @@ async function render(self) {
 		});
 
 		
-		// regtype-ext.mjs, export function extendPage(self) {} 
+		// gro-ext.mjs, export function extendPage(self) {} 
 		const fn_name = 'extendPage'
 		const fn_extendPage = Extender[fn_name]
 		if (typeof fn_extendPage === 'function') {

@@ -135,10 +135,10 @@ async function btn_actionCommit_click(self, frm, CurrentState, evt) {
 		}
 
 		// check commit status
-		obj_iscommit.value = result.iscommit
+		obj_iscommit.value = result._iscommit
 		frm.acceptChanges()
 
-		self.Modules.paymreqHeaderList.updateCurrentRow(self, { iscommit: result.iscommit })
+		self.Modules.regHeaderList.updateCurrentRow(self, { iscommit: result.iscommit })
 
 		CurrentState.Actions.edit.suspend(true)
 		CurrentState.Actions.commit.suspend(true)
@@ -183,7 +183,7 @@ async function btn_actionUncommit_click(self, frm, CurrentState, evt) {
 		}
 
 		// uncheck commit status
-		obj_iscommit.value = result.iscommit
+		obj_iscommit.value = result._iscommit
 
 		// update version
 		obj_reg_version.value = result.version
@@ -198,7 +198,7 @@ async function btn_actionUncommit_click(self, frm, CurrentState, evt) {
 		CurrentState.Actions.uncommit.suspend(true)
 		CurrentState.Actions.generate.suspend(true)
 
-		$fgta5.MessageBox.info(`request '${paymreq_doc}' berhasil di un-commit`)
+		$fgta5.MessageBox.info(`request '${reg_doc}' berhasil di un-commit`)
 	} catch (err) {
 		$fgta5.MessageBox.error(err.message)
 		throw err

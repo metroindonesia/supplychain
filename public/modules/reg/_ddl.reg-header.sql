@@ -147,63 +147,63 @@ comment on column public."reg".unit_id is '';
 
 
 -- =============================================
--- FIELD: commitby bigint
+-- FIELD: _commitby bigint
 -- =============================================
--- ADD commitby
-alter table public."reg" add commitby bigint  ;
-comment on column public."reg".commitby is '';
+-- ADD _commitby
+alter table public."reg" add _commitby bigint  ;
+comment on column public."reg"._commitby is '';
 
--- MODIFY commitby
+-- MODIFY _commitby
 alter table public."reg"
-	alter column commitby type bigint,
-	ALTER COLUMN commitby DROP DEFAULT,
-	ALTER COLUMN commitby DROP NOT NULL;
-comment on column public."reg".commitby is '';
+	alter column _commitby type bigint,
+	ALTER COLUMN _commitby DROP DEFAULT,
+	ALTER COLUMN _commitby DROP NOT NULL;
+comment on column public."reg"._commitby is '';
 
 
 -- =============================================
--- FIELD: commitdate timestamp with time zone
+-- FIELD: _commitdate timestamp with time zone
 -- =============================================
--- ADD commitdate
-alter table public."reg" add commitdate timestamp with time zone  ;
-comment on column public."reg".commitdate is '';
+-- ADD _commitdate
+alter table public."reg" add _commitdate timestamp with time zone  ;
+comment on column public."reg"._commitdate is '';
 
--- MODIFY commitdate
+-- MODIFY _commitdate
 alter table public."reg"
-	alter column commitdate type timestamp with time zone,
-	ALTER COLUMN commitdate DROP DEFAULT,
-	ALTER COLUMN commitdate DROP NOT NULL;
-comment on column public."reg".commitdate is '';
+	alter column _commitdate type timestamp with time zone,
+	ALTER COLUMN _commitdate DROP DEFAULT,
+	ALTER COLUMN _commitdate DROP NOT NULL;
+comment on column public."reg"._commitdate is '';
 
 
 -- =============================================
--- FIELD: generateby bigint
+-- FIELD: _generateby bigint
 -- =============================================
--- ADD generateby
-alter table public."reg" add generateby bigint  ;
-comment on column public."reg".generateby is '';
+-- ADD _generateby
+alter table public."reg" add _generateby bigint  ;
+comment on column public."reg"._generateby is '';
 
--- MODIFY generateby
+-- MODIFY _generateby
 alter table public."reg"
-	alter column generateby type bigint,
-	ALTER COLUMN generateby DROP DEFAULT,
-	ALTER COLUMN generateby DROP NOT NULL;
-comment on column public."reg".generateby is '';
+	alter column _generateby type bigint,
+	ALTER COLUMN _generateby DROP DEFAULT,
+	ALTER COLUMN _generateby DROP NOT NULL;
+comment on column public."reg"._generateby is '';
 
 
 -- =============================================
--- FIELD: generatedate timestamp with time zone
+-- FIELD: _generatedate timestamp with time zone
 -- =============================================
--- ADD generatedate
-alter table public."reg" add generatedate timestamp with time zone  ;
-comment on column public."reg".generatedate is '';
+-- ADD _generatedate
+alter table public."reg" add _generatedate timestamp with time zone  ;
+comment on column public."reg"._generatedate is '';
 
--- MODIFY generatedate
+-- MODIFY _generatedate
 alter table public."reg"
-	alter column generatedate type timestamp with time zone,
-	ALTER COLUMN generatedate DROP DEFAULT,
-	ALTER COLUMN generatedate DROP NOT NULL;
-comment on column public."reg".generatedate is '';
+	alter column _generatedate type timestamp with time zone,
+	ALTER COLUMN _generatedate DROP DEFAULT,
+	ALTER COLUMN _generatedate DROP NOT NULL;
+comment on column public."reg"._generatedate is '';
 
 
 -- =============================================
@@ -291,6 +291,13 @@ CREATE INDEX idx$public$reg$_timestamp ON public.reg (_timestamp);
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."reg" DROP CONSTRAINT fk$public$reg$brand_id;
+ALTER TABLE public."reg" DROP CONSTRAINT fk$public$reg$regtype_id;
+ALTER TABLE public."reg" DROP CONSTRAINT fk$public$reg$sea_id;
+ALTER TABLE public."reg" DROP CONSTRAINT fk$public$reg$unit_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE public."reg"
 	ADD CONSTRAINT fk$public$reg$brand_id
@@ -341,6 +348,11 @@ CREATE INDEX idx_fk$public$reg$unit_id ON public."reg"(unit_id);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."reg"
+	drop constraint uq$public$reg$reg_doc;
+	
+
 -- Add unique index 
 alter table  public."reg"
 	add constraint uq$public$reg$reg_doc unique (reg_doc); 

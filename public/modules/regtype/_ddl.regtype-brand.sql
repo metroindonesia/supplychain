@@ -141,6 +141,10 @@ CREATE INDEX idx$public$regtypebrand$_timestamp ON public.regtypebrand (_timesta
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."regtypebrand" DROP CONSTRAINT fk$public$regtypebrand$brand_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE public."regtypebrand"
 	ADD CONSTRAINT fk$public$regtypebrand$brand_id
@@ -158,6 +162,11 @@ CREATE INDEX idx_fk$public$regtypebrand$brand_id ON public."regtypebrand"(brand_
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."regtypebrand"
+	drop constraint uq$public$regtypebrand$regtypebrand_pair;
+	
+
 -- Add unique index 
 alter table  public."regtypebrand"
 	add constraint uq$public$regtypebrand$regtypebrand_pair unique (regtype_id, brand_id); 
