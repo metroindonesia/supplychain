@@ -1,9 +1,9 @@
 {
   "appname": "supplychain",
-  "name": "item",
+  "name": "sku",
   "directory": "/home/ubuntu/Development/metroindonesia/supplychain",
-  "title": "Item",
-  "description": "daftar item (product)",
+  "title": "Sku",
+  "description": "daftar SKU (product)",
   "icon": "",
   "primary_entity_id": "en-muv8fysy-edspg",
   "primary_entity_name": "header",
@@ -13,9 +13,9 @@
       "id": "en-muv8fysy-edspg",
       "name": "header",
       "isheader": true,
-      "title": "Item",
-      "table": "public.item",
-      "pk": "item_id",
+      "title": "SKU",
+      "table": "public.sku",
+      "pk": "sku_id",
       "descr": "",
       "skipRegenerateTable": false,
       "formGridLayout": true,
@@ -31,10 +31,10 @@
       "bindHeadTitle": "",
       "bindHeadDescr": "",
       "Items": {
-        "item_id": {
+        "sku_id": {
           "component": "Textbox",
-          "data_fieldname": "item_id",
-          "name": "item_id",
+          "data_fieldname": "sku_id",
+          "name": "sku_id",
           "data_type": "bigint",
           "data_length": "30",
           "data_precision": "0",
@@ -42,7 +42,7 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "",
-          "input_name": "obj_item_id",
+          "input_name": "obj_sku_id",
           "input_index": "0",
           "input_label": "ID",
           "input_placeholder": "id item",
@@ -98,10 +98,10 @@
             "loadingdata": false
           }
         },
-        "item_isdisabled": {
+        "sku_isdisabled": {
           "component": "Checkbox",
-          "data_fieldname": "item_isdisabled",
-          "name": "item_isdisabled",
+          "data_fieldname": "sku_isdisabled",
+          "name": "sku_isdisabled",
           "data_type": "boolean",
           "data_length": 0,
           "data_precision": 0,
@@ -109,7 +109,7 @@
           "input_multiline": false,
           "data_defaultvalue": 0,
           "description": "",
-          "input_name": "obj_item_isdisabled",
+          "input_name": "obj_sku_isdisabled",
           "input_index": "0",
           "input_label": "Disabled",
           "input_placeholder": "",
@@ -165,10 +165,10 @@
             "loadingdata": false
           }
         },
-        "item_code": {
+        "product_code": {
           "component": "Textbox",
-          "data_fieldname": "item_code",
-          "name": "item_code",
+          "data_fieldname": "product_code",
+          "name": "product_code",
           "data_type": "text",
           "data_length": "30",
           "data_precision": "0",
@@ -176,7 +176,7 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "",
-          "input_name": "obj_item_code",
+          "input_name": "obj_product_code",
           "input_index": "0",
           "input_label": "Code",
           "input_placeholder": "code",
@@ -204,7 +204,7 @@
             "Minimum": "",
             "Maximum": "30",
             "messageDefault": "",
-            "messageRequired": "nama item harus diisi",
+            "messageRequired": "nama product harus diisi",
             "messageMinimum": "",
             "messageMaximum": "",
             "hasCustomValidator": false,
@@ -232,10 +232,10 @@
             "loadingdata": false
           }
         },
-        "item_col": {
+        "variance_code": {
           "component": "Textbox",
-          "data_fieldname": "item_col",
-          "name": "item_col",
+          "data_fieldname": "variance_code",
+          "name": "variance_code",
           "data_type": "text",
           "data_length": "30",
           "data_precision": "0",
@@ -243,10 +243,10 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "",
-          "input_name": "obj_item_col",
+          "input_name": "obj_variance_code",
           "input_index": "0",
-          "input_label": "Color",
-          "input_placeholder": "color",
+          "input_label": "Variance",
+          "input_placeholder": "variance",
           "input_caption": "",
           "input_information": "",
           "input_containercss": "",
@@ -299,10 +299,10 @@
             "loadingdata": false
           }
         },
-        "item_size": {
+        "size_code": {
           "component": "Textbox",
-          "data_fieldname": "item_size",
-          "name": "item_size",
+          "data_fieldname": "size_code",
+          "name": "size_code",
           "data_type": "text",
           "data_length": "30",
           "data_precision": "0",
@@ -310,7 +310,7 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "",
-          "input_name": "obj_item_size",
+          "input_name": "obj_size_code",
           "input_index": "0",
           "input_label": "Size",
           "input_placeholder": "size",
@@ -366,10 +366,10 @@
             "loadingdata": false
           }
         },
-        "item_descr": {
+        "sku_name": {
           "component": "Textbox",
-          "data_fieldname": "item_descr",
-          "name": "item_descr",
+          "data_fieldname": "sku_name",
+          "name": "sku_name",
           "data_type": "text",
           "data_length": "160",
           "data_precision": "0",
@@ -377,10 +377,10 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "",
-          "input_name": "obj_item_descr",
+          "input_name": "obj_sku_name",
           "input_index": "0",
-          "input_label": "Item_descr",
-          "input_placeholder": "item_descr",
+          "input_label": "Name",
+          "input_placeholder": "product name",
           "input_caption": "",
           "input_information": "",
           "input_containercss": "",
@@ -433,10 +433,10 @@
             "loadingdata": false
           }
         },
-        "item_group": {
+        "product_group": {
           "component": "Textbox",
-          "data_fieldname": "item_group",
-          "name": "item_group",
+          "data_fieldname": "product_group",
+          "name": "product_group",
           "data_type": "text",
           "data_length": "30",
           "data_precision": "0",
@@ -444,7 +444,7 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "kode/nama kelompok original dari brand/principal",
-          "input_name": "obj_item_group",
+          "input_name": "obj_product_group",
           "input_index": "0",
           "input_label": "Item_group",
           "input_placeholder": "item_group",
@@ -500,10 +500,10 @@
             "loadingdata": false
           }
         },
-        "item_category": {
+        "product_category": {
           "component": "Textbox",
-          "data_fieldname": "item_category",
-          "name": "item_category",
+          "data_fieldname": "product_category",
+          "name": "product_category",
           "data_type": "text",
           "data_length": "30",
           "data_precision": "0",
@@ -511,7 +511,7 @@
           "input_multiline": false,
           "data_defaultvalue": "",
           "description": "kode/nama kelompok original dari brand/principal",
-          "input_name": "obj_item_category",
+          "input_name": "obj_product_category",
           "input_index": "0",
           "input_label": "Item_category",
           "input_placeholder": "item_category",

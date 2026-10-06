@@ -68,6 +68,22 @@
 		</div>
 		
 
+		<!-- Checkbox: ismanualclose-->
+		<div id="brandHeaderEdit-obj_ismanualclose-container" class="input-field" field="brandHeaderEdit-obj_ismanualclose">
+			<label for="brandHeaderEdit-obj_ismanualclose">
+				Manual Close
+			</label>
+			<input id="brandHeaderEdit-obj_ismanualclose" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="ismanualclose" 
+			data-tabindex="4"
+				
+			type="checkbox"
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: brand_descr-->
 		<div id="brandHeaderEdit-obj_brand_descr-container" class="input-field" field="brandHeaderEdit-obj_brand_descr">
 			<label for="brandHeaderEdit-obj_brand_descr">
@@ -76,7 +92,7 @@
 			<input id="brandHeaderEdit-obj_brand_descr" fgta5-component="Textbox"
 				placeholder="descr" autocomplete="off" spellcheck="false"
 				binding="brand_descr" 
-			data-tabindex="4"
+			data-tabindex="5"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -94,13 +110,29 @@
 			<input id="brandHeaderEdit-obj_unit_id" fgta5-component="Combobox"
 				placeholder="pilih unit" autocomplete="off" spellcheck="false"
 				binding="unit_id" 
-			data-tabindex="5"
+			data-tabindex="6"
 				
 			required
 				
 			invalid-message-required="unit harus diisi"
 				
 			data-display="unit_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: partner_id-->
+		<div id="brandHeaderEdit-obj_partner_id-container" class="input-field" field="brandHeaderEdit-obj_partner_id">
+			<label for="brandHeaderEdit-obj_partner_id">
+				Partner
+			</label>
+			<input id="brandHeaderEdit-obj_partner_id" fgta5-component="Combobox"
+				placeholder="partner_id" autocomplete="off" spellcheck="false"
+				binding="partner_id" 
+			data-tabindex="7"
+				
+			data-display="partner_name"
 				
 					>
 		</div>

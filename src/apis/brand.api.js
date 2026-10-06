@@ -189,6 +189,11 @@ async function brand_headerList(self, body) {
 				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
 				row.unit_name = unit_name ?? null
 			}
+			// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.brand.partner_id)
+			if (row.partner_id !== undefined) {
+				const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', row.partner_id)
+				row.partner_name = partner_name ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -242,6 +247,11 @@ async function brand_headerOpen(self, body) {
 		if (data.unit_id !== undefined) {
 			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
 			data.unit_name = unit_name ?? null
+		}
+		// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.brand.partner_id)
+		if (data.partner_id !== undefined) {
+			const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', data.partner_id)
+			data.partner_name = partner_name ?? null
 		}
 		 
 		// lookup data createby

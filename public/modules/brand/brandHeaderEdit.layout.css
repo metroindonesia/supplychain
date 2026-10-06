@@ -36,6 +36,12 @@
 		
 	}
 	
+	#brandHeaderEdit-obj_ismanualclose-container {
+		grid-row: 2;
+		grid-column: 5 / span 2;
+		
+	}
+	
 	#brandHeaderEdit-obj_brand_descr-container {
 		grid-row: 3;
 		grid-column: 1 / span 6;
@@ -45,6 +51,12 @@
 	#brandHeaderEdit-obj_unit_id-container {
 		grid-row: 4;
 		grid-column: 1 / span 2;
+		
+	}
+	
+	#brandHeaderEdit-obj_partner_id-container {
+		grid-row: 4;
+		grid-column: 3 / span 3;
 		
 	}
 		

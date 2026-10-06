@@ -367,8 +367,19 @@
           }
         }
       },
-      "Uniques": {},
-      "Search": {}
+      "Uniques": {
+        "ctg_name": {
+          "name": "ctg_name",
+          "fields": "ctg_name"
+        }
+      },
+      "Search": {
+        "searchtext": {
+          "name": "searchtext",
+          "label": "Search",
+          "fields": "ctg_id, %ctg_name"
+        }
+      }
     }
   },
   "uniques": {},

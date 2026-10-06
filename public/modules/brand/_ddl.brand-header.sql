@@ -42,6 +42,21 @@ comment on column public."brand".brand_name is '';
 
 
 -- =============================================
+-- FIELD: ismanualclose boolean
+-- =============================================
+-- ADD ismanualclose
+alter table public."brand" add ismanualclose boolean not null default false;
+comment on column public."brand".ismanualclose is '';
+
+-- MODIFY ismanualclose
+alter table public."brand"
+	alter column ismanualclose type boolean,
+	ALTER COLUMN ismanualclose SET DEFAULT false,
+	ALTER COLUMN ismanualclose SET NOT NULL;
+comment on column public."brand".ismanualclose is '';
+
+
+-- =============================================
 -- FIELD: brand_descr text
 -- =============================================
 -- ADD brand_descr
@@ -69,6 +84,21 @@ alter table public."brand"
 	ALTER COLUMN unit_id DROP DEFAULT,
 	ALTER COLUMN unit_id DROP NOT NULL;
 comment on column public."brand".unit_id is '';
+
+
+-- =============================================
+-- FIELD: partner_id int
+-- =============================================
+-- ADD partner_id
+alter table public."brand" add partner_id int  ;
+comment on column public."brand".partner_id is '';
+
+-- MODIFY partner_id
+alter table public."brand"
+	alter column partner_id type int,
+	ALTER COLUMN partner_id DROP DEFAULT,
+	ALTER COLUMN partner_id DROP NOT NULL;
+comment on column public."brand".partner_id is '';
 
 
 -- =============================================
@@ -158,6 +188,7 @@ CREATE INDEX idx$public$brand$_timestamp ON public.brand (_timestamp);
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE public."brand" DROP CONSTRAINT fk$public$brand$unit_id;
+ALTER TABLE public."brand" DROP CONSTRAINT fk$public$brand$partner_id;
 
 
 -- Add Foreign Key Constraint  
@@ -170,6 +201,17 @@ ALTER TABLE public."brand"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$brand$unit_id;
 CREATE INDEX idx_fk$public$brand$unit_id ON public."brand"(unit_id);	
+
+
+ALTER TABLE public."brand"
+	ADD CONSTRAINT fk$public$brand$partner_id
+	FOREIGN KEY (partner_id)
+	REFERENCES public."partner"(partner_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$brand$partner_id;
+CREATE INDEX idx_fk$public$brand$partner_id ON public."brand"(partner_id);	
 
 	
 
