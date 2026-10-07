@@ -72,6 +72,21 @@ comment on column public."product".product_name is '';
 
 
 -- =============================================
+-- FIELD: uom_id smallint
+-- =============================================
+-- ADD uom_id
+alter table public."product" add uom_id smallint  ;
+comment on column public."product".uom_id is '';
+
+-- MODIFY uom_id
+alter table public."product"
+	alter column uom_id type smallint,
+	ALTER COLUMN uom_id DROP DEFAULT,
+	ALTER COLUMN uom_id DROP NOT NULL;
+comment on column public."product".uom_id is '';
+
+
+-- =============================================
 -- FIELD: brand_id int
 -- =============================================
 -- ADD brand_id
@@ -308,6 +323,7 @@ CREATE INDEX idx$public$product$_timestamp ON public.product (_timestamp);
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$model_id;
+ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$uom_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$brand_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$variancetype_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$skuopt;
@@ -326,6 +342,17 @@ ALTER TABLE public."product"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$product$model_id;
 CREATE INDEX idx_fk$public$product$model_id ON public."product"(model_id);	
+
+
+ALTER TABLE public."product"
+	ADD CONSTRAINT fk$public$product$uom_id
+	FOREIGN KEY (uom_id)
+	REFERENCES public."uom"(uom_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$product$uom_id;
+CREATE INDEX idx_fk$public$product$uom_id ON public."product"(uom_id);	
 
 
 ALTER TABLE public."product"

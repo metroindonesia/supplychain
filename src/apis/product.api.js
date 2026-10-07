@@ -208,6 +208,11 @@ async function product_headerList(self, body) {
 				const { model_name } = await sqlUtil.lookupdb(db, 'public.model', 'model_id', row.model_id)
 				row.model_name = model_name ?? null
 			}
+			// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.product.uom_id)
+			if (row.uom_id !== undefined) {
+				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
+				row.uom_name = uom_name ?? null
+			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.product.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
@@ -291,6 +296,11 @@ async function product_headerOpen(self, body) {
 		if (data.model_id !== undefined) {
 			const { model_name } = await sqlUtil.lookupdb(db, 'public.model', 'model_id', data.model_id)
 			data.model_name = model_name ?? null
+		}
+		// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.product.uom_id)
+		if (data.uom_id !== undefined) {
+			const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', data.uom_id)
+			data.uom_name = uom_name ?? null
 		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.product.brand_id)
 		if (data.brand_id !== undefined) {
