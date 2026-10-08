@@ -17,9 +17,9 @@
     "files.watcherExclude": {
       "**/node_modules": true
     },
-    "remote.autoForwardPorts": false,
+    "remote.autoForwardPorts": true,
     "remote.autoForwardPortsSource": "hybrid",
-    "remote.restoreForwardedPorts": false,
+    "remote.restoreForwardedPorts": true,
     "remote.forwardOnOpen": true,
     "remote.portsAttributes": {
       "3005": {
@@ -31,7 +31,7 @@
         "onAutoForward": "silent"
       },
       "8080": {
-        "label": "HTTP Service (8080)",
+        "label": "Notifier",
         "onAutoForward": "silent"
       }
     }

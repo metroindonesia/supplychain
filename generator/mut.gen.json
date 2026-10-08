@@ -1,0 +1,40 @@
+{
+  "appname": "supplychain",
+  "name": "mut",
+  "directory": "/home/ubuntu/Development/metroindonesia/supplychain",
+  "title": "Inventory Mutation",
+  "description": "",
+  "icon": "",
+  "primary_entity_id": "en-muz0xzxr-9e2cv",
+  "primary_entity_name": "header",
+  "actions": [],
+  "entities": {
+    "header": {
+      "id": "en-muz0xzxr-9e2cv",
+      "name": "header",
+      "isheader": true,
+      "title": "programtitle",
+      "table": "schema.tablename",
+      "pk": "pk",
+      "descr": "",
+      "skipRegenerateTable": false,
+      "formGridLayout": true,
+      "allowFormNew": true,
+      "allowFormEdit": true,
+      "allowRowAdd": true,
+      "allowRowRemove": true,
+      "allowRowEdit": true,
+      "identifierMethod": "manual",
+      "identifierPrefix": "",
+      "identifierBlock": "3",
+      "identifierLength": "6",
+      "bindHeadTitle": "",
+      "bindHeadDescr": "",
+      "Items": {},
+      "Uniques": {},
+      "Search": {}
+    }
+  },
+  "uniques": {},
+  "search": {}
+}

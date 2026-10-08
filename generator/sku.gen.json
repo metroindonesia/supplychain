@@ -1069,7 +1069,7 @@
           "grid_inlinestyle": "",
           "grid_sorting": false,
           "Validation": {
-            "isRequired": true,
+            "isRequired": false,
             "isMinimum": false,
             "isMaximum": false,
             "Minimum": null,
@@ -1136,7 +1136,7 @@
           "grid_inlinestyle": "",
           "grid_sorting": false,
           "Validation": {
-            "isRequired": true,
+            "isRequired": false,
             "isMinimum": false,
             "isMaximum": false,
             "Minimum": null,

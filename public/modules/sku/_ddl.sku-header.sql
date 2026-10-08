@@ -382,15 +382,15 @@ CREATE INDEX idx$public$sku$_timestamp ON public.sku (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$brand_id;
+ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$product_id;
+ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$model_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$variancetype_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$skuopt_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$gro_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$ctg_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$uom_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$sea_id;
-ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$brand_id;
-ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$product_id;
-ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$model_id;
 
 
 -- Add Foreign Key Constraint  
@@ -500,10 +500,10 @@ CREATE INDEX idx_fk$public$sku$sea_id ON public."sku"(sea_id);
 -- =============================================
 -- Drop existing unique index 
 alter table public."sku"
-	drop constraint uq$public$sku$sku_pair;
+	drop constraint uq$public$sku$sku_code;
 
 alter table public."sku"
-	drop constraint uq$public$sku$sku_code;
+	drop constraint uq$public$sku$sku_pair;
 	
 
 -- Add unique index 
