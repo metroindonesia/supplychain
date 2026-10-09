@@ -60,31 +60,25 @@
 		
 	}
 	
-	#poHeaderEdit-obj_partner_id-container {
-		grid-row: 4;
-		grid-column: 1 / span 3;
-		
-	}
-	
-	#poHeaderEdit-obj_tax_id-container {
-		grid-row: 4;
-		grid-column: 5 / span 2;
-		
-	}
-	
 	#poHeaderEdit-obj_brand_id-container {
-		grid-row: 5;
+		grid-row: 4;
 		grid-column: 1 / span 2;
 		
 	}
 	
 	#poHeaderEdit-obj_sea_id-container {
-		grid-row: 5;
+		grid-row: 4;
 		grid-column: 3 / span 2;
 		
 	}
 	
-	#poHeaderEdit-obj_po_subtotalqty-container {
+	#poHeaderEdit-obj_partner_id-container {
+		grid-row: 5;
+		grid-column: 1 / span 3;
+		
+	}
+	
+	#poHeaderEdit-obj_curr_id-container {
 		grid-row: 6;
 		grid-column: 1 / span 2;
 		
@@ -96,15 +90,15 @@
 		
 	}
 	
-	#poHeaderEdit-obj_curr_id-container {
-		grid-row: 6;
-		grid-column: 5 / span 2;
-		
-	}
-	
 	#poHeaderEdit-obj_po_subtotaltax-container {
 		grid-row: 7;
 		grid-column: 3 / span 2;
+		
+	}
+	
+	#poHeaderEdit-obj_tax_id-container {
+		grid-row: 7;
+		grid-column: 1 / span 2;
 		
 	}
 	
@@ -117,6 +111,12 @@
 	#poHeaderEdit-obj_tax_isinclude-container {
 		grid-row: 7;
 		grid-column: 6;
+		
+	}
+	
+	#poHeaderEdit-obj_po_subtotalqty-container {
+		grid-row: 8;
+		grid-column: 1 / span 2;
 		
 	}
 	

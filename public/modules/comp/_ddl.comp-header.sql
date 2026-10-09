@@ -42,6 +42,21 @@ comment on column public."comp".comp_isdisabled is '';
 
 
 -- =============================================
+-- FIELD: comp_isallowselect boolean
+-- =============================================
+-- ADD comp_isallowselect
+alter table public."comp" add comp_isallowselect boolean not null default true;
+comment on column public."comp".comp_isallowselect is '';
+
+-- MODIFY comp_isallowselect
+alter table public."comp"
+	alter column comp_isallowselect type boolean,
+	ALTER COLUMN comp_isallowselect SET DEFAULT true,
+	ALTER COLUMN comp_isallowselect SET NOT NULL;
+comment on column public."comp".comp_isallowselect is '';
+
+
+-- =============================================
 -- FIELD: comp_name text
 -- =============================================
 -- ADD comp_name
@@ -114,6 +129,21 @@ alter table public."comp"
 	ALTER COLUMN coa_id DROP DEFAULT,
 	ALTER COLUMN coa_id DROP NOT NULL;
 comment on column public."comp".coa_id is '';
+
+
+-- =============================================
+-- FIELD: adv_coa_id int
+-- =============================================
+-- ADD adv_coa_id
+alter table public."comp" add adv_coa_id int  ;
+comment on column public."comp".adv_coa_id is '';
+
+-- MODIFY adv_coa_id
+alter table public."comp"
+	alter column adv_coa_id type int,
+	ALTER COLUMN adv_coa_id DROP DEFAULT,
+	ALTER COLUMN adv_coa_id DROP NOT NULL;
+comment on column public."comp".adv_coa_id is '';
 
 
 -- =============================================
@@ -204,6 +234,7 @@ CREATE INDEX idx$public$comp$_timestamp ON public.comp (_timestamp);
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE public."comp" DROP CONSTRAINT fk$public$comp$compgroup_id;
 ALTER TABLE public."comp" DROP CONSTRAINT fk$public$comp$coa_id;
+ALTER TABLE public."comp" DROP CONSTRAINT fk$public$comp$adv_coa_id;
 
 
 -- Add Foreign Key Constraint  
@@ -227,6 +258,17 @@ ALTER TABLE public."comp"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$comp$coa_id;
 CREATE INDEX idx_fk$public$comp$coa_id ON public."comp"(coa_id);	
+
+
+ALTER TABLE public."comp"
+	ADD CONSTRAINT fk$public$comp$adv_coa_id
+	FOREIGN KEY (adv_coa_id)
+	REFERENCES public."coa"(coa_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$comp$adv_coa_id;
+CREATE INDEX idx_fk$public$comp$adv_coa_id ON public."comp"(adv_coa_id);	
 
 	
 

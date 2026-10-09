@@ -184,10 +184,10 @@ async function mov_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: movtype_name dari field movtype_name pada table public.movtype dimana (public.movtype.movtype_id = public.mov.movtype_id)
+			// lookup: movtype_code dari field movtype_code pada table public.movtype dimana (public.movtype.movtype_id = public.mov.movtype_id)
 			if (row.movtype_id !== undefined) {
-				const { movtype_name } = await sqlUtil.lookupdb(db, 'public.movtype', 'movtype_id', row.movtype_id)
-				row.movtype_name = movtype_name ?? null
+				const { movtype_code } = await sqlUtil.lookupdb(db, 'public.movtype', 'movtype_id', row.movtype_id)
+				row.movtype_code = movtype_code ?? null
 			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
 			if (row.brand_id !== undefined) {
@@ -273,10 +273,10 @@ async function mov_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
-		// lookup: movtype_name dari field movtype_name pada table public.movtype dimana (public.movtype.movtype_id = public.mov.movtype_id)
+		// lookup: movtype_code dari field movtype_code pada table public.movtype dimana (public.movtype.movtype_id = public.mov.movtype_id)
 		if (data.movtype_id !== undefined) {
-			const { movtype_name } = await sqlUtil.lookupdb(db, 'public.movtype', 'movtype_id', data.movtype_id)
-			data.movtype_name = movtype_name ?? null
+			const { movtype_code } = await sqlUtil.lookupdb(db, 'public.movtype', 'movtype_id', data.movtype_id)
+			data.movtype_code = movtype_code ?? null
 		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
 		if (data.brand_id !== undefined) {

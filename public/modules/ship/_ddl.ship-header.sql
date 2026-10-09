@@ -267,15 +267,15 @@ comment on column public."ship"._calculate is '';
 
 
 -- =============================================
--- FIELD: _commitby bigint
+-- FIELD: _commitby int
 -- =============================================
 -- ADD _commitby
-alter table public."ship" add _commitby bigint  ;
+alter table public."ship" add _commitby int  ;
 comment on column public."ship"._commitby is '';
 
 -- MODIFY _commitby
 alter table public."ship"
-	alter column _commitby type bigint,
+	alter column _commitby type int,
 	ALTER COLUMN _commitby DROP DEFAULT,
 	ALTER COLUMN _commitby DROP NOT NULL;
 comment on column public."ship"._commitby is '';
@@ -297,15 +297,15 @@ comment on column public."ship"._commitdate is '';
 
 
 -- =============================================
--- FIELD: _verifyby bigint
+-- FIELD: _verifyby int
 -- =============================================
 -- ADD _verifyby
-alter table public."ship" add _verifyby bigint  ;
+alter table public."ship" add _verifyby int  ;
 comment on column public."ship"._verifyby is '';
 
 -- MODIFY _verifyby
 alter table public."ship"
-	alter column _verifyby type bigint,
+	alter column _verifyby type int,
 	ALTER COLUMN _verifyby DROP DEFAULT,
 	ALTER COLUMN _verifyby DROP NOT NULL;
 comment on column public."ship"._verifyby is '';

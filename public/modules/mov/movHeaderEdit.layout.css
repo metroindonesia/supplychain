@@ -24,6 +24,90 @@
 		
 	}
 	
+	#movHeaderEdit-obj_mov_doc-container {
+		grid-row: 1;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_version-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_date-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_datesent-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_daterecv-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_ref-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_descr-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_qty-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_qtysend-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_qtyrecv-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_fobvalue-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_fobidr-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_addidr-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#movHeaderEdit-obj_mov_landedidr-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
 	#movHeaderEdit-obj_movtype_id-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;
@@ -72,84 +156,6 @@
 		
 	}
 	
-	#movHeaderEdit-obj_mov_date-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_datesent-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_daterecv-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_doc-container {
-		grid-row: 1;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_version-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_ref-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_descr-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_qty-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_qtysend-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_qtyrecv-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_itemidr-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_addidr-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_mov_landedidr-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
 	#movHeaderEdit-obj_commit-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;
@@ -168,55 +174,7 @@
 		
 	}
 	
-	#movHeaderEdit-obj_isrecv-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_commitby-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_commitdate-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_lockby-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_lockdate-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_sentby-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_sentdate-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_recvby-container {
-		grid-row: auto;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#movHeaderEdit-obj_recvdate-container {
+	#movHeaderEdit-obj__isrecv-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;
 		

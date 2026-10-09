@@ -39,11 +39,13 @@ const frm = new $fgta5.Form('compHeaderEdit-frm');
 const obj_comp_id = frm.Inputs['compHeaderEdit-obj_comp_id']
 const obj_comp_code = frm.Inputs['compHeaderEdit-obj_comp_code']
 const obj_comp_isdisabled = frm.Inputs['compHeaderEdit-obj_comp_isdisabled']
+const obj_comp_isallowselect = frm.Inputs['compHeaderEdit-obj_comp_isallowselect']
 const obj_comp_name = frm.Inputs['compHeaderEdit-obj_comp_name']
 const obj_comp_istax = frm.Inputs['compHeaderEdit-obj_comp_istax']
 const obj_comp_descr = frm.Inputs['compHeaderEdit-obj_comp_descr']
 const obj_compgroup_id = frm.Inputs['compHeaderEdit-obj_compgroup_id']
-const obj_coa_id = frm.Inputs['compHeaderEdit-obj_coa_id']	
+const obj_coa_id = frm.Inputs['compHeaderEdit-obj_coa_id']
+const obj_adv_coa_id = frm.Inputs['compHeaderEdit-obj_adv_coa_id']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -222,6 +224,63 @@ export async function init(self, args) {
 		}		
 	})
 	
+	
+	// Combobox: obj_adv_coa_id
+	obj_adv_coa_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_adv_coa_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_adv_coa_id_selecting(self, obj_adv_coa_id, frm, evt) {}
+			fn_selecting(self, obj_adv_coa_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'coa/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_adv_coa_id_selecting_criteria(self, obj_adv_coa_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_adv_coa_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_adv_coa_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.coa_id, row.coa_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -233,6 +292,7 @@ export async function openSelectedData(self, params) {
 	try {
 		obj_compgroup_id.clear()
 		obj_coa_id.clear()
+		obj_adv_coa_id.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)

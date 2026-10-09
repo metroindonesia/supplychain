@@ -38,6 +38,7 @@ const btn_about = document.getElementById('uomHeader-btn_about')
 const frm = new $fgta5.Form('uomHeaderEdit-frm');
 const obj_uom_id = frm.Inputs['uomHeaderEdit-obj_uom_id']
 const obj_uom_name = frm.Inputs['uomHeaderEdit-obj_uom_name']
+const obj_usedecimal = frm.Inputs['uomHeaderEdit-obj_usedecimal']
 const obj_uomtype_id = frm.Inputs['uomHeaderEdit-obj_uomtype_id']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')

@@ -27,6 +27,21 @@ comment on column public."uom".uom_name is '';
 
 
 -- =============================================
+-- FIELD: isusedecimal boolean
+-- =============================================
+-- ADD isusedecimal
+alter table public."uom" add isusedecimal boolean not null default false;
+comment on column public."uom".isusedecimal is '';
+
+-- MODIFY isusedecimal
+alter table public."uom"
+	alter column isusedecimal type boolean,
+	ALTER COLUMN isusedecimal SET DEFAULT false,
+	ALTER COLUMN isusedecimal SET NOT NULL;
+comment on column public."uom".isusedecimal is '';
+
+
+-- =============================================
 -- FIELD: uomtype_id smallint
 -- =============================================
 -- ADD uomtype_id

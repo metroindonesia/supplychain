@@ -62,6 +62,26 @@
 		</div>
 		
 
+		<!-- Combobox: taxtype_id-->
+		<div id="taxHeaderEdit-obj_taxtype_id-container" class="input-field" field="taxHeaderEdit-obj_taxtype_id">
+			<label for="taxHeaderEdit-obj_taxtype_id">
+				Type
+			</label>
+			<input id="taxHeaderEdit-obj_taxtype_id" fgta5-component="Combobox"
+				placeholder="type" autocomplete="off" spellcheck="false"
+				binding="taxtype_id" 
+			data-tabindex="4"
+				
+			required
+				
+			invalid-message-required="tipe tax harus diisi"
+				
+			data-display="taxtype_name"
+				
+					>
+		</div>
+		
+
 		<!-- Numberbox: tax_value-->
 		<div id="taxHeaderEdit-obj_tax_value-container" class="input-field" field="taxHeaderEdit-obj_tax_value">
 			<label for="taxHeaderEdit-obj_tax_value">
@@ -72,7 +92,7 @@
 				binding="tax_value" 
 			value="0"
 				
-			data-tabindex="4"
+			data-tabindex="5"
 				
 			description="% value"
 				
@@ -100,7 +120,7 @@
 			<input id="taxHeaderEdit-obj_tax_isinclude" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="tax_isinclude" 
-			data-tabindex="5"
+			data-tabindex="6"
 				
 			type="checkbox"
 				

@@ -11,7 +11,7 @@
 	
 
 		<!-- Textbox: mov_id-->
-		<div id="movHeaderEdit-obj_mov_id-container" class="input-field" field="movHeaderEdit-obj_mov_id">
+		<div id="movHeaderEdit-obj_mov_id-container" class="input-field hidden" field="movHeaderEdit-obj_mov_id">
 			<label for="movHeaderEdit-obj_mov_id">
 				mov_id
 			</label>
@@ -28,201 +28,15 @@
 		</div>
 		
 
-		<!-- Combobox: movtype_id-->
-		<div id="movHeaderEdit-obj_movtype_id-container" class="input-field" field="movHeaderEdit-obj_movtype_id">
-			<label for="movHeaderEdit-obj_movtype_id">
-				movtype_id
-			</label>
-			<input id="movHeaderEdit-obj_movtype_id" fgta5-component="Combobox"
-				placeholder="movtype_id" autocomplete="off" spellcheck="false"
-				binding="movtype_id" 
-			data-tabindex="2"
-				
-			description="tipe moving, misalnya RV, TR, SL, dll"
-				
-			data-display="movtype_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: brand_id-->
-		<div id="movHeaderEdit-obj_brand_id-container" class="input-field" field="movHeaderEdit-obj_brand_id">
-			<label for="movHeaderEdit-obj_brand_id">
-				brand_id
-			</label>
-			<input id="movHeaderEdit-obj_brand_id" fgta5-component="Combobox"
-				placeholder="brand_id" autocomplete="off" spellcheck="false"
-				binding="brand_id" 
-			data-tabindex="3"
-				
-			data-display="brand_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: po_id-->
-		<div id="movHeaderEdit-obj_po_id-container" class="input-field" field="movHeaderEdit-obj_po_id">
-			<label for="movHeaderEdit-obj_po_id">
-				po_id
-			</label>
-			<input id="movHeaderEdit-obj_po_id" fgta5-component="Combobox"
-				placeholder="po_id" autocomplete="off" spellcheck="false"
-				binding="po_id" 
-			data-tabindex="4"
-				
-			description="khusus untuk RV, berisi sumner po dari receiving ini, nantinya berfungsi untuk filter sku yang bisa dipilih untuk receive."
-				
-			data-display="po_descr"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: partner_id-->
-		<div id="movHeaderEdit-obj_partner_id-container" class="input-field" field="movHeaderEdit-obj_partner_id">
-			<label for="movHeaderEdit-obj_partner_id">
-				partner_id
-			</label>
-			<input id="movHeaderEdit-obj_partner_id" fgta5-component="Combobox"
-				placeholder="partner_id" autocomplete="off" spellcheck="false"
-				binding="partner_id" 
-			data-tabindex="5"
-				
-			data-display="partner_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: sea_id-->
-		<div id="movHeaderEdit-obj_sea_id-container" class="input-field" field="movHeaderEdit-obj_sea_id">
-			<label for="movHeaderEdit-obj_sea_id">
-				sea_id
-			</label>
-			<input id="movHeaderEdit-obj_sea_id" fgta5-component="Combobox"
-				placeholder="sea_id" autocomplete="off" spellcheck="false"
-				binding="sea_id" 
-			data-tabindex="6"
-				
-			description="season khusus untuk dokumen RV"
-				
-			data-display="sea_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: curr_id-->
-		<div id="movHeaderEdit-obj_curr_id-container" class="input-field" field="movHeaderEdit-obj_curr_id">
-			<label for="movHeaderEdit-obj_curr_id">
-				curr_id
-			</label>
-			<input id="movHeaderEdit-obj_curr_id" fgta5-component="Combobox"
-				placeholder="curr_id" autocomplete="off" spellcheck="false"
-				binding="curr_id" 
-			data-tabindex="7"
-				
-			data-display="curr_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: ori_site_id-->
-		<div id="movHeaderEdit-obj_ori_site_id-container" class="input-field" field="movHeaderEdit-obj_ori_site_id">
-			<label for="movHeaderEdit-obj_ori_site_id">
-				ori_site_id
-			</label>
-			<input id="movHeaderEdit-obj_ori_site_id" fgta5-component="Combobox"
-				placeholder="origin_site_id" autocomplete="off" spellcheck="false"
-				binding="ori_site_id" 
-			data-tabindex="8"
-				
-			description="untuk TR, site asal barang (TR, SL, DO)"
-				
-			data-display="ori_site_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: des_site_id-->
-		<div id="movHeaderEdit-obj_des_site_id-container" class="input-field" field="movHeaderEdit-obj_des_site_id">
-			<label for="movHeaderEdit-obj_des_site_id">
-				des_site_id
-			</label>
-			<input id="movHeaderEdit-obj_des_site_id" fgta5-component="Combobox"
-				placeholder="dest_" autocomplete="off" spellcheck="false"
-				binding="des_site_id" 
-			data-tabindex="9"
-				
-			description="site tujuan pengiriman barang (TR, RV, AJ)"
-				
-			data-display="des_site_name"
-				
-					>
-		</div>
-		
-
-		<!-- Datepicker: mov_date-->
-		<div id="movHeaderEdit-obj_mov_date-container" class="input-field" field="movHeaderEdit-obj_mov_date">
-			<label for="movHeaderEdit-obj_mov_date">
-				mov_date
-			</label>
-			<input id="movHeaderEdit-obj_mov_date" fgta5-component="Datepicker"
-				placeholder="mov_date" autocomplete="off" spellcheck="false"
-				binding="mov_date" 
-			data-tabindex="10"
-				
-			description="tanggal dokumen dibuat"
-				
-					>
-		</div>
-		
-
-		<!-- Datepicker: mov_datesent-->
-		<div id="movHeaderEdit-obj_mov_datesent-container" class="input-field" field="movHeaderEdit-obj_mov_datesent">
-			<label for="movHeaderEdit-obj_mov_datesent">
-				mov_datesent
-			</label>
-			<input id="movHeaderEdit-obj_mov_datesent" fgta5-component="Datepicker"
-				placeholder="date_sent" autocomplete="off" spellcheck="false"
-				binding="mov_datesent" 
-			data-tabindex="11"
-				
-			description="tanggal barang dikirimkan"
-				
-					>
-		</div>
-		
-
-		<!-- Datepicker: mov_daterecv-->
-		<div id="movHeaderEdit-obj_mov_daterecv-container" class="input-field" field="movHeaderEdit-obj_mov_daterecv">
-			<label for="movHeaderEdit-obj_mov_daterecv">
-				mov_daterecv
-			</label>
-			<input id="movHeaderEdit-obj_mov_daterecv" fgta5-component="Datepicker"
-				placeholder="date_recv" autocomplete="off" spellcheck="false"
-				binding="mov_daterecv" 
-			data-tabindex="12"
-				
-			description="tanggal barang diterima"
-				
-					>
-		</div>
-		
-
 		<!-- Textbox: mov_doc-->
 		<div id="movHeaderEdit-obj_mov_doc-container" class="input-field" field="movHeaderEdit-obj_mov_doc">
 			<label for="movHeaderEdit-obj_mov_doc">
-				mov_doc
+				ID
 			</label>
 			<input id="movHeaderEdit-obj_mov_doc" fgta5-component="Textbox"
-				placeholder="mov_doc" autocomplete="off" spellcheck="false"
+				placeholder="id" autocomplete="off" spellcheck="false"
 				binding="mov_doc" 
-			data-tabindex="13"
+			data-tabindex="2"
 				
 			description="id dokumen (formated)"
 				
@@ -239,12 +53,14 @@
 		<!-- Textbox: mov_version-->
 		<div id="movHeaderEdit-obj_mov_version-container" class="input-field" field="movHeaderEdit-obj_mov_version">
 			<label for="movHeaderEdit-obj_mov_version">
-				mov_version
+				Version
 			</label>
 			<input id="movHeaderEdit-obj_mov_version" fgta5-component="Textbox"
-				placeholder="mov_version" autocomplete="off" spellcheck="false"
+				placeholder="" autocomplete="off" spellcheck="false"
 				binding="mov_version" 
-			data-tabindex="14"
+			value="0"
+				
+			data-tabindex="3"
 				
 			description="versi dokumen (increase saat uncommit)"
 				
@@ -256,15 +72,63 @@
 		</div>
 		
 
+		<!-- Datepicker: mov_date-->
+		<div id="movHeaderEdit-obj_mov_date-container" class="input-field" field="movHeaderEdit-obj_mov_date">
+			<label for="movHeaderEdit-obj_mov_date">
+				Date
+			</label>
+			<input id="movHeaderEdit-obj_mov_date" fgta5-component="Datepicker"
+				placeholder="date" autocomplete="off" spellcheck="false"
+				binding="mov_date" 
+			data-tabindex="4"
+				
+			description="tanggal dokumen dibuat"
+				
+					>
+		</div>
+		
+
+		<!-- Datepicker: mov_datesent-->
+		<div id="movHeaderEdit-obj_mov_datesent-container" class="input-field" field="movHeaderEdit-obj_mov_datesent">
+			<label for="movHeaderEdit-obj_mov_datesent">
+				Date Sent
+			</label>
+			<input id="movHeaderEdit-obj_mov_datesent" fgta5-component="Datepicker"
+				placeholder="date sent" autocomplete="off" spellcheck="false"
+				binding="mov_datesent" 
+			data-tabindex="5"
+				
+			description="tanggal barang dikirimkan"
+				
+					>
+		</div>
+		
+
+		<!-- Datepicker: mov_daterecv-->
+		<div id="movHeaderEdit-obj_mov_daterecv-container" class="input-field" field="movHeaderEdit-obj_mov_daterecv">
+			<label for="movHeaderEdit-obj_mov_daterecv">
+				Date Recv
+			</label>
+			<input id="movHeaderEdit-obj_mov_daterecv" fgta5-component="Datepicker"
+				placeholder="date_recv" autocomplete="off" spellcheck="false"
+				binding="mov_daterecv" 
+			data-tabindex="6"
+				
+			description="tanggal barang diterima"
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: mov_ref-->
 		<div id="movHeaderEdit-obj_mov_ref-container" class="input-field" field="movHeaderEdit-obj_mov_ref">
 			<label for="movHeaderEdit-obj_mov_ref">
-				mov_ref
+				Reference
 			</label>
 			<input id="movHeaderEdit-obj_mov_ref" fgta5-component="Textbox"
-				placeholder="mov_ref" autocomplete="off" spellcheck="false"
+				placeholder="reference" autocomplete="off" spellcheck="false"
 				binding="mov_ref" 
-			data-tabindex="15"
+			data-tabindex="7"
 				
 			description="refernsi dokumen (misalnya kode packing list dari origin / principal)"
 				
@@ -279,12 +143,12 @@
 		<!-- Textbox: mov_descr-->
 		<div id="movHeaderEdit-obj_mov_descr-container" class="input-field" field="movHeaderEdit-obj_mov_descr">
 			<label for="movHeaderEdit-obj_mov_descr">
-				mov_descr
+				Descr
 			</label>
 			<input id="movHeaderEdit-obj_mov_descr" fgta5-component="Textbox"
-				placeholder="mov_descr" autocomplete="off" spellcheck="false"
+				placeholder="description" autocomplete="off" spellcheck="false"
 				binding="mov_descr" 
-			data-tabindex="16"
+			data-tabindex="8"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -297,18 +161,20 @@
 		<!-- Numberbox: mov_qty-->
 		<div id="movHeaderEdit-obj_mov_qty-container" class="input-field" field="movHeaderEdit-obj_mov_qty">
 			<label for="movHeaderEdit-obj_mov_qty">
-				mov_qty
+				Qty
 			</label>
 			<input id="movHeaderEdit-obj_mov_qty" fgta5-component="Numberbox"
-				placeholder="mov_qty" autocomplete="off" spellcheck="false"
+				placeholder="qty" autocomplete="off" spellcheck="false"
 				binding="mov_qty" 
 			value="0"
 				
-			data-tabindex="17"
+			data-tabindex="9"
 				
 			precision="2"
 				
 			maxlength="13"
+				
+			disabled
 				
 					>
 		</div>
@@ -317,18 +183,20 @@
 		<!-- Numberbox: mov_qtysend-->
 		<div id="movHeaderEdit-obj_mov_qtysend-container" class="input-field" field="movHeaderEdit-obj_mov_qtysend">
 			<label for="movHeaderEdit-obj_mov_qtysend">
-				mov_qtysend
+				Qty Send
 			</label>
 			<input id="movHeaderEdit-obj_mov_qtysend" fgta5-component="Numberbox"
-				placeholder="mov_qtysend" autocomplete="off" spellcheck="false"
+				placeholder="Qty Send" autocomplete="off" spellcheck="false"
 				binding="mov_qtysend" 
 			value="0"
 				
-			data-tabindex="18"
+			data-tabindex="10"
 				
 			precision="2"
 				
 			maxlength="13"
+				
+			disabled
 				
 					>
 		</div>
@@ -337,38 +205,64 @@
 		<!-- Numberbox: mov_qtyrecv-->
 		<div id="movHeaderEdit-obj_mov_qtyrecv-container" class="input-field" field="movHeaderEdit-obj_mov_qtyrecv">
 			<label for="movHeaderEdit-obj_mov_qtyrecv">
-				mov_qtyrecv
+				Qty Recv
 			</label>
 			<input id="movHeaderEdit-obj_mov_qtyrecv" fgta5-component="Numberbox"
-				placeholder="mov_qtyrecv" autocomplete="off" spellcheck="false"
+				placeholder="Qty Recv" autocomplete="off" spellcheck="false"
 				binding="mov_qtyrecv" 
 			value="0"
 				
-			data-tabindex="19"
+			data-tabindex="11"
 				
 			precision="2"
 				
 			maxlength="13"
 				
+			disabled
+				
 					>
 		</div>
 		
 
-		<!-- Numberbox: mov_itemidr-->
-		<div id="movHeaderEdit-obj_mov_itemidr-container" class="input-field" field="movHeaderEdit-obj_mov_itemidr">
-			<label for="movHeaderEdit-obj_mov_itemidr">
-				mov_itemidr
+		<!-- Numberbox: mov_fobvalue-->
+		<div id="movHeaderEdit-obj_mov_fobvalue-container" class="input-field" field="movHeaderEdit-obj_mov_fobvalue">
+			<label for="movHeaderEdit-obj_mov_fobvalue">
+				FOB Value
 			</label>
-			<input id="movHeaderEdit-obj_mov_itemidr" fgta5-component="Numberbox"
-				placeholder="mov_itemidr" autocomplete="off" spellcheck="false"
-				binding="mov_itemidr" 
+			<input id="movHeaderEdit-obj_mov_fobvalue" fgta5-component="Numberbox"
+				placeholder="fob value" autocomplete="off" spellcheck="false"
+				binding="mov_fobvalue" 
 			value="0"
 				
-			data-tabindex="20"
+			data-tabindex="12"
 				
 			precision="2"
 				
 			maxlength="19"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: mov_fobidr-->
+		<div id="movHeaderEdit-obj_mov_fobidr-container" class="input-field" field="movHeaderEdit-obj_mov_fobidr">
+			<label for="movHeaderEdit-obj_mov_fobidr">
+				FOB IDR
+			</label>
+			<input id="movHeaderEdit-obj_mov_fobidr" fgta5-component="Numberbox"
+				placeholder="fob idr" autocomplete="off" spellcheck="false"
+				binding="mov_fobidr" 
+			value="0"
+				
+			data-tabindex="13"
+				
+			precision="2"
+				
+			maxlength="19"
+				
+			disabled
 				
 					>
 		</div>
@@ -377,18 +271,20 @@
 		<!-- Numberbox: mov_addidr-->
 		<div id="movHeaderEdit-obj_mov_addidr-container" class="input-field" field="movHeaderEdit-obj_mov_addidr">
 			<label for="movHeaderEdit-obj_mov_addidr">
-				mov_addidr
+				Additional Cost
 			</label>
 			<input id="movHeaderEdit-obj_mov_addidr" fgta5-component="Numberbox"
-				placeholder="mov_addidr" autocomplete="off" spellcheck="false"
+				placeholder="additional cost" autocomplete="off" spellcheck="false"
 				binding="mov_addidr" 
 			value="0"
 				
-			data-tabindex="21"
+			data-tabindex="14"
 				
 			precision="2"
 				
 			maxlength="19"
+				
+			disabled
 				
 					>
 		</div>
@@ -397,18 +293,158 @@
 		<!-- Numberbox: mov_landedidr-->
 		<div id="movHeaderEdit-obj_mov_landedidr-container" class="input-field" field="movHeaderEdit-obj_mov_landedidr">
 			<label for="movHeaderEdit-obj_mov_landedidr">
-				mov_landedidr
+				Landed Cost
 			</label>
 			<input id="movHeaderEdit-obj_mov_landedidr" fgta5-component="Numberbox"
-				placeholder="mov_landedidr" autocomplete="off" spellcheck="false"
+				placeholder="landed cost" autocomplete="off" spellcheck="false"
 				binding="mov_landedidr" 
 			value="0"
 				
-			data-tabindex="22"
+			data-tabindex="15"
 				
 			precision="2"
 				
 			maxlength="19"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: movtype_id-->
+		<div id="movHeaderEdit-obj_movtype_id-container" class="input-field" field="movHeaderEdit-obj_movtype_id">
+			<label for="movHeaderEdit-obj_movtype_id">
+				Type
+			</label>
+			<input id="movHeaderEdit-obj_movtype_id" fgta5-component="Combobox"
+				placeholder="type" autocomplete="off" spellcheck="false"
+				binding="movtype_id" 
+			data-tabindex="16"
+				
+			description="tipe moving, misalnya RV, TR, SL, dll"
+				
+			data-display="movtype_code"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: brand_id-->
+		<div id="movHeaderEdit-obj_brand_id-container" class="input-field" field="movHeaderEdit-obj_brand_id">
+			<label for="movHeaderEdit-obj_brand_id">
+				Brand
+			</label>
+			<input id="movHeaderEdit-obj_brand_id" fgta5-component="Combobox"
+				placeholder="brand" autocomplete="off" spellcheck="false"
+				binding="brand_id" 
+			data-tabindex="17"
+				
+			data-display="brand_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: po_id-->
+		<div id="movHeaderEdit-obj_po_id-container" class="input-field" field="movHeaderEdit-obj_po_id">
+			<label for="movHeaderEdit-obj_po_id">
+				PO
+			</label>
+			<input id="movHeaderEdit-obj_po_id" fgta5-component="Combobox"
+				placeholder="po" autocomplete="off" spellcheck="false"
+				binding="po_id" 
+			data-tabindex="18"
+				
+			description="khusus untuk RV, berisi sumner po dari receiving ini, nantinya berfungsi untuk filter sku yang bisa dipilih untuk receive."
+				
+			data-display="po_descr"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: partner_id-->
+		<div id="movHeaderEdit-obj_partner_id-container" class="input-field" field="movHeaderEdit-obj_partner_id">
+			<label for="movHeaderEdit-obj_partner_id">
+				Partner
+			</label>
+			<input id="movHeaderEdit-obj_partner_id" fgta5-component="Combobox"
+				placeholder="partner" autocomplete="off" spellcheck="false"
+				binding="partner_id" 
+			data-tabindex="19"
+				
+			data-display="partner_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: sea_id-->
+		<div id="movHeaderEdit-obj_sea_id-container" class="input-field" field="movHeaderEdit-obj_sea_id">
+			<label for="movHeaderEdit-obj_sea_id">
+				Season
+			</label>
+			<input id="movHeaderEdit-obj_sea_id" fgta5-component="Combobox"
+				placeholder="season" autocomplete="off" spellcheck="false"
+				binding="sea_id" 
+			data-tabindex="20"
+				
+			description="season khusus untuk dokumen RV"
+				
+			data-display="sea_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: curr_id-->
+		<div id="movHeaderEdit-obj_curr_id-container" class="input-field" field="movHeaderEdit-obj_curr_id">
+			<label for="movHeaderEdit-obj_curr_id">
+				Curr
+			</label>
+			<input id="movHeaderEdit-obj_curr_id" fgta5-component="Combobox"
+				placeholder="currency" autocomplete="off" spellcheck="false"
+				binding="curr_id" 
+			data-tabindex="21"
+				
+			data-display="curr_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: ori_site_id-->
+		<div id="movHeaderEdit-obj_ori_site_id-container" class="input-field" field="movHeaderEdit-obj_ori_site_id">
+			<label for="movHeaderEdit-obj_ori_site_id">
+				From
+			</label>
+			<input id="movHeaderEdit-obj_ori_site_id" fgta5-component="Combobox"
+				placeholder="origin site" autocomplete="off" spellcheck="false"
+				binding="ori_site_id" 
+			data-tabindex="22"
+				
+			description="untuk TR, site asal barang (TR, SL, DO)"
+				
+			data-display="ori_site_name"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: des_site_id-->
+		<div id="movHeaderEdit-obj_des_site_id-container" class="input-field" field="movHeaderEdit-obj_des_site_id">
+			<label for="movHeaderEdit-obj_des_site_id">
+				To
+			</label>
+			<input id="movHeaderEdit-obj_des_site_id" fgta5-component="Combobox"
+				placeholder="destination site" autocomplete="off" spellcheck="false"
+				binding="des_site_id" 
+			data-tabindex="23"
+				
+			description="site tujuan pengiriman barang (TR, RV, AJ)"
+				
+			data-display="des_site_name"
 				
 					>
 		</div>
@@ -417,14 +453,16 @@
 		<!-- Checkbox: _commit-->
 		<div id="movHeaderEdit-obj_commit-container" class="input-field" field="movHeaderEdit-obj_commit">
 			<label for="movHeaderEdit-obj_commit">
-				_commit
+				Commit
 			</label>
 			<input id="movHeaderEdit-obj_commit" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="_commit" 
-			data-tabindex="23"
+			data-tabindex="24"
 				
 			type="checkbox"
+				
+			disabled
 				
 					>
 		</div>
@@ -433,14 +471,16 @@
 		<!-- Checkbox: _lock-->
 		<div id="movHeaderEdit-obj_lock-container" class="input-field" field="movHeaderEdit-obj_lock">
 			<label for="movHeaderEdit-obj_lock">
-				_lock
+				Locked
 			</label>
 			<input id="movHeaderEdit-obj_lock" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="_lock" 
-			data-tabindex="24"
+			data-tabindex="25"
 				
 			type="checkbox"
+				
+			disabled
 				
 					>
 		</div>
@@ -449,176 +489,34 @@
 		<!-- Checkbox: _issent-->
 		<div id="movHeaderEdit-obj_issent-container" class="input-field" field="movHeaderEdit-obj_issent">
 			<label for="movHeaderEdit-obj_issent">
-				_issent
+				Sent
 			</label>
 			<input id="movHeaderEdit-obj_issent" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="_issent" 
-			data-tabindex="25"
+			data-tabindex="26"
 				
 			type="checkbox"
 				
+			disabled
+				
 					>
 		</div>
 		
 
-		<!-- Textbox: _isrecv-->
-		<div id="movHeaderEdit-obj_isrecv-container" class="input-field" field="movHeaderEdit-obj_isrecv">
-			<label for="movHeaderEdit-obj_isrecv">
-				_isrecv
+		<!-- Checkbox: _isrecv-->
+		<div id="movHeaderEdit-obj__isrecv-container" class="input-field" field="movHeaderEdit-obj__isrecv">
+			<label for="movHeaderEdit-obj__isrecv">
+				Received
 			</label>
-			<input id="movHeaderEdit-obj_isrecv" fgta5-component="Textbox"
-				placeholder="_isrecv" autocomplete="off" spellcheck="false"
+			<input id="movHeaderEdit-obj__isrecv" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
 				binding="_isrecv" 
-			data-tabindex="26"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: commitby-->
-		<div id="movHeaderEdit-obj_commitby-container" class="input-field" field="movHeaderEdit-obj_commitby">
-			<label for="movHeaderEdit-obj_commitby">
-				Commitby
-			</label>
-			<input id="movHeaderEdit-obj_commitby" fgta5-component="Textbox"
-				placeholder="commitby" autocomplete="off" spellcheck="false"
-				binding="commitby" 
 			data-tabindex="27"
 				
-			autocomplete="off" spellcheck="false"
+			type="checkbox"
 				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: commitdate-->
-		<div id="movHeaderEdit-obj_commitdate-container" class="input-field" field="movHeaderEdit-obj_commitdate">
-			<label for="movHeaderEdit-obj_commitdate">
-				Commitdate
-			</label>
-			<input id="movHeaderEdit-obj_commitdate" fgta5-component="Textbox"
-				placeholder="commitdate" autocomplete="off" spellcheck="false"
-				binding="commitdate" 
-			data-tabindex="28"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: lockby-->
-		<div id="movHeaderEdit-obj_lockby-container" class="input-field" field="movHeaderEdit-obj_lockby">
-			<label for="movHeaderEdit-obj_lockby">
-				Lockby
-			</label>
-			<input id="movHeaderEdit-obj_lockby" fgta5-component="Textbox"
-				placeholder="lockby" autocomplete="off" spellcheck="false"
-				binding="lockby" 
-			data-tabindex="29"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: lockdate-->
-		<div id="movHeaderEdit-obj_lockdate-container" class="input-field" field="movHeaderEdit-obj_lockdate">
-			<label for="movHeaderEdit-obj_lockdate">
-				Lockdate
-			</label>
-			<input id="movHeaderEdit-obj_lockdate" fgta5-component="Textbox"
-				placeholder="lockdate" autocomplete="off" spellcheck="false"
-				binding="lockdate" 
-			data-tabindex="30"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: sentby-->
-		<div id="movHeaderEdit-obj_sentby-container" class="input-field" field="movHeaderEdit-obj_sentby">
-			<label for="movHeaderEdit-obj_sentby">
-				Sentby
-			</label>
-			<input id="movHeaderEdit-obj_sentby" fgta5-component="Textbox"
-				placeholder="sentby" autocomplete="off" spellcheck="false"
-				binding="sentby" 
-			data-tabindex="31"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: sentdate-->
-		<div id="movHeaderEdit-obj_sentdate-container" class="input-field" field="movHeaderEdit-obj_sentdate">
-			<label for="movHeaderEdit-obj_sentdate">
-				Sentdate
-			</label>
-			<input id="movHeaderEdit-obj_sentdate" fgta5-component="Textbox"
-				placeholder="sentdate" autocomplete="off" spellcheck="false"
-				binding="sentdate" 
-			data-tabindex="32"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: recvby-->
-		<div id="movHeaderEdit-obj_recvby-container" class="input-field" field="movHeaderEdit-obj_recvby">
-			<label for="movHeaderEdit-obj_recvby">
-				Recvby
-			</label>
-			<input id="movHeaderEdit-obj_recvby" fgta5-component="Textbox"
-				placeholder="recvby" autocomplete="off" spellcheck="false"
-				binding="recvby" 
-			data-tabindex="33"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
-				
-					>
-		</div>
-		
-
-		<!-- Textbox: recvdate-->
-		<div id="movHeaderEdit-obj_recvdate-container" class="input-field" field="movHeaderEdit-obj_recvdate">
-			<label for="movHeaderEdit-obj_recvdate">
-				Recvdate
-			</label>
-			<input id="movHeaderEdit-obj_recvdate" fgta5-component="Textbox"
-				placeholder="recvdate" autocomplete="off" spellcheck="false"
-				binding="recvdate" 
-			data-tabindex="34"
-				
-			autocomplete="off" spellcheck="false"
-				
-			maxlength="30"
+			disabled
 				
 					>
 		</div>

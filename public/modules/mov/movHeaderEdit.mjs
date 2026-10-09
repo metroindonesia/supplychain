@@ -37,6 +37,20 @@ const btn_about = document.getElementById('movHeader-btn_about')
 
 const frm = new $fgta5.Form('movHeaderEdit-frm');
 const obj_mov_id = frm.Inputs['movHeaderEdit-obj_mov_id']
+const obj_mov_doc = frm.Inputs['movHeaderEdit-obj_mov_doc']
+const obj_mov_version = frm.Inputs['movHeaderEdit-obj_mov_version']
+const obj_mov_date = frm.Inputs['movHeaderEdit-obj_mov_date']
+const obj_mov_datesent = frm.Inputs['movHeaderEdit-obj_mov_datesent']
+const obj_mov_daterecv = frm.Inputs['movHeaderEdit-obj_mov_daterecv']
+const obj_mov_ref = frm.Inputs['movHeaderEdit-obj_mov_ref']
+const obj_mov_descr = frm.Inputs['movHeaderEdit-obj_mov_descr']
+const obj_mov_qty = frm.Inputs['movHeaderEdit-obj_mov_qty']
+const obj_mov_qtysend = frm.Inputs['movHeaderEdit-obj_mov_qtysend']
+const obj_mov_qtyrecv = frm.Inputs['movHeaderEdit-obj_mov_qtyrecv']
+const obj_mov_fobvalue = frm.Inputs['movHeaderEdit-obj_mov_fobvalue']
+const obj_mov_fobidr = frm.Inputs['movHeaderEdit-obj_mov_fobidr']
+const obj_mov_addidr = frm.Inputs['movHeaderEdit-obj_mov_addidr']
+const obj_mov_landedidr = frm.Inputs['movHeaderEdit-obj_mov_landedidr']
 const obj_movtype_id = frm.Inputs['movHeaderEdit-obj_movtype_id']
 const obj_brand_id = frm.Inputs['movHeaderEdit-obj_brand_id']
 const obj_po_id = frm.Inputs['movHeaderEdit-obj_po_id']
@@ -45,31 +59,10 @@ const obj_sea_id = frm.Inputs['movHeaderEdit-obj_sea_id']
 const obj_curr_id = frm.Inputs['movHeaderEdit-obj_curr_id']
 const obj_ori_site_id = frm.Inputs['movHeaderEdit-obj_ori_site_id']
 const obj_des_site_id = frm.Inputs['movHeaderEdit-obj_des_site_id']
-const obj_mov_date = frm.Inputs['movHeaderEdit-obj_mov_date']
-const obj_mov_datesent = frm.Inputs['movHeaderEdit-obj_mov_datesent']
-const obj_mov_daterecv = frm.Inputs['movHeaderEdit-obj_mov_daterecv']
-const obj_mov_doc = frm.Inputs['movHeaderEdit-obj_mov_doc']
-const obj_mov_version = frm.Inputs['movHeaderEdit-obj_mov_version']
-const obj_mov_ref = frm.Inputs['movHeaderEdit-obj_mov_ref']
-const obj_mov_descr = frm.Inputs['movHeaderEdit-obj_mov_descr']
-const obj_mov_qty = frm.Inputs['movHeaderEdit-obj_mov_qty']
-const obj_mov_qtysend = frm.Inputs['movHeaderEdit-obj_mov_qtysend']
-const obj_mov_qtyrecv = frm.Inputs['movHeaderEdit-obj_mov_qtyrecv']
-const obj_mov_itemidr = frm.Inputs['movHeaderEdit-obj_mov_itemidr']
-const obj_mov_addidr = frm.Inputs['movHeaderEdit-obj_mov_addidr']
-const obj_mov_landedidr = frm.Inputs['movHeaderEdit-obj_mov_landedidr']
 const obj_commit = frm.Inputs['movHeaderEdit-obj_commit']
 const obj_lock = frm.Inputs['movHeaderEdit-obj_lock']
 const obj_issent = frm.Inputs['movHeaderEdit-obj_issent']
-const obj_isrecv = frm.Inputs['movHeaderEdit-obj_isrecv']
-const obj_commitby = frm.Inputs['movHeaderEdit-obj_commitby']
-const obj_commitdate = frm.Inputs['movHeaderEdit-obj_commitdate']
-const obj_lockby = frm.Inputs['movHeaderEdit-obj_lockby']
-const obj_lockdate = frm.Inputs['movHeaderEdit-obj_lockdate']
-const obj_sentby = frm.Inputs['movHeaderEdit-obj_sentby']
-const obj_sentdate = frm.Inputs['movHeaderEdit-obj_sentdate']
-const obj_recvby = frm.Inputs['movHeaderEdit-obj_recvby']
-const obj_recvdate = frm.Inputs['movHeaderEdit-obj_recvdate']	
+const obj__isrecv = frm.Inputs['movHeaderEdit-obj__isrecv']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -177,7 +170,7 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.movtype_id, row.movtype_name, row)
+					evt.detail.addRow(row.movtype_id, row.movtype_code, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -920,13 +913,15 @@ async function btn_new_click(self, evt) {
 
 		// inisiasi data baru
 		const datainit = {
+			mov_version: '0',
 			mov_date: new Date(),
 			mov_datesent: new Date(),
 			mov_daterecv: new Date(),
 			mov_qty: 0,
 			mov_qtysend: 0,
 			mov_qtyrecv: 0,
-			mov_itemidr: 0,
+			mov_fobvalue: 0,
+			mov_fobidr: 0,
 			mov_addidr: 0,
 			mov_landedidr: 0,
 		}

@@ -194,16 +194,6 @@ async function po_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
-			if (row.partner_id !== undefined) {
-				const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', row.partner_id)
-				row.partner_name = partner_name ?? null
-			}
-			// lookup: tax_value dari field tax_value pada table public.tax dimana (public.tax.tax_id = public.po.tax_id)
-			if (row.tax_id !== undefined) {
-				const { tax_value } = await sqlUtil.lookupdb(db, 'public.tax', 'tax_id', row.tax_id)
-				row.tax_value = tax_value ?? null
-			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
@@ -214,10 +204,20 @@ async function po_headerList(self, body) {
 				const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', row.sea_id)
 				row.sea_name = sea_name ?? null
 			}
+			// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
+			if (row.partner_id !== undefined) {
+				const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', row.partner_id)
+				row.partner_name = partner_name ?? null
+			}
 			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
 			if (row.curr_id !== undefined) {
 				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
 				row.curr_name = curr_name ?? null
+			}
+			// lookup: tax_value dari field tax_value pada table public.tax dimana (public.tax.tax_id = public.po.tax_id)
+			if (row.tax_id !== undefined) {
+				const { tax_value } = await sqlUtil.lookupdb(db, 'public.tax', 'tax_id', row.tax_id)
+				row.tax_value = tax_value ?? null
 			}
 			 
 			// pasang extender di sini
@@ -268,16 +268,6 @@ async function po_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
-		// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
-		if (data.partner_id !== undefined) {
-			const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', data.partner_id)
-			data.partner_name = partner_name ?? null
-		}
-		// lookup: tax_value dari field tax_value pada table public.tax dimana (public.tax.tax_id = public.po.tax_id)
-		if (data.tax_id !== undefined) {
-			const { tax_value } = await sqlUtil.lookupdb(db, 'public.tax', 'tax_id', data.tax_id)
-			data.tax_value = tax_value ?? null
-		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 		if (data.brand_id !== undefined) {
 			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
@@ -288,10 +278,20 @@ async function po_headerOpen(self, body) {
 			const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', data.sea_id)
 			data.sea_name = sea_name ?? null
 		}
+		// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
+		if (data.partner_id !== undefined) {
+			const { partner_name } = await sqlUtil.lookupdb(db, 'public.partner', 'partner_id', data.partner_id)
+			data.partner_name = partner_name ?? null
+		}
 		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
 		if (data.curr_id !== undefined) {
 			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
 			data.curr_name = curr_name ?? null
+		}
+		// lookup: tax_value dari field tax_value pada table public.tax dimana (public.tax.tax_id = public.po.tax_id)
+		if (data.tax_id !== undefined) {
+			const { tax_value } = await sqlUtil.lookupdb(db, 'public.tax', 'tax_id', data.tax_id)
+			data.tax_value = tax_value ?? null
 		}
 		 
 		// lookup data createby

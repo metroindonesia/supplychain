@@ -183,6 +183,11 @@ async function tax_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: taxtype_name dari field taxtype_name pada table public.taxtype dimana (public.taxtype.taxtype_id = public.tax.taxtype_id)
+			if (row.taxtype_id !== undefined) {
+				const { taxtype_name } = await sqlUtil.lookupdb(db, 'public.taxtype', 'taxtype_id', row.taxtype_id)
+				row.taxtype_name = taxtype_name ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -232,6 +237,11 @@ async function tax_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: taxtype_name dari field taxtype_name pada table public.taxtype dimana (public.taxtype.taxtype_id = public.tax.taxtype_id)
+		if (data.taxtype_id !== undefined) {
+			const { taxtype_name } = await sqlUtil.lookupdb(db, 'public.taxtype', 'taxtype_id', data.taxtype_id)
+			data.taxtype_name = taxtype_name ?? null
+		}
 		 
 		// lookup data createby
 		if (data._createby !== undefined) {

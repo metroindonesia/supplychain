@@ -42,6 +42,21 @@ comment on column public."tax".tax_name is '';
 
 
 -- =============================================
+-- FIELD: taxtype_id smallint
+-- =============================================
+-- ADD taxtype_id
+alter table public."tax" add taxtype_id smallint  ;
+comment on column public."tax".taxtype_id is '';
+
+-- MODIFY taxtype_id
+alter table public."tax"
+	alter column taxtype_id type smallint,
+	ALTER COLUMN taxtype_id DROP DEFAULT,
+	ALTER COLUMN taxtype_id DROP NOT NULL;
+comment on column public."tax".taxtype_id is '';
+
+
+-- =============================================
 -- FIELD: tax_value decimal(4, 2)
 -- =============================================
 -- ADD tax_value
@@ -153,6 +168,26 @@ DROP INDEX IF EXISTS public.idx$public$tax$_timestamp;
 CREATE INDEX idx$public$tax$_timestamp ON public.tax (_timestamp);
 
 
+-- =============================================
+-- FOREIGN KEY CONSTRAINT
+-- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."tax" DROP CONSTRAINT fk$public$tax$comp_id;
+ALTER TABLE public."tax" DROP CONSTRAINT fk$public$tax$taxtype_id;
+
+
+-- Add Foreign Key Constraint  
+ALTER TABLE public."tax"
+	ADD CONSTRAINT fk$public$tax$taxtype_id
+	FOREIGN KEY (taxtype_id)
+	REFERENCES public."taxtype"(taxtype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$tax$taxtype_id;
+CREATE INDEX idx_fk$public$tax$taxtype_id ON public."tax"(taxtype_id);	
+
+	
 
 
 -- =============================================

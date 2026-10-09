@@ -130,38 +130,6 @@
 		</div>
 		
 
-		<!-- Combobox: partner_id-->
-		<div id="poHeaderEdit-obj_partner_id-container" class="input-field" field="poHeaderEdit-obj_partner_id">
-			<label for="poHeaderEdit-obj_partner_id">
-				Partner
-			</label>
-			<input id="poHeaderEdit-obj_partner_id" fgta5-component="Combobox"
-				placeholder="partner_id" autocomplete="off" spellcheck="false"
-				binding="partner_id" 
-			data-tabindex="8"
-				
-			data-display="partner_name"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: tax_id-->
-		<div id="poHeaderEdit-obj_tax_id-container" class="input-field" field="poHeaderEdit-obj_tax_id">
-			<label for="poHeaderEdit-obj_tax_id">
-				Tax
-			</label>
-			<input id="poHeaderEdit-obj_tax_id" fgta5-component="Combobox"
-				placeholder="NONE" autocomplete="off" spellcheck="false"
-				binding="tax_id" 
-			data-tabindex="9"
-				
-			data-display="tax_value"
-				
-					>
-		</div>
-		
-
 		<!-- Combobox: brand_id-->
 		<div id="poHeaderEdit-obj_brand_id-container" class="input-field" field="poHeaderEdit-obj_brand_id">
 			<label for="poHeaderEdit-obj_brand_id">
@@ -170,7 +138,7 @@
 			<input id="poHeaderEdit-obj_brand_id" fgta5-component="Combobox"
 				placeholder="brand_id" autocomplete="off" spellcheck="false"
 				binding="brand_id" 
-			data-tabindex="10"
+			data-tabindex="8"
 				
 			data-display="brand_name"
 				
@@ -186,7 +154,7 @@
 			<input id="poHeaderEdit-obj_sea_id" fgta5-component="Combobox"
 				placeholder="sea_id" autocomplete="off" spellcheck="false"
 				binding="sea_id" 
-			data-tabindex="11"
+			data-tabindex="9"
 				
 			data-display="sea_name"
 				
@@ -194,23 +162,33 @@
 		</div>
 		
 
-		<!-- Numberbox: po_subtotalqty-->
-		<div id="poHeaderEdit-obj_po_subtotalqty-container" class="input-field" field="poHeaderEdit-obj_po_subtotalqty">
-			<label for="poHeaderEdit-obj_po_subtotalqty">
-				Subt. Qty
+		<!-- Combobox: partner_id-->
+		<div id="poHeaderEdit-obj_partner_id-container" class="input-field" field="poHeaderEdit-obj_partner_id">
+			<label for="poHeaderEdit-obj_partner_id">
+				Partner
 			</label>
-			<input id="poHeaderEdit-obj_po_subtotalqty" fgta5-component="Numberbox"
-				placeholder="subtotal qty" autocomplete="off" spellcheck="false"
-				binding="po_subtotalqty" 
-			value="0"
+			<input id="poHeaderEdit-obj_partner_id" fgta5-component="Combobox"
+				placeholder="partner_id" autocomplete="off" spellcheck="false"
+				binding="partner_id" 
+			data-tabindex="10"
 				
-			data-tabindex="12"
+			data-display="partner_name"
 				
-			precision="2"
+					>
+		</div>
+		
+
+		<!-- Combobox: curr_id-->
+		<div id="poHeaderEdit-obj_curr_id-container" class="input-field" field="poHeaderEdit-obj_curr_id">
+			<label for="poHeaderEdit-obj_curr_id">
+				Curr
+			</label>
+			<input id="poHeaderEdit-obj_curr_id" fgta5-component="Combobox"
+				placeholder="currency" autocomplete="off" spellcheck="false"
+				binding="curr_id" 
+			data-tabindex="11"
 				
-			maxlength="10"
-				
-			disabled
+			data-display="curr_name"
 				
 					>
 		</div>
@@ -226,29 +204,13 @@
 				binding="po_subtotalitem" 
 			value="0"
 				
-			data-tabindex="13"
+			data-tabindex="12"
 				
 			precision="2"
 				
 			maxlength="19"
 				
 			disabled
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: curr_id-->
-		<div id="poHeaderEdit-obj_curr_id-container" class="input-field" field="poHeaderEdit-obj_curr_id">
-			<label for="poHeaderEdit-obj_curr_id">
-				Curr
-			</label>
-			<input id="poHeaderEdit-obj_curr_id" fgta5-component="Combobox"
-				placeholder="currency" autocomplete="off" spellcheck="false"
-				binding="curr_id" 
-			data-tabindex="14"
-				
-			data-display="curr_name"
 				
 					>
 		</div>
@@ -264,11 +226,27 @@
 				binding="po_subtotaltax" 
 			value="0"
 				
-			data-tabindex="15"
+			data-tabindex="13"
 				
 			maxlength="12"
 				
 			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: tax_id-->
+		<div id="poHeaderEdit-obj_tax_id-container" class="input-field" field="poHeaderEdit-obj_tax_id">
+			<label for="poHeaderEdit-obj_tax_id">
+				Tax
+			</label>
+			<input id="poHeaderEdit-obj_tax_id" fgta5-component="Combobox"
+				placeholder="NONE" autocomplete="off" spellcheck="false"
+				binding="tax_id" 
+			data-tabindex="14"
+				
+			data-display="tax_value"
 				
 					>
 		</div>
@@ -284,7 +262,7 @@
 				binding="tax_value" 
 			value="0"
 				
-			data-tabindex="16"
+			data-tabindex="15"
 				
 			precision="2"
 				
@@ -304,9 +282,31 @@
 			<input id="poHeaderEdit-obj_tax_isinclude" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="tax_isinclude" 
-			data-tabindex="17"
+			data-tabindex="16"
 				
 			type="checkbox"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: po_subtotalqty-->
+		<div id="poHeaderEdit-obj_po_subtotalqty-container" class="input-field" field="poHeaderEdit-obj_po_subtotalqty">
+			<label for="poHeaderEdit-obj_po_subtotalqty">
+				Subt. Qty
+			</label>
+			<input id="poHeaderEdit-obj_po_subtotalqty" fgta5-component="Numberbox"
+				placeholder="subtotal qty" autocomplete="off" spellcheck="false"
+				binding="po_subtotalqty" 
+			value="0"
+				
+			data-tabindex="17"
+				
+			precision="2"
+				
+			maxlength="10"
 				
 			disabled
 				

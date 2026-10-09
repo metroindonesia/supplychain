@@ -17,6 +17,7 @@ import syncCurr from './curr.sync.js'
 import syncCurrrate from './currrate.sync.js'
 import syncItemclass from './itemclass.sync.js'
 import syncPeriode from './periode.sync.js'
+import syncPaymtype from './paymtype.sync.js'
 
 
 const args = process.argv.slice(2)
@@ -40,6 +41,7 @@ try {
 	await syncCurrrate(dbAccounting, dbTarget, batch_id, { all: isAll })
 	await syncItemclass(dbAccounting, dbTarget, batch_id, { all: isAll })
 	await syncPeriode(dbAccounting, dbTarget, batch_id, { all: isAll })
+	await syncPaymtype(dbAccounting, dbTarget, batch_id, { all: isAll })
 
 
 	console.log('\n')

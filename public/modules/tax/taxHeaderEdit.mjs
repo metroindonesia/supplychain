@@ -39,6 +39,7 @@ const frm = new $fgta5.Form('taxHeaderEdit-frm');
 const obj_tax_id = frm.Inputs['taxHeaderEdit-obj_tax_id']
 const obj_tax_isdisabled = frm.Inputs['taxHeaderEdit-obj_tax_isdisabled']
 const obj_tax_name = frm.Inputs['taxHeaderEdit-obj_tax_name']
+const obj_taxtype_id = frm.Inputs['taxHeaderEdit-obj_taxtype_id']
 const obj_tax_value = frm.Inputs['taxHeaderEdit-obj_tax_value']
 const obj_tax_isinclude = frm.Inputs['taxHeaderEdit-obj_tax_isinclude']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
@@ -105,6 +106,63 @@ export async function init(self, args) {
 	}
 
 	
+	
+	// Combobox: obj_taxtype_id
+	obj_taxtype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_taxtype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_taxtype_id_selecting(self, obj_taxtype_id, frm, evt) {}
+			fn_selecting(self, obj_taxtype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'taxtype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_taxtype_id_selecting_criteria(self, obj_taxtype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_taxtype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_taxtype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.taxtype_id, row.taxtype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -114,6 +172,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_taxtype_id.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)

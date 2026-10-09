@@ -102,36 +102,6 @@ comment on column public."po".po_descr is '';
 
 
 -- =============================================
--- FIELD: partner_id int
--- =============================================
--- ADD partner_id
-alter table public."po" add partner_id int  ;
-comment on column public."po".partner_id is '';
-
--- MODIFY partner_id
-alter table public."po"
-	alter column partner_id type int,
-	ALTER COLUMN partner_id DROP DEFAULT,
-	ALTER COLUMN partner_id DROP NOT NULL;
-comment on column public."po".partner_id is '';
-
-
--- =============================================
--- FIELD: tax_id smallint
--- =============================================
--- ADD tax_id
-alter table public."po" add tax_id smallint  ;
-comment on column public."po".tax_id is '';
-
--- MODIFY tax_id
-alter table public."po"
-	alter column tax_id type smallint,
-	ALTER COLUMN tax_id DROP DEFAULT,
-	ALTER COLUMN tax_id DROP NOT NULL;
-comment on column public."po".tax_id is '';
-
-
--- =============================================
 -- FIELD: brand_id int
 -- =============================================
 -- ADD brand_id
@@ -162,33 +132,18 @@ comment on column public."po".sea_id is '';
 
 
 -- =============================================
--- FIELD: po_subtotalqty decimal(9, 2)
+-- FIELD: partner_id int
 -- =============================================
--- ADD po_subtotalqty
-alter table public."po" add po_subtotalqty decimal(9, 2) not null default 0;
-comment on column public."po".po_subtotalqty is '';
+-- ADD partner_id
+alter table public."po" add partner_id int  ;
+comment on column public."po".partner_id is '';
 
--- MODIFY po_subtotalqty
+-- MODIFY partner_id
 alter table public."po"
-	alter column po_subtotalqty type decimal(9, 2),
-	ALTER COLUMN po_subtotalqty SET DEFAULT 0,
-	ALTER COLUMN po_subtotalqty SET NOT NULL;
-comment on column public."po".po_subtotalqty is '';
-
-
--- =============================================
--- FIELD: po_subtotalitem decimal(18, 2)
--- =============================================
--- ADD po_subtotalitem
-alter table public."po" add po_subtotalitem decimal(18, 2) not null default 0;
-comment on column public."po".po_subtotalitem is '';
-
--- MODIFY po_subtotalitem
-alter table public."po"
-	alter column po_subtotalitem type decimal(18, 2),
-	ALTER COLUMN po_subtotalitem SET DEFAULT 0,
-	ALTER COLUMN po_subtotalitem SET NOT NULL;
-comment on column public."po".po_subtotalitem is '';
+	alter column partner_id type int,
+	ALTER COLUMN partner_id DROP DEFAULT,
+	ALTER COLUMN partner_id DROP NOT NULL;
+comment on column public."po".partner_id is '';
 
 
 -- =============================================
@@ -207,6 +162,21 @@ comment on column public."po".curr_id is '';
 
 
 -- =============================================
+-- FIELD: po_subtotalitem decimal(18, 2)
+-- =============================================
+-- ADD po_subtotalitem
+alter table public."po" add po_subtotalitem decimal(18, 2) not null default 0;
+comment on column public."po".po_subtotalitem is '';
+
+-- MODIFY po_subtotalitem
+alter table public."po"
+	alter column po_subtotalitem type decimal(18, 2),
+	ALTER COLUMN po_subtotalitem SET DEFAULT 0,
+	ALTER COLUMN po_subtotalitem SET NOT NULL;
+comment on column public."po".po_subtotalitem is '';
+
+
+-- =============================================
 -- FIELD: po_subtotaltax decimal(12, 0)
 -- =============================================
 -- ADD po_subtotaltax
@@ -219,6 +189,21 @@ alter table public."po"
 	ALTER COLUMN po_subtotaltax SET DEFAULT 0,
 	ALTER COLUMN po_subtotaltax SET NOT NULL;
 comment on column public."po".po_subtotaltax is '';
+
+
+-- =============================================
+-- FIELD: tax_id smallint
+-- =============================================
+-- ADD tax_id
+alter table public."po" add tax_id smallint  ;
+comment on column public."po".tax_id is '';
+
+-- MODIFY tax_id
+alter table public."po"
+	alter column tax_id type smallint,
+	ALTER COLUMN tax_id DROP DEFAULT,
+	ALTER COLUMN tax_id DROP NOT NULL;
+comment on column public."po".tax_id is '';
 
 
 -- =============================================
@@ -249,6 +234,21 @@ alter table public."po"
 	ALTER COLUMN tax_isinclude SET DEFAULT false,
 	ALTER COLUMN tax_isinclude SET NOT NULL;
 comment on column public."po".tax_isinclude is '';
+
+
+-- =============================================
+-- FIELD: po_subtotalqty decimal(9, 2)
+-- =============================================
+-- ADD po_subtotalqty
+alter table public."po" add po_subtotalqty decimal(9, 2) not null default 0;
+comment on column public."po".po_subtotalqty is '';
+
+-- MODIFY po_subtotalqty
+alter table public."po"
+	alter column po_subtotalqty type decimal(9, 2),
+	ALTER COLUMN po_subtotalqty SET DEFAULT 0,
+	ALTER COLUMN po_subtotalqty SET NOT NULL;
+comment on column public."po".po_subtotalqty is '';
 
 
 -- =============================================
@@ -352,36 +352,14 @@ CREATE INDEX idx$public$po$_timestamp ON public.po (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$partner_id;
-ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$tax_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$brand_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$sea_id;
+ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$partner_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$curr_id;
+ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$tax_id;
 
 
 -- Add Foreign Key Constraint  
-ALTER TABLE public."po"
-	ADD CONSTRAINT fk$public$po$partner_id
-	FOREIGN KEY (partner_id)
-	REFERENCES public."partner"(partner_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$po$partner_id;
-CREATE INDEX idx_fk$public$po$partner_id ON public."po"(partner_id);	
-
-
-ALTER TABLE public."po"
-	ADD CONSTRAINT fk$public$po$tax_id
-	FOREIGN KEY (tax_id)
-	REFERENCES public."tax"(tax_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$po$tax_id;
-CREATE INDEX idx_fk$public$po$tax_id ON public."po"(tax_id);	
-
-
 ALTER TABLE public."po"
 	ADD CONSTRAINT fk$public$po$brand_id
 	FOREIGN KEY (brand_id)
@@ -405,6 +383,17 @@ CREATE INDEX idx_fk$public$po$sea_id ON public."po"(sea_id);
 
 
 ALTER TABLE public."po"
+	ADD CONSTRAINT fk$public$po$partner_id
+	FOREIGN KEY (partner_id)
+	REFERENCES public."partner"(partner_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$po$partner_id;
+CREATE INDEX idx_fk$public$po$partner_id ON public."po"(partner_id);	
+
+
+ALTER TABLE public."po"
 	ADD CONSTRAINT fk$public$po$curr_id
 	FOREIGN KEY (curr_id)
 	REFERENCES public."curr"(curr_id);
@@ -413,6 +402,17 @@ ALTER TABLE public."po"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$po$curr_id;
 CREATE INDEX idx_fk$public$po$curr_id ON public."po"(curr_id);	
+
+
+ALTER TABLE public."po"
+	ADD CONSTRAINT fk$public$po$tax_id
+	FOREIGN KEY (tax_id)
+	REFERENCES public."tax"(tax_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$po$tax_id;
+CREATE INDEX idx_fk$public$po$tax_id ON public."po"(tax_id);	
 
 	
 

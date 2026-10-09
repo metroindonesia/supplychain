@@ -193,6 +193,11 @@ async function comp_headerList(self, body) {
 				const { coa_name } = await sqlUtil.lookupdb(db, 'public.coa', 'coa_id', row.coa_id)
 				row.coa_name = coa_name ?? null
 			}
+			// lookup: adv_coa_name dari field coa_name pada table public.coa dimana (public.coa.coa_id = public.comp.adv_coa_id)
+			if (row.adv_coa_id !== undefined) {
+				const { coa_name } = await sqlUtil.lookupdb(db, 'public.coa', 'coa_id', row.adv_coa_id)
+				row.adv_coa_name = coa_name ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -251,6 +256,11 @@ async function comp_headerOpen(self, body) {
 		if (data.coa_id !== undefined) {
 			const { coa_name } = await sqlUtil.lookupdb(db, 'public.coa', 'coa_id', data.coa_id)
 			data.coa_name = coa_name ?? null
+		}
+		// lookup: adv_coa_name dari field coa_name pada table public.coa dimana (public.coa.coa_id = public.comp.adv_coa_id)
+		if (data.adv_coa_id !== undefined) {
+			const { coa_name } = await sqlUtil.lookupdb(db, 'public.coa', 'coa_id', data.adv_coa_id)
+			data.adv_coa_name = coa_name ?? null
 		}
 		 
 		// lookup data createby

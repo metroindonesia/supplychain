@@ -1,0 +1,45 @@
+#billHeaderEdit-obj_bill_version-container .fgta5-entry-input-wrapper,
+#billHeaderEdit-obj_bill_version {
+	width: 55px;
+}
+
+
+#billHeaderEdit-obj_iscommit-container {
+	margin-left: 30px;
+}
+
+
+#billHeaderEdit-obj_bill_datedue-container {
+	margin-left: 50px;
+}
+
+
+
+
+
+
+
+#billHeaderEdit-obj_curr_id-container {
+	margin-left: 95px;
+}
+
+
+
+
+
+
+/* event yang ketutupan, dibuka agar bisa di klik */
+#billHeaderEdit-obj_bill_datedue-container,
+#billHeaderEdit-obj_curr_id-container {
+	pointer-events: none;
+}
+
+#billHeaderEdit-obj_bill_datedue-container>*,
+#billHeaderEdit-obj_curr_id-container>* {
+	pointer-events: auto;
+}
+
+#billHeaderEdit-obj_bill_datedue-container>label,
+#billHeaderEdit-obj_curr_id-container>label {
+	pointer-events: none;
+}

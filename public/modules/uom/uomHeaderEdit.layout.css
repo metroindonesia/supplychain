@@ -30,9 +30,15 @@
 		
 	}
 	
-	#uomHeaderEdit-obj_uomtype_id-container {
+	#uomHeaderEdit-obj_usedecimal-container {
 		grid-row: 2;
 		grid-column: 3 / span 2;
+		
+	}
+	
+	#uomHeaderEdit-obj_uomtype_id-container {
+		grid-row: 3;
+		grid-column: 1 / span 2;
 		
 	}
 		
