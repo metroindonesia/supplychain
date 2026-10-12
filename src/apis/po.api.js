@@ -20,7 +20,8 @@ const moduleName = 'po'
 const headerSectionName = 'header'
 const headerTableName = 'public.po' 
 const headerPrimaryKey = 'po_id' 
-const itemTableName = 'public.poitem'  	
+const itemTableName = 'public.poitem'  
+const costTableName = 'public.pocost'  	
 
 // api: account
 export default class extends Api {
@@ -53,6 +54,14 @@ export default class extends Api {
 	async itemCreate(body) { return await po_itemCreate(this, body) }
 	async itemDelete(body) { return await po_itemDelete(this, body) }
 	async itemDeleteRows(body) { return await po_itemDeleteRows(this, body) }
+	
+	// cost	
+	async costList(body) { return await po_costList(this, body) }
+	async costOpen(body) { return await po_costOpen(this, body) }
+	async costUpdate(body) { return await po_costUpdate(this, body)}
+	async costCreate(body) { return await po_costCreate(this, body) }
+	async costDelete(body) { return await po_costDelete(this, body) }
+	async costDeleteRows(body) { return await po_costDeleteRows(this, body) }
 			
 }	
 
@@ -194,6 +203,11 @@ async function po_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: potype_name dari field potype_name pada table public.potype dimana (public.potype.potype_id = public.po.potype_id)
+			if (row.potype_id !== undefined) {
+				const { potype_name } = await sqlUtil.lookupdb(db, 'public.potype', 'potype_id', row.potype_id)
+				row.potype_name = potype_name ?? null
+			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
@@ -268,6 +282,11 @@ async function po_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: potype_name dari field potype_name pada table public.potype dimana (public.potype.potype_id = public.po.potype_id)
+		if (data.potype_id !== undefined) {
+			const { potype_name } = await sqlUtil.lookupdb(db, 'public.potype', 'potype_id', data.potype_id)
+			data.potype_name = potype_name ?? null
+		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 		if (data.brand_id !== undefined) {
 			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
@@ -502,6 +521,37 @@ async function po_headerDelete(self, body) {
 				}	
 			}
 
+			// hapus data cost
+			{
+				const sql = `select * from ${costTableName} where po_id=\${po_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowcost of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.costDeleting === 'function') {
+						// export async function costDeleting(self, tx, rowcost, logMetadata) {}
+						await Extender.costDeleting(self, tx, rowcost, logMetadata)
+					}
+
+					const param = {pocost_id: rowcost.pocost_id}
+					const cmd = sqlUtil.createDeleteCommand(costTableName, ['pocost_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.costDeleted === 'function') {
+						// export async function costDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.costDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					po_log(self, body, startTime, costTableName, rowcost.pocost_id, 'DELETE', {rowdata: deletedRow})
+					po_log(self, body, startTime, headerTableName, rowcost.po_id, 'DELETE ROW COST', {pocost_id: rowcost.pocost_id, tablename: costTableName}, `removed: ${rowcost.pocost_id}`)
+
+
+				}	
+			}
+
 			
 			
 
@@ -589,6 +639,16 @@ async function po_itemList(self, body) {
 				const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', row.sku_id)
 				row.sku_code = sku_code ?? null
 			}
+			// lookup: product_name dari field product_name pada table public.product dimana (public.product.product_id = public.po.product_id)
+			if (row.product_id !== undefined) {
+				const { product_name } = await sqlUtil.lookupdb(db, 'public.product', 'product_id', row.product_id)
+				row.product_name = product_name ?? null
+			}
+			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
+			if (row.curr_id !== undefined) {
+				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name ?? null
+			}
 			// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.po.uom_id)
 			if (row.uom_id !== undefined) {
 				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
@@ -655,6 +715,16 @@ async function po_itemOpen(self, body) {
 		if (data.sku_id !== undefined) {
 			const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', data.sku_id)
 			data.sku_code = sku_code ?? null
+		}
+		// lookup: product_name dari field product_name pada table public.product dimana (public.product.product_id = public.po.product_id)
+		if (data.product_id !== undefined) {
+			const { product_name } = await sqlUtil.lookupdb(db, 'public.product', 'product_id', data.product_id)
+			data.product_name = product_name ?? null
+		}
+		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
+		if (data.curr_id !== undefined) {
+			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name ?? null
 		}
 		// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.po.uom_id)
 		if (data.uom_id !== undefined) {
@@ -949,6 +1019,433 @@ async function po_itemDeleteRows(self, body) {
 		const fn = Extender[fn_name]
 		if (typeof fn === 'function') {
 			// export async function itemRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// cost	
+
+async function po_costList(self, body) {
+	const tablename = costTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		po_id: `po_id=try_cast_bigint(\${po_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.pocost_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.costListCriteria === 'function') {
+			// export async function costListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.costListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: comp_name dari field comp_name pada table public.comp dimana (public.comp.comp_id = public.po.comp_id)
+			if (row.comp_id !== undefined) {
+				const { comp_name } = await sqlUtil.lookupdb(db, 'public.comp', 'comp_id', row.comp_id)
+				row.comp_name = comp_name ?? null
+			}
+			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
+			if (row.curr_id !== undefined) {
+				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name ?? null
+			}
+			 
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function po_costOpen(self, body) {
+	const tablename = costTableName
+
+	try {
+		const { id } = body 
+		const criteria = { pocost_id: id }
+		const searchMap = { pocost_id: `pocost_id = \${pocost_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: comp_name dari field comp_name pada table public.comp dimana (public.comp.comp_id = public.po.comp_id)
+		if (data.comp_id !== undefined) {
+			const { comp_name } = await sqlUtil.lookupdb(db, 'public.comp', 'comp_id', data.comp_id)
+			data.comp_name = comp_name ?? null
+		}
+		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.po.curr_id)
+		if (data.curr_id !== undefined) {
+			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name ?? null
+		}
+		  
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function costOpen(self, db, data) {}
+		if (typeof Extender.costOpen === 'function') {
+			// export async function costOpen(self, db, data) {}
+			await Extender.costOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function po_costCreate(self, body) {
+	const { source='po', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = costTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'cost', 
+				doc_id: 'PO'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.pocost_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.costCreating === 'function') {
+				// export async function costCreating(self, tx, data, seqdata, args) {}
+				await Extender.costCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.po_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.costCreated === 'function') {
+				// export async function costCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.costCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			po_log(self, body, startTime, tablename, ret.pocost_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function po_costUpdate(self, body) {
+	const { source='po', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = costTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {pocost_id: data.pocost_id}
+			const sql = `select * from ${costTableName} where pocost_id=\${pocost_id}`
+			const rowcost = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.costUpdating === 'function') {
+				// export async function costUpdating(self, tx, data) {}
+				await Extender.costUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['pocost_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowcost.po_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.costUpdated === 'function') {
+				// export async function costUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.costUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			po_log(self, body, startTime, tablename, data.pocost_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function po_costDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = costTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {pocost_id: id}
+			const sql = `select * from ${costTableName} where pocost_id=\${pocost_id}`
+			const rowcost = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.costDeleting === 'function') {
+				// export async function costDeleting(self, tx, rowcost, logMetadata) {}
+				await Extender.costDeleting(self, tx, rowcost, logMetadata)
+			}
+
+			const param = {pocost_id: rowcost.pocost_id}
+			const cmd = sqlUtil.createDeleteCommand(costTableName, ['pocost_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowcost.po_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.costDeleted === 'function') {
+				// export async function costDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.costDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			po_log(self, body, startTime, costTableName, rowcost.pocost_id, 'DELETE', {rowdata: deletedRow})
+			po_log(self, body, startTime, headerTableName, rowcost.po_id, 'DELETE ROW COST', {pocost_id: rowcost.pocost_id, tablename: costTableName}, `removed: ${rowcost.pocost_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function po_costDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = costTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let po_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {pocost_id: id}
+				const sql = `select * from ${costTableName} where pocost_id=\${pocost_id}`
+				const rowcost = await tx.oneOrNone(sql, dataToRemove)
+				po_id = rowcost.po_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.costDeleting === 'function') {
+					// async function costDeleting(self, tx, rowcost, logMetadata) {}
+					await Extender.costDeleting(self, tx, rowcost, logMetadata)
+				}
+
+				const param = {pocost_id: rowcost.pocost_id}
+				const cmd = sqlUtil.createDeleteCommand(costTableName, ['pocost_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowcost.po_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.costDeleted === 'function') {
+					// export async function costDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.costDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				po_log(self, body, startTime, costTableName, rowcost.pocost_id, 'DELETE', {rowdata: deletedRow})
+				po_log(self, body, startTime, headerTableName, rowcost.po_id, 'DELETE ROW COST', {pocost_id: rowcost.pocost_id, tablename: costTableName}, `removed: ${rowcost.pocost_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			po_id: po_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'costRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function costRowsDeleted(self, db, res) {}
 			await fn(self, db, res)
 		}
 

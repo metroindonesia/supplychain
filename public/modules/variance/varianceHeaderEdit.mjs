@@ -40,6 +40,7 @@ const obj_variance_id = frm.Inputs['varianceHeaderEdit-obj_variance_id']
 const obj_variance_isdisabled = frm.Inputs['varianceHeaderEdit-obj_variance_isdisabled']
 const obj_variance_code = frm.Inputs['varianceHeaderEdit-obj_variance_code']
 const obj_variance_name = frm.Inputs['varianceHeaderEdit-obj_variance_name']
+const obj_variancetype_id = frm.Inputs['varianceHeaderEdit-obj_variancetype_id']
 const obj_variance_descr = frm.Inputs['varianceHeaderEdit-obj_variance_descr']
 const obj_brand_id = frm.Inputs['varianceHeaderEdit-obj_brand_id']
 const obj_product_id = frm.Inputs['varianceHeaderEdit-obj_product_id']	
@@ -106,6 +107,63 @@ export async function init(self, args) {
 		console.log('buat function di extender: export function setupActionButtonEvent(self, buttons)')
 	}
 
+	
+	
+	// Combobox: obj_variancetype_id
+	obj_variancetype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_variancetype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_variancetype_id_selecting(self, obj_variancetype_id, frm, evt) {}
+			fn_selecting(self, obj_variancetype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'variancetype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_variancetype_id_selecting_criteria(self, obj_variancetype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_variancetype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_variancetype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.variancetype_id, row.variancetype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
 	
 	
 	// Combobox: obj_brand_id
@@ -230,6 +288,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_variancetype_id.clear()
 		obj_brand_id.clear()
 		obj_product_id.clear()
 					

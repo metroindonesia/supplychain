@@ -132,18 +132,18 @@ comment on column public."mov".mov_qty is '';
 
 
 -- =============================================
--- FIELD: mov_qtysend decimal(12, 2)
+-- FIELD: mov_qtysent decimal(12, 2)
 -- =============================================
--- ADD mov_qtysend
-alter table public."mov" add mov_qtysend decimal(12, 2) not null default 0;
-comment on column public."mov".mov_qtysend is '';
+-- ADD mov_qtysent
+alter table public."mov" add mov_qtysent decimal(12, 2) not null default 0;
+comment on column public."mov".mov_qtysent is '';
 
--- MODIFY mov_qtysend
+-- MODIFY mov_qtysent
 alter table public."mov"
-	alter column mov_qtysend type decimal(12, 2),
-	ALTER COLUMN mov_qtysend SET DEFAULT 0,
-	ALTER COLUMN mov_qtysend SET NOT NULL;
-comment on column public."mov".mov_qtysend is '';
+	alter column mov_qtysent type decimal(12, 2),
+	ALTER COLUMN mov_qtysent SET DEFAULT 0,
+	ALTER COLUMN mov_qtysent SET NOT NULL;
+comment on column public."mov".mov_qtysent is '';
 
 
 -- =============================================

@@ -42,86 +42,98 @@
 		
 	}
 	
-	#poHeaderEdit-obj_po_date-container {
+	#poHeaderEdit-obj_potype_id-container {
 		grid-row: 2;
+		grid-column: 1 / span 3;
+		
+	}
+	
+	#poHeaderEdit-obj_po_date-container {
+		grid-row: 3;
 		grid-column: 1 / span 2;
 		
 	}
 	
 	#poHeaderEdit-obj_po_dateeta-container {
-		grid-row: 2;
+		grid-row: 3;
 		grid-column: 3 / span 2;
 		
 	}
 	
 	#poHeaderEdit-obj_po_descr-container {
-		grid-row: 3;
+		grid-row: 4;
 		grid-column: 1 / span 6;
 		
 	}
 	
 	#poHeaderEdit-obj_brand_id-container {
-		grid-row: 4;
+		grid-row: 5;
 		grid-column: 1 / span 2;
 		
 	}
 	
 	#poHeaderEdit-obj_sea_id-container {
-		grid-row: 4;
+		grid-row: 5;
 		grid-column: 3 / span 2;
 		
 	}
 	
 	#poHeaderEdit-obj_partner_id-container {
-		grid-row: 5;
+		grid-row: 6;
 		grid-column: 1 / span 3;
 		
 	}
 	
 	#poHeaderEdit-obj_curr_id-container {
-		grid-row: 6;
-		grid-column: 1 / span 2;
-		
-	}
-	
-	#poHeaderEdit-obj_po_subtotalitem-container {
-		grid-row: 6;
-		grid-column: 3 / span 2;
-		
-	}
-	
-	#poHeaderEdit-obj_po_subtotaltax-container {
-		grid-row: 7;
-		grid-column: 3 / span 2;
-		
-	}
-	
-	#poHeaderEdit-obj_tax_id-container {
 		grid-row: 7;
 		grid-column: 1 / span 2;
 		
 	}
 	
-	#poHeaderEdit-obj_tax_value-container {
+	#poHeaderEdit-obj_po_totalfob-container {
+		grid-row: 7;
+		grid-column: 3 / span 2;
+		
+	}
+	
+	#poHeaderEdit-obj_po_totaladd-container {
 		grid-row: 7;
 		grid-column: 5 / span 2;
 		
 	}
 	
-	#poHeaderEdit-obj_tax_isinclude-container {
-		grid-row: 7;
-		grid-column: 6;
+	#poHeaderEdit-obj_po_totaltax-container {
+		grid-row: 8;
+		grid-column: 3 / span 2;
 		
 	}
 	
-	#poHeaderEdit-obj_po_subtotalqty-container {
+	#poHeaderEdit-obj_tax_id-container {
 		grid-row: 8;
 		grid-column: 1 / span 2;
 		
 	}
 	
-	#poHeaderEdit-obj_po_subtotal-container {
+	#poHeaderEdit-obj_tax_value-container {
 		grid-row: 8;
+		grid-column: 5 / span 2;
+		
+	}
+	
+	#poHeaderEdit-obj_tax_isinclude-container {
+		grid-row: 8;
+		grid-column: 6;
+		
+	}
+	
+	#poHeaderEdit-obj_po_totalqty-container {
+		grid-row: 9;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#poHeaderEdit-obj_po_total-container {
+		grid-row: 9;
 		grid-column: 3 / span 2;
 		
 	}

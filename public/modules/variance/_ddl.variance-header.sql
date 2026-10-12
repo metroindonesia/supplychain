@@ -30,14 +30,14 @@ comment on column public."variance".variance_isdisabled is '';
 -- FIELD: variance_code varchar(30)
 -- =============================================
 -- ADD variance_code
-alter table public."variance" add variance_code varchar(30)  ;
+alter table public."variance" add variance_code varchar(30) not null default '';
 comment on column public."variance".variance_code is '';
 
 -- MODIFY variance_code
 alter table public."variance"
 	alter column variance_code type varchar(30),
-	ALTER COLUMN variance_code DROP DEFAULT,
-	ALTER COLUMN variance_code DROP NOT NULL;
+	ALTER COLUMN variance_code SET DEFAULT '',
+	ALTER COLUMN variance_code SET NOT NULL;
 comment on column public."variance".variance_code is '';
 
 
@@ -54,6 +54,21 @@ alter table public."variance"
 	ALTER COLUMN variance_name DROP DEFAULT,
 	ALTER COLUMN variance_name DROP NOT NULL;
 comment on column public."variance".variance_name is '';
+
+
+-- =============================================
+-- FIELD: variancetype_id smallint
+-- =============================================
+-- ADD variancetype_id
+alter table public."variance" add variancetype_id smallint  ;
+comment on column public."variance".variancetype_id is '';
+
+-- MODIFY variancetype_id
+alter table public."variance"
+	alter column variancetype_id type smallint,
+	ALTER COLUMN variancetype_id DROP DEFAULT,
+	ALTER COLUMN variancetype_id DROP NOT NULL;
+comment on column public."variance".variancetype_id is '';
 
 
 -- =============================================
@@ -187,11 +202,23 @@ CREATE INDEX idx$public$variance$_timestamp ON public.variance (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."variance" DROP CONSTRAINT fk$public$variance$variancetype_id;
 ALTER TABLE public."variance" DROP CONSTRAINT fk$public$variance$brand_id;
 ALTER TABLE public."variance" DROP CONSTRAINT fk$public$variance$product_id;
 
 
 -- Add Foreign Key Constraint  
+ALTER TABLE public."variance"
+	ADD CONSTRAINT fk$public$variance$variancetype_id
+	FOREIGN KEY (variancetype_id)
+	REFERENCES public."variancetype"(variancetype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$variance$variancetype_id;
+CREATE INDEX idx_fk$public$variance$variancetype_id ON public."variance"(variancetype_id);	
+
+
 ALTER TABLE public."variance"
 	ADD CONSTRAINT fk$public$variance$brand_id
 	FOREIGN KEY (brand_id)

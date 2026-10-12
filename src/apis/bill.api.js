@@ -20,7 +20,8 @@ const moduleName = 'bill'
 const headerSectionName = 'header'
 const headerTableName = 'public.bill' 
 const headerPrimaryKey = 'bill_id' 
-const detilTableName = 'public.billdetil'  	
+const detilTableName = 'public.billdetil'  
+const rvTableName = 'public.billrv'  	
 
 // api: account
 export default class extends Api {
@@ -53,6 +54,14 @@ export default class extends Api {
 	async detilCreate(body) { return await bill_detilCreate(this, body) }
 	async detilDelete(body) { return await bill_detilDelete(this, body) }
 	async detilDeleteRows(body) { return await bill_detilDeleteRows(this, body) }
+	
+	// rv	
+	async rvList(body) { return await bill_rvList(this, body) }
+	async rvOpen(body) { return await bill_rvOpen(this, body) }
+	async rvUpdate(body) { return await bill_rvUpdate(this, body)}
+	async rvCreate(body) { return await bill_rvCreate(this, body) }
+	async rvDelete(body) { return await bill_rvDelete(this, body) }
+	async rvDeleteRows(body) { return await bill_rvDeleteRows(this, body) }
 			
 }	
 
@@ -553,6 +562,37 @@ async function bill_headerDelete(self, body) {
 				}	
 			}
 
+			// hapus data rv
+			{
+				const sql = `select * from ${rvTableName} where bill_id=\${bill_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowrv of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.rvDeleting === 'function') {
+						// export async function rvDeleting(self, tx, rowrv, logMetadata) {}
+						await Extender.rvDeleting(self, tx, rowrv, logMetadata)
+					}
+
+					const param = {billrv_id: rowrv.billrv_id}
+					const cmd = sqlUtil.createDeleteCommand(rvTableName, ['billrv_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.rvDeleted === 'function') {
+						// export async function rvDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.rvDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					bill_log(self, body, startTime, rvTableName, rowrv.billrv_id, 'DELETE', {rowdata: deletedRow})
+					bill_log(self, body, startTime, headerTableName, rowrv.bill_id, 'DELETE ROW RV', {billrv_id: rowrv.billrv_id, tablename: rvTableName}, `removed: ${rowrv.billrv_id}`)
+
+
+				}	
+			}
+
 			
 			
 
@@ -1000,6 +1040,433 @@ async function bill_detilDeleteRows(self, body) {
 		const fn = Extender[fn_name]
 		if (typeof fn === 'function') {
 			// export async function detilRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// rv	
+
+async function bill_rvList(self, body) {
+	const tablename = rvTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		bill_id: `bill_id=try_cast_bigint(\${bill_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.billrv_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.rvListCriteria === 'function') {
+			// export async function rvListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.rvListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: mov_doc dari field mov_doc pada table public.mov dimana (public.mov.mov_id = public.bill.mov_id)
+			if (row.mov_id !== undefined) {
+				const { mov_doc } = await sqlUtil.lookupdb(db, 'public.mov', 'mov_id', row.mov_id)
+				row.mov_doc = mov_doc ?? null
+			}
+			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.bill.curr_id)
+			if (row.curr_id !== undefined) {
+				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name ?? null
+			}
+			 
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function bill_rvOpen(self, body) {
+	const tablename = rvTableName
+
+	try {
+		const { id } = body 
+		const criteria = { billrv_id: id }
+		const searchMap = { billrv_id: `billrv_id = \${billrv_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: mov_doc dari field mov_doc pada table public.mov dimana (public.mov.mov_id = public.bill.mov_id)
+		if (data.mov_id !== undefined) {
+			const { mov_doc } = await sqlUtil.lookupdb(db, 'public.mov', 'mov_id', data.mov_id)
+			data.mov_doc = mov_doc ?? null
+		}
+		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.bill.curr_id)
+		if (data.curr_id !== undefined) {
+			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name ?? null
+		}
+		  
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function rvOpen(self, db, data) {}
+		if (typeof Extender.rvOpen === 'function') {
+			// export async function rvOpen(self, db, data) {}
+			await Extender.rvOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function bill_rvCreate(self, body) {
+	const { source='bill', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = rvTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'rv', 
+				doc_id: 'PL'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.billrv_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.rvCreating === 'function') {
+				// export async function rvCreating(self, tx, data, seqdata, args) {}
+				await Extender.rvCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.bill_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.rvCreated === 'function') {
+				// export async function rvCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.rvCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			bill_log(self, body, startTime, tablename, ret.billrv_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function bill_rvUpdate(self, body) {
+	const { source='bill', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = rvTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {billrv_id: data.billrv_id}
+			const sql = `select * from ${rvTableName} where billrv_id=\${billrv_id}`
+			const rowrv = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.rvUpdating === 'function') {
+				// export async function rvUpdating(self, tx, data) {}
+				await Extender.rvUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['billrv_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowrv.bill_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.rvUpdated === 'function') {
+				// export async function rvUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.rvUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			bill_log(self, body, startTime, tablename, data.billrv_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function bill_rvDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = rvTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {billrv_id: id}
+			const sql = `select * from ${rvTableName} where billrv_id=\${billrv_id}`
+			const rowrv = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.rvDeleting === 'function') {
+				// export async function rvDeleting(self, tx, rowrv, logMetadata) {}
+				await Extender.rvDeleting(self, tx, rowrv, logMetadata)
+			}
+
+			const param = {billrv_id: rowrv.billrv_id}
+			const cmd = sqlUtil.createDeleteCommand(rvTableName, ['billrv_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowrv.bill_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.rvDeleted === 'function') {
+				// export async function rvDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.rvDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			bill_log(self, body, startTime, rvTableName, rowrv.billrv_id, 'DELETE', {rowdata: deletedRow})
+			bill_log(self, body, startTime, headerTableName, rowrv.bill_id, 'DELETE ROW RV', {billrv_id: rowrv.billrv_id, tablename: rvTableName}, `removed: ${rowrv.billrv_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function bill_rvDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = rvTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let bill_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {billrv_id: id}
+				const sql = `select * from ${rvTableName} where billrv_id=\${billrv_id}`
+				const rowrv = await tx.oneOrNone(sql, dataToRemove)
+				bill_id = rowrv.bill_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.rvDeleting === 'function') {
+					// async function rvDeleting(self, tx, rowrv, logMetadata) {}
+					await Extender.rvDeleting(self, tx, rowrv, logMetadata)
+				}
+
+				const param = {billrv_id: rowrv.billrv_id}
+				const cmd = sqlUtil.createDeleteCommand(rvTableName, ['billrv_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowrv.bill_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.rvDeleted === 'function') {
+					// export async function rvDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.rvDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				bill_log(self, body, startTime, rvTableName, rowrv.billrv_id, 'DELETE', {rowdata: deletedRow})
+				bill_log(self, body, startTime, headerTableName, rowrv.bill_id, 'DELETE ROW RV', {billrv_id: rowrv.billrv_id, tablename: rvTableName}, `removed: ${rowrv.billrv_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			bill_id: bill_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'rvRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function rvRowsDeleted(self, db, res) {}
 			await fn(self, db, res)
 		}
 

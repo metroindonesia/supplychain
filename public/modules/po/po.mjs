@@ -8,6 +8,8 @@ import * as poHeaderList from './poHeaderList.mjs'
 import * as poHeaderEdit from './poHeaderEdit.mjs' 
 import * as poItemList from './poItemList.mjs' 
 import * as poItemEdit from './poItemEdit.mjs' 
+import * as poCostList from './poCostList.mjs' 
+import * as poCostEdit from './poCostEdit.mjs' 
 import * as Extender from './po-ext.mjs'
 
 const app = Context.app
@@ -53,6 +55,8 @@ export default class extends Module {
 			poHeaderEdit, 
 			poItemList, 
 			poItemEdit, 
+			poCostList, 
+			poCostEdit, 
 		}
 
 		try {
@@ -77,6 +81,8 @@ export default class extends Module {
 				poHeaderEdit.init(self, args), 
 				poItemList.init(self, args), 
 				poItemEdit.init(self, args), 
+				poCostList.init(self, args), 
+				poCostEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -88,7 +94,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['poHeaderEdit', 'poItemEdit']
+			const modNameList = ['poHeaderEdit', 'poItemEdit', 'poCostEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false

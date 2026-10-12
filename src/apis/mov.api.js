@@ -12,13 +12,15 @@ import context from '@agung_dhewe/webapps/src/context.js'
 import { getProgramSetting } from '@agung_dhewe/webapps/src/helper.js'
 import logger from '@agung_dhewe/webapps/src/logger.js'
 import { createSequencerDocument } from '@agung_dhewe/webapps/src/sequencerdoc.js' 
+import { createSequencerLine } from '@agung_dhewe/webapps/src/sequencerline.js' 
 
 import * as Extender from './extenders/mov.apiext.js'
 
 const moduleName = 'mov'
 const headerSectionName = 'header'
 const headerTableName = 'public.mov' 
-const headerPrimaryKey = 'mov_id' 	
+const headerPrimaryKey = 'mov_id' 
+const itemTableName = 'public.movitem'  	
 
 // api: account
 export default class extends Api {
@@ -43,6 +45,14 @@ export default class extends Api {
 	async headerCreate(body) { return await mov_headerCreate(this, body)}
 	async headerDelete(body) { return await mov_headerDelete(this, body) }
 
+	
+	// item	
+	async itemList(body) { return await mov_itemList(this, body) }
+	async itemOpen(body) { return await mov_itemOpen(this, body) }
+	async itemUpdate(body) { return await mov_itemUpdate(this, body)}
+	async itemCreate(body) { return await mov_itemCreate(this, body) }
+	async itemDelete(body) { return await mov_itemDelete(this, body) }
+	async itemDeleteRows(body) { return await mov_itemDeleteRows(this, body) }
 			
 }	
 
@@ -491,6 +501,39 @@ async function mov_headerDelete(self, body) {
 			}
 
 			
+			// hapus data item
+			{
+				const sql = `select * from ${itemTableName} where mov_id=\${mov_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowitem of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.itemDeleting === 'function') {
+						// export async function itemDeleting(self, tx, rowitem, logMetadata) {}
+						await Extender.itemDeleting(self, tx, rowitem, logMetadata)
+					}
+
+					const param = {movitem_id: rowitem.movitem_id}
+					const cmd = sqlUtil.createDeleteCommand(itemTableName, ['movitem_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.itemDeleted === 'function') {
+						// export async function itemDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.itemDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					mov_log(self, body, startTime, itemTableName, rowitem.movitem_id, 'DELETE', {rowdata: deletedRow})
+					mov_log(self, body, startTime, headerTableName, rowitem.mov_id, 'DELETE ROW ITEM', {movitem_id: rowitem.movitem_id, tablename: itemTableName}, `removed: ${rowitem.movitem_id}`)
+
+
+				}	
+			}
+
+			
+			
 
 			// hapus data header
 			const cmd = sqlUtil.createDeleteCommand(tablename, ['mov_id'])
@@ -517,5 +560,462 @@ async function mov_headerDelete(self, body) {
 	}
 }
 
+
+
+// item	
+
+async function mov_itemList(self, body) {
+	const tablename = itemTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		mov_id: `mov_id=try_cast_bigint(\${mov_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.movitem_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.itemListCriteria === 'function') {
+			// export async function itemListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.itemListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
+			if (row.brand_id !== undefined) {
+				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
+				row.brand_name = brand_name ?? null
+			}
+			// lookup: sku_code dari field sku_code pada table public.sku dimana (public.sku.sku_id = public.mov.sku_id)
+			if (row.sku_id !== undefined) {
+				const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', row.sku_id)
+				row.sku_code = sku_code ?? null
+			}
+			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
+			if (row.curr_id !== undefined) {
+				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name ?? null
+			}
+			// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
+			if (row.poitem_id !== undefined) {
+				const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', row.poitem_id)
+				row.sku_name = sku_name ?? null
+			}
+			// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.mov.uom_id)
+			if (row.uom_id !== undefined) {
+				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
+				row.uom_name = uom_name ?? null
+			}
+			 
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function mov_itemOpen(self, body) {
+	const tablename = itemTableName
+
+	try {
+		const { id } = body 
+		const criteria = { movitem_id: id }
+		const searchMap = { movitem_id: `movitem_id = \${movitem_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
+		if (data.brand_id !== undefined) {
+			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
+			data.brand_name = brand_name ?? null
+		}
+		// lookup: sku_code dari field sku_code pada table public.sku dimana (public.sku.sku_id = public.mov.sku_id)
+		if (data.sku_id !== undefined) {
+			const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', data.sku_id)
+			data.sku_code = sku_code ?? null
+		}
+		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
+		if (data.curr_id !== undefined) {
+			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name ?? null
+		}
+		// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
+		if (data.poitem_id !== undefined) {
+			const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', data.poitem_id)
+			data.sku_name = sku_name ?? null
+		}
+		// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.mov.uom_id)
+		if (data.uom_id !== undefined) {
+			const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', data.uom_id)
+			data.uom_name = uom_name ?? null
+		}
+		  
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function itemOpen(self, db, data) {}
+		if (typeof Extender.itemOpen === 'function') {
+			// export async function itemOpen(self, db, data) {}
+			await Extender.itemOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function mov_itemCreate(self, body) {
+	const { source='mov', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = itemTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'item', 
+				doc_id: 'XX'	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.movitem_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.itemCreating === 'function') {
+				// export async function itemCreating(self, tx, data, seqdata, args) {}
+				await Extender.itemCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.mov_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.itemCreated === 'function') {
+				// export async function itemCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.itemCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			mov_log(self, body, startTime, tablename, ret.movitem_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function mov_itemUpdate(self, body) {
+	const { source='mov', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = itemTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {movitem_id: data.movitem_id}
+			const sql = `select * from ${itemTableName} where movitem_id=\${movitem_id}`
+			const rowitem = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.itemUpdating === 'function') {
+				// export async function itemUpdating(self, tx, data) {}
+				await Extender.itemUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['movitem_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowitem.mov_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.itemUpdated === 'function') {
+				// export async function itemUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.itemUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			mov_log(self, body, startTime, tablename, data.movitem_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function mov_itemDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = itemTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {movitem_id: id}
+			const sql = `select * from ${itemTableName} where movitem_id=\${movitem_id}`
+			const rowitem = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.itemDeleting === 'function') {
+				// export async function itemDeleting(self, tx, rowitem, logMetadata) {}
+				await Extender.itemDeleting(self, tx, rowitem, logMetadata)
+			}
+
+			const param = {movitem_id: rowitem.movitem_id}
+			const cmd = sqlUtil.createDeleteCommand(itemTableName, ['movitem_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowitem.mov_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.itemDeleted === 'function') {
+				// export async function itemDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.itemDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			mov_log(self, body, startTime, itemTableName, rowitem.movitem_id, 'DELETE', {rowdata: deletedRow})
+			mov_log(self, body, startTime, headerTableName, rowitem.mov_id, 'DELETE ROW ITEM', {movitem_id: rowitem.movitem_id, tablename: itemTableName}, `removed: ${rowitem.movitem_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function mov_itemDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = itemTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let mov_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {movitem_id: id}
+				const sql = `select * from ${itemTableName} where movitem_id=\${movitem_id}`
+				const rowitem = await tx.oneOrNone(sql, dataToRemove)
+				mov_id = rowitem.mov_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.itemDeleting === 'function') {
+					// async function itemDeleting(self, tx, rowitem, logMetadata) {}
+					await Extender.itemDeleting(self, tx, rowitem, logMetadata)
+				}
+
+				const param = {movitem_id: rowitem.movitem_id}
+				const cmd = sqlUtil.createDeleteCommand(itemTableName, ['movitem_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowitem.mov_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.itemDeleted === 'function') {
+					// export async function itemDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.itemDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				mov_log(self, body, startTime, itemTableName, rowitem.movitem_id, 'DELETE', {rowdata: deletedRow})
+				mov_log(self, body, startTime, headerTableName, rowitem.mov_id, 'DELETE ROW ITEM', {movitem_id: rowitem.movitem_id, tablename: itemTableName}, `removed: ${rowitem.movitem_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			mov_id: mov_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'itemRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function itemRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
 
 	

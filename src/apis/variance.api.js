@@ -194,6 +194,11 @@ async function variance_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: variancetype_name dari field variancetype_name pada table public.variancetype dimana (public.variancetype.variancetype_id = public.variance.variancetype_id)
+			if (row.variancetype_id !== undefined) {
+				const { variancetype_name } = await sqlUtil.lookupdb(db, 'public.variancetype', 'variancetype_id', row.variancetype_id)
+				row.variancetype_name = variancetype_name ?? null
+			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.variance.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
@@ -253,6 +258,11 @@ async function variance_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: variancetype_name dari field variancetype_name pada table public.variancetype dimana (public.variancetype.variancetype_id = public.variance.variancetype_id)
+		if (data.variancetype_id !== undefined) {
+			const { variancetype_name } = await sqlUtil.lookupdb(db, 'public.variancetype', 'variancetype_id', data.variancetype_id)
+			data.variancetype_name = variancetype_name ?? null
+		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.variance.brand_id)
 		if (data.brand_id !== undefined) {
 			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)

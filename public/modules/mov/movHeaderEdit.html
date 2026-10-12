@@ -180,14 +180,14 @@
 		</div>
 		
 
-		<!-- Numberbox: mov_qtysend-->
-		<div id="movHeaderEdit-obj_mov_qtysend-container" class="input-field" field="movHeaderEdit-obj_mov_qtysend">
-			<label for="movHeaderEdit-obj_mov_qtysend">
-				Qty Send
+		<!-- Numberbox: mov_qtysent-->
+		<div id="movHeaderEdit-obj_mov_qtysent-container" class="input-field" field="movHeaderEdit-obj_mov_qtysent">
+			<label for="movHeaderEdit-obj_mov_qtysent">
+				Qty Sent
 			</label>
-			<input id="movHeaderEdit-obj_mov_qtysend" fgta5-component="Numberbox"
-				placeholder="Qty Send" autocomplete="off" spellcheck="false"
-				binding="mov_qtysend" 
+			<input id="movHeaderEdit-obj_mov_qtysent" fgta5-component="Numberbox"
+				placeholder="Qty Sent" autocomplete="off" spellcheck="false"
+				binding="mov_qtysent" 
 			value="0"
 				
 			data-tabindex="10"
@@ -527,12 +527,20 @@
 <div id="movHeaderEdit-footer">
 </div>
 
-<div id="panel-detil-selector" class="panel-detil hidden">
+<div id="panel-detil-selector" class="panel-detil ">
 	<div panel-title>
 		Information Detil
 	</div>
 	<div panel-content>
 		
+			<div class="panel-detil-row" id="movHeaderEdit-info-item-row">
+				<div data-label><a href="javascript:void(0)" data-target-section="movItemList"
+						data-current-section="movHeaderEdit">
+						Items
+					</a></div>
+				<div data-info>&nbsp</div>
+			</div>
+			
 
 				<div id="panel-detil-additionalinfo">
 					<!-- tambahkan additional info disini -->
@@ -545,7 +553,7 @@
 </div>
 
 
-<div class="panel-recordbar" data-view="nodetil">
+<div class="panel-recordbar" >
 
 		<button id="movHeader-btn_recordstatus" tabindex="-1">
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

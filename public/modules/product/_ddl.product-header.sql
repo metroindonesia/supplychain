@@ -42,21 +42,6 @@ comment on column public."product".product_code is '';
 
 
 -- =============================================
--- FIELD: model_id int
--- =============================================
--- ADD model_id
-alter table public."product" add model_id int  ;
-comment on column public."product".model_id is '';
-
--- MODIFY model_id
-alter table public."product"
-	alter column model_id type int,
-	ALTER COLUMN model_id DROP DEFAULT,
-	ALTER COLUMN model_id DROP NOT NULL;
-comment on column public."product".model_id is '';
-
-
--- =============================================
 -- FIELD: product_name text
 -- =============================================
 -- ADD product_name
@@ -72,6 +57,21 @@ comment on column public."product".product_name is '';
 
 
 -- =============================================
+-- FIELD: model_id int
+-- =============================================
+-- ADD model_id
+alter table public."product" add model_id int  ;
+comment on column public."product".model_id is '';
+
+-- MODIFY model_id
+alter table public."product"
+	alter column model_id type int,
+	ALTER COLUMN model_id DROP DEFAULT,
+	ALTER COLUMN model_id DROP NOT NULL;
+comment on column public."product".model_id is '';
+
+
+-- =============================================
 -- FIELD: uom_id smallint
 -- =============================================
 -- ADD uom_id
@@ -84,6 +84,21 @@ alter table public."product"
 	ALTER COLUMN uom_id DROP DEFAULT,
 	ALTER COLUMN uom_id DROP NOT NULL;
 comment on column public."product".uom_id is '';
+
+
+-- =============================================
+-- FIELD: isedtrack boolean
+-- =============================================
+-- ADD isedtrack
+alter table public."product" add isedtrack boolean not null default false;
+comment on column public."product".isedtrack is '';
+
+-- MODIFY isedtrack
+alter table public."product"
+	alter column isedtrack type boolean,
+	ALTER COLUMN isedtrack SET DEFAULT false,
+	ALTER COLUMN isedtrack SET NOT NULL;
+comment on column public."product".isedtrack is '';
 
 
 -- =============================================
@@ -322,6 +337,7 @@ CREATE INDEX idx$public$product$_timestamp ON public.product (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$sea_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$model_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$uom_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$brand_id;
@@ -329,7 +345,6 @@ ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$variancetype_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$skuopt;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$gro_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$ctg_id;
-ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$sea_id;
 
 
 -- Add Foreign Key Constraint  

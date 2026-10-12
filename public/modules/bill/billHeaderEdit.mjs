@@ -928,6 +928,10 @@ async function  frm_locked(self, evt) {
 	// trigger lock event di detil
 	self.Modules.billDetilList.headerLocked(self)
 	self.Modules.billDetilEdit.headerLocked(self)
+	
+	// trigger lock event di rv
+	self.Modules.billRvList.headerLocked(self)
+	self.Modules.billRvEdit.headerLocked(self)
 		
 
 }
@@ -972,6 +976,10 @@ async function  frm_unlocked(self, evt) {
 	// trigger unlock event di detil
 	self.Modules.billDetilList.headerUnlocked(self)
 	self.Modules.billDetilEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di rv
+	self.Modules.billRvList.headerUnlocked(self)
+	self.Modules.billRvEdit.headerUnlocked(self)	
 		
 }
 

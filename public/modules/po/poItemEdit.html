@@ -48,15 +48,49 @@
 		</div>
 		
 
+		<!-- Combobox: product_id-->
+		<div id="poItemEdit-obj_product_id-container" class="input-field" field="poItemEdit-obj_product_id">
+			<label for="poItemEdit-obj_product_id">
+				Product
+			</label>
+			<input id="poItemEdit-obj_product_id" fgta5-component="Combobox"
+				placeholder="product_id" autocomplete="off" spellcheck="false"
+				binding="product_id" 
+			data-tabindex="3"
+				
+			data-display="product_name"
+				
+					>
+		</div>
+		
+
+		<!-- Checkbox: isusedecimal-->
+		<div id="poItemEdit-obj_isusedecimal-container" class="input-field" field="poItemEdit-obj_isusedecimal">
+			<label for="poItemEdit-obj_isusedecimal">
+				Decimal
+			</label>
+			<input id="poItemEdit-obj_isusedecimal" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="isusedecimal" 
+			data-tabindex="4"
+				
+			type="checkbox"
+				
+			disabled
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: product_code-->
 		<div id="poItemEdit-obj_product_code-container" class="input-field" field="poItemEdit-obj_product_code">
 			<label for="poItemEdit-obj_product_code">
-				Product
+				Code
 			</label>
 			<input id="poItemEdit-obj_product_code" fgta5-component="Textbox"
 				placeholder="product code" autocomplete="off" spellcheck="false"
 				binding="product_code" 
-			data-tabindex="3"
+			data-tabindex="5"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -74,7 +108,7 @@
 			<input id="poItemEdit-obj_variance_code" fgta5-component="Textbox"
 				placeholder="variance" autocomplete="off" spellcheck="false"
 				binding="variance_code" 
-			data-tabindex="4"
+			data-tabindex="6"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -92,7 +126,7 @@
 			<input id="poItemEdit-obj_skuopt_code" fgta5-component="Textbox"
 				placeholder="option" autocomplete="off" spellcheck="false"
 				binding="skuopt_code" 
-			data-tabindex="5"
+			data-tabindex="7"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -110,7 +144,7 @@
 			<input id="poItemEdit-obj_sku_name" fgta5-component="Textbox"
 				placeholder="name" autocomplete="off" spellcheck="false"
 				binding="sku_name" 
-			data-tabindex="6"
+			data-tabindex="8"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -130,11 +164,51 @@
 				binding="poitem_qty" 
 			value="0"
 				
-			data-tabindex="7"
+			data-tabindex="9"
 				
 			precision="2"
 				
 			maxlength="10"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: poitem_fob-->
+		<div id="poItemEdit-obj_poitem_fob-container" class="input-field" field="poItemEdit-obj_poitem_fob">
+			<label for="poItemEdit-obj_poitem_fob">
+				FOB
+			</label>
+			<input id="poItemEdit-obj_poitem_fob" fgta5-component="Numberbox"
+				placeholder="value" autocomplete="off" spellcheck="false"
+				binding="poitem_fob" 
+			value="0"
+				
+			data-tabindex="10"
+				
+			precision="2"
+				
+			maxlength="19"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: curr_id-->
+		<div id="poItemEdit-obj_curr_id-container" class="input-field" field="poItemEdit-obj_curr_id">
+			<label for="poItemEdit-obj_curr_id">
+				Curr
+			</label>
+			<input id="poItemEdit-obj_curr_id" fgta5-component="Combobox"
+				placeholder="curr" autocomplete="off" spellcheck="false"
+				binding="curr_id" 
+			data-tabindex="11"
+				
+			required
+				
+			invalid-message-required="currency harus diisi"
+				
+			data-display="curr_name"
 				
 					>
 		</div>
@@ -148,33 +222,13 @@
 			<input id="poItemEdit-obj_uom_id" fgta5-component="Combobox"
 				placeholder="measurement" autocomplete="off" spellcheck="false"
 				binding="uom_id" 
-			data-tabindex="8"
+			data-tabindex="12"
 				
 			required
 				
 			invalid-message-required="uom harus diisi"
 				
 			data-display="uom_name"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: poitem_value-->
-		<div id="poItemEdit-obj_poitem_value-container" class="input-field" field="poItemEdit-obj_poitem_value">
-			<label for="poItemEdit-obj_poitem_value">
-				Value
-			</label>
-			<input id="poItemEdit-obj_poitem_value" fgta5-component="Numberbox"
-				placeholder="value" autocomplete="off" spellcheck="false"
-				binding="poitem_value" 
-			value="0"
-				
-			data-tabindex="9"
-				
-			precision="2"
-				
-			maxlength="19"
 				
 					>
 		</div>
@@ -190,7 +244,7 @@
 				binding="poitem_subtotal" 
 			value="0"
 				
-			data-tabindex="10"
+			data-tabindex="13"
 				
 			precision="2"
 				
@@ -210,7 +264,7 @@
 			<input id="poItemEdit-obj_po_id" fgta5-component="Textbox"
 				placeholder="order id" autocomplete="off" spellcheck="false"
 				binding="po_id" 
-			data-tabindex="11"
+			data-tabindex="14"
 				
 			autocomplete="off" spellcheck="false"
 				

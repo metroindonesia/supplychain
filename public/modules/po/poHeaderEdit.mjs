@@ -40,6 +40,7 @@ const obj_po_id = frm.Inputs['poHeaderEdit-obj_po_id']
 const obj_po_doc = frm.Inputs['poHeaderEdit-obj_po_doc']
 const obj_iscommit = frm.Inputs['poHeaderEdit-obj_iscommit']
 const obj_isapproved = frm.Inputs['poHeaderEdit-obj_isapproved']
+const obj_potype_id = frm.Inputs['poHeaderEdit-obj_potype_id']
 const obj_po_date = frm.Inputs['poHeaderEdit-obj_po_date']
 const obj_po_dateeta = frm.Inputs['poHeaderEdit-obj_po_dateeta']
 const obj_po_descr = frm.Inputs['poHeaderEdit-obj_po_descr']
@@ -47,13 +48,14 @@ const obj_brand_id = frm.Inputs['poHeaderEdit-obj_brand_id']
 const obj_sea_id = frm.Inputs['poHeaderEdit-obj_sea_id']
 const obj_partner_id = frm.Inputs['poHeaderEdit-obj_partner_id']
 const obj_curr_id = frm.Inputs['poHeaderEdit-obj_curr_id']
-const obj_po_subtotalitem = frm.Inputs['poHeaderEdit-obj_po_subtotalitem']
-const obj_po_subtotaltax = frm.Inputs['poHeaderEdit-obj_po_subtotaltax']
+const obj_po_totalfob = frm.Inputs['poHeaderEdit-obj_po_totalfob']
+const obj_po_totaladd = frm.Inputs['poHeaderEdit-obj_po_totaladd']
+const obj_po_totaltax = frm.Inputs['poHeaderEdit-obj_po_totaltax']
 const obj_tax_id = frm.Inputs['poHeaderEdit-obj_tax_id']
 const obj_tax_value = frm.Inputs['poHeaderEdit-obj_tax_value']
 const obj_tax_isinclude = frm.Inputs['poHeaderEdit-obj_tax_isinclude']
-const obj_po_subtotalqty = frm.Inputs['poHeaderEdit-obj_po_subtotalqty']
-const obj_po_subtotal = frm.Inputs['poHeaderEdit-obj_po_subtotal']	
+const obj_po_totalqty = frm.Inputs['poHeaderEdit-obj_po_totalqty']
+const obj_po_total = frm.Inputs['poHeaderEdit-obj_po_total']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -117,6 +119,78 @@ export async function init(self, args) {
 		console.log('buat function di extender: export function setupActionButtonEvent(self, buttons)')
 	}
 
+	
+	
+	// Combobox: obj_potype_id
+	obj_potype_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selected_name = 'obj_potype_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_potype_id_selected(self, obj_potype_id, frm, evt) {}
+			fn_selected(self, obj_potype_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_potype_id_selected is not implemented')
+		}		
+	})
+	
+	obj_potype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_potype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_potype_id_selecting(self, obj_potype_id, frm, evt) {}
+			fn_selecting(self, obj_potype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'potype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_potype_id_selecting_criteria(self, obj_potype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_potype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_potype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.potype_id, row.potype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
 	
 	
 	// Combobox: obj_brand_id
@@ -427,6 +501,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_potype_id.clear()
 		obj_brand_id.clear()
 		obj_sea_id.clear()
 		obj_partner_id.clear()
@@ -643,6 +718,10 @@ async function  frm_locked(self, evt) {
 	// trigger lock event di item
 	self.Modules.poItemList.headerLocked(self)
 	self.Modules.poItemEdit.headerLocked(self)
+	
+	// trigger lock event di cost
+	self.Modules.poCostList.headerLocked(self)
+	self.Modules.poCostEdit.headerLocked(self)
 		
 
 }
@@ -687,6 +766,10 @@ async function  frm_unlocked(self, evt) {
 	// trigger unlock event di item
 	self.Modules.poItemList.headerUnlocked(self)
 	self.Modules.poItemEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di cost
+	self.Modules.poCostList.headerUnlocked(self)
+	self.Modules.poCostEdit.headerUnlocked(self)	
 		
 }
 
@@ -755,11 +838,12 @@ async function btn_new_click(self, evt) {
 		const datainit = {
 			po_date: new Date(),
 			po_dateeta: new Date(),
-			po_subtotalitem: 0,
-			po_subtotaltax: 0,
+			po_totalfob: 0,
+			po_totaladd: 0,
+			po_totaltax: 0,
 			tax_value: 0,
-			po_subtotalqty: 0,
-			po_subtotal: 0,
+			po_totalqty: 0,
+			po_total: 0,
 		}
 
 

@@ -57,6 +57,21 @@ comment on column public."po"._isapproved is '';
 
 
 -- =============================================
+-- FIELD: potype_id smallint
+-- =============================================
+-- ADD potype_id
+alter table public."po" add potype_id smallint  ;
+comment on column public."po".potype_id is '';
+
+-- MODIFY potype_id
+alter table public."po"
+	alter column potype_id type smallint,
+	ALTER COLUMN potype_id DROP DEFAULT,
+	ALTER COLUMN potype_id DROP NOT NULL;
+comment on column public."po".potype_id is '';
+
+
+-- =============================================
 -- FIELD: po_date date
 -- =============================================
 -- ADD po_date
@@ -162,33 +177,48 @@ comment on column public."po".curr_id is '';
 
 
 -- =============================================
--- FIELD: po_subtotalitem decimal(18, 2)
+-- FIELD: po_totalfob decimal(18, 2)
 -- =============================================
--- ADD po_subtotalitem
-alter table public."po" add po_subtotalitem decimal(18, 2) not null default 0;
-comment on column public."po".po_subtotalitem is '';
+-- ADD po_totalfob
+alter table public."po" add po_totalfob decimal(18, 2) not null default 0;
+comment on column public."po".po_totalfob is '';
 
--- MODIFY po_subtotalitem
+-- MODIFY po_totalfob
 alter table public."po"
-	alter column po_subtotalitem type decimal(18, 2),
-	ALTER COLUMN po_subtotalitem SET DEFAULT 0,
-	ALTER COLUMN po_subtotalitem SET NOT NULL;
-comment on column public."po".po_subtotalitem is '';
+	alter column po_totalfob type decimal(18, 2),
+	ALTER COLUMN po_totalfob SET DEFAULT 0,
+	ALTER COLUMN po_totalfob SET NOT NULL;
+comment on column public."po".po_totalfob is '';
 
 
 -- =============================================
--- FIELD: po_subtotaltax decimal(12, 0)
+-- FIELD: po_totaladd int
 -- =============================================
--- ADD po_subtotaltax
-alter table public."po" add po_subtotaltax decimal(12, 0) not null default 0;
-comment on column public."po".po_subtotaltax is '';
+-- ADD po_totaladd
+alter table public."po" add po_totaladd int not null default 0;
+comment on column public."po".po_totaladd is '';
 
--- MODIFY po_subtotaltax
+-- MODIFY po_totaladd
 alter table public."po"
-	alter column po_subtotaltax type decimal(12, 0),
-	ALTER COLUMN po_subtotaltax SET DEFAULT 0,
-	ALTER COLUMN po_subtotaltax SET NOT NULL;
-comment on column public."po".po_subtotaltax is '';
+	alter column po_totaladd type int,
+	ALTER COLUMN po_totaladd SET DEFAULT 0,
+	ALTER COLUMN po_totaladd SET NOT NULL;
+comment on column public."po".po_totaladd is '';
+
+
+-- =============================================
+-- FIELD: po_totaltax decimal(12, 0)
+-- =============================================
+-- ADD po_totaltax
+alter table public."po" add po_totaltax decimal(12, 0) not null default 0;
+comment on column public."po".po_totaltax is '';
+
+-- MODIFY po_totaltax
+alter table public."po"
+	alter column po_totaltax type decimal(12, 0),
+	ALTER COLUMN po_totaltax SET DEFAULT 0,
+	ALTER COLUMN po_totaltax SET NOT NULL;
+comment on column public."po".po_totaltax is '';
 
 
 -- =============================================
@@ -237,33 +267,33 @@ comment on column public."po".tax_isinclude is '';
 
 
 -- =============================================
--- FIELD: po_subtotalqty decimal(9, 2)
+-- FIELD: po_totalqty decimal(9, 2)
 -- =============================================
--- ADD po_subtotalqty
-alter table public."po" add po_subtotalqty decimal(9, 2) not null default 0;
-comment on column public."po".po_subtotalqty is '';
+-- ADD po_totalqty
+alter table public."po" add po_totalqty decimal(9, 2) not null default 0;
+comment on column public."po".po_totalqty is '';
 
--- MODIFY po_subtotalqty
+-- MODIFY po_totalqty
 alter table public."po"
-	alter column po_subtotalqty type decimal(9, 2),
-	ALTER COLUMN po_subtotalqty SET DEFAULT 0,
-	ALTER COLUMN po_subtotalqty SET NOT NULL;
-comment on column public."po".po_subtotalqty is '';
+	alter column po_totalqty type decimal(9, 2),
+	ALTER COLUMN po_totalqty SET DEFAULT 0,
+	ALTER COLUMN po_totalqty SET NOT NULL;
+comment on column public."po".po_totalqty is '';
 
 
 -- =============================================
--- FIELD: po_subtotal decimal(18, 2)
+-- FIELD: po_total decimal(18, 2)
 -- =============================================
--- ADD po_subtotal
-alter table public."po" add po_subtotal decimal(18, 2) not null default 0;
-comment on column public."po".po_subtotal is '';
+-- ADD po_total
+alter table public."po" add po_total decimal(18, 2) not null default 0;
+comment on column public."po".po_total is '';
 
--- MODIFY po_subtotal
+-- MODIFY po_total
 alter table public."po"
-	alter column po_subtotal type decimal(18, 2),
-	ALTER COLUMN po_subtotal SET DEFAULT 0,
-	ALTER COLUMN po_subtotal SET NOT NULL;
-comment on column public."po".po_subtotal is '';
+	alter column po_total type decimal(18, 2),
+	ALTER COLUMN po_total SET DEFAULT 0,
+	ALTER COLUMN po_total SET NOT NULL;
+comment on column public."po".po_total is '';
 
 
 -- =============================================
@@ -352,6 +382,7 @@ CREATE INDEX idx$public$po$_timestamp ON public.po (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$potype_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$brand_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$sea_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$partner_id;
@@ -360,6 +391,17 @@ ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$tax_id;
 
 
 -- Add Foreign Key Constraint  
+ALTER TABLE public."po"
+	ADD CONSTRAINT fk$public$po$potype_id
+	FOREIGN KEY (potype_id)
+	REFERENCES public."potype"(potype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$po$potype_id;
+CREATE INDEX idx_fk$public$po$potype_id ON public."po"(potype_id);	
+
+
 ALTER TABLE public."po"
 	ADD CONSTRAINT fk$public$po$brand_id
 	FOREIGN KEY (brand_id)

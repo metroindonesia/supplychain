@@ -17,11 +17,15 @@ export default {
 		poHeaderEdit: 'poHeaderEdit-section', 
 		poItemList: 'poItemList-section', 
 		poItemEdit: 'poItemEdit-section', 
+		poCostList: 'poCostList-section', 
+		poCostEdit: 'poCostEdit-section', 
 	},
 	SectionMap: { 
 		'poHeaderList-section' : 'poHeaderList', 
 		'poHeaderEdit-section' : 'poHeaderEdit', 
 		'poItemList-section' : 'poItemList', 
 		'poItemEdit-section' : 'poItemEdit', 
+		'poCostList-section' : 'poCostList', 
+		'poCostEdit-section' : 'poCostEdit', 
 	}
 }

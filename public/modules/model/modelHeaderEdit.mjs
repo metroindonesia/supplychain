@@ -41,6 +41,7 @@ const obj_model_isdisabled = frm.Inputs['modelHeaderEdit-obj_model_isdisabled']
 const obj_model_name = frm.Inputs['modelHeaderEdit-obj_model_name']
 const obj_variance_id = frm.Inputs['modelHeaderEdit-obj_variance_id']
 const obj_skuoptions = frm.Inputs['modelHeaderEdit-obj_skuoptions']
+const obj_isedtrack = frm.Inputs['modelHeaderEdit-obj_isedtrack']
 const obj_model_descr = frm.Inputs['modelHeaderEdit-obj_model_descr']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')

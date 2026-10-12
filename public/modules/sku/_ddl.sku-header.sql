@@ -87,6 +87,21 @@ comment on column public."sku".product_id is '';
 
 
 -- =============================================
+-- FIELD: isedtrack boolean
+-- =============================================
+-- ADD isedtrack
+alter table public."sku" add isedtrack boolean not null default false;
+comment on column public."sku".isedtrack is '';
+
+-- MODIFY isedtrack
+alter table public."sku"
+	alter column isedtrack type boolean,
+	ALTER COLUMN isedtrack SET DEFAULT false,
+	ALTER COLUMN isedtrack SET NOT NULL;
+comment on column public."sku".isedtrack is '';
+
+
+-- =============================================
 -- FIELD: model_id int
 -- =============================================
 -- ADD model_id
@@ -264,6 +279,21 @@ alter table public."sku"
 	ALTER COLUMN uom_id DROP DEFAULT,
 	ALTER COLUMN uom_id DROP NOT NULL;
 comment on column public."sku".uom_id is '';
+
+
+-- =============================================
+-- FIELD: isusedecimal boolean
+-- =============================================
+-- ADD isusedecimal
+alter table public."sku" add isusedecimal boolean not null default false;
+comment on column public."sku".isusedecimal is '';
+
+-- MODIFY isusedecimal
+alter table public."sku"
+	alter column isusedecimal type boolean,
+	ALTER COLUMN isusedecimal SET DEFAULT false,
+	ALTER COLUMN isusedecimal SET NOT NULL;
+comment on column public."sku".isusedecimal is '';
 
 
 -- =============================================

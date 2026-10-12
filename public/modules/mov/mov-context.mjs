@@ -15,9 +15,13 @@ export default {
 	Sections: { 
 		movHeaderList: 'movHeaderList-section', 
 		movHeaderEdit: 'movHeaderEdit-section', 
+		movItemList: 'movItemList-section', 
+		movItemEdit: 'movItemEdit-section', 
 	},
 	SectionMap: { 
 		'movHeaderList-section' : 'movHeaderList', 
 		'movHeaderEdit-section' : 'movHeaderEdit', 
+		'movItemList-section' : 'movItemList', 
+		'movItemEdit-section' : 'movItemEdit', 
 	}
 }

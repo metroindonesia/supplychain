@@ -1,4 +1,43 @@
+#poHeaderEdit-obj_curr_id-container .fgta5-entry-input-wrapper,
+#poHeaderEdit-obj_curr_id-display {
+	width: 80px;
+}
+
+
 #poHeaderEdit-obj_tax_value-container .fgta5-entry-input-wrapper,
 #poHeaderEdit-obj_tax_value-display {
 	width: 45px !important;
+}
+
+
+#poItemEdit-obj_poitem_fob-container,
+#poItemEdit-obj_poitem_subtotal-container {
+	margin-left: -60px;
+}
+
+#poItemEdit-obj_poitem_fob-container label,
+#poItemEdit-obj_poitem_subtotal-container label {
+	min-width: 50px;
+	width: 50px;
+}
+
+
+#poItemEdit-obj_poitem_fob-container,
+#poItemEdit-obj_poitem_fob-container {
+	width: 175px;
+}
+
+
+#poItemEdit-obj_curr_id-container {
+	width: 175px;
+}
+
+#poItemEdit-obj_curr_id-container label {
+	min-width: 40px;
+	width: 40px;
+}
+
+#poItemEdit-obj_curr_id-container .fgta5-entry-input-wrapper,
+#poItemEdit-obj_curr_id-display {
+	width: 80px;
 }

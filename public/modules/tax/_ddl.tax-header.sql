@@ -172,7 +172,6 @@ CREATE INDEX idx$public$tax$_timestamp ON public.tax (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."tax" DROP CONSTRAINT fk$public$tax$comp_id;
 ALTER TABLE public."tax" DROP CONSTRAINT fk$public$tax$taxtype_id;
 
 

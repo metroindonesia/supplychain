@@ -72,6 +72,21 @@ comment on column public."model".skuopt_id is '';
 
 
 -- =============================================
+-- FIELD: isedtrack boolean
+-- =============================================
+-- ADD isedtrack
+alter table public."model" add isedtrack boolean not null default false;
+comment on column public."model".isedtrack is '';
+
+-- MODIFY isedtrack
+alter table public."model"
+	alter column isedtrack type boolean,
+	ALTER COLUMN isedtrack SET DEFAULT false,
+	ALTER COLUMN isedtrack SET NOT NULL;
+comment on column public."model".isedtrack is '';
+
+
+-- =============================================
 -- FIELD: model_descr text
 -- =============================================
 -- ADD model_descr

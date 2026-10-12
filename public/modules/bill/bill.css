@@ -43,3 +43,30 @@
 #billHeaderEdit-obj_curr_id-container>label {
 	pointer-events: none;
 }
+
+
+
+
+#billDetilEdit-obj_curr_id-container {
+	margin-left: -40px;
+}
+
+
+
+
+
+
+#billRvEdit-obj_curr_id-container {
+	margin-left: -80px;
+}
+
+#billRvEdit-obj_curr_id-container>label {
+	min-width: 40px;
+	width: 40px;
+}
+
+
+#billRvEdit-obj_curr_id-container .fgta5-entry-input-wrapper,
+#billRvEdit-obj_curr_id-display {
+	width: 100px;
+}

@@ -17,11 +17,15 @@ export default {
 		billHeaderEdit: 'billHeaderEdit-section', 
 		billDetilList: 'billDetilList-section', 
 		billDetilEdit: 'billDetilEdit-section', 
+		billRvList: 'billRvList-section', 
+		billRvEdit: 'billRvEdit-section', 
 	},
 	SectionMap: { 
 		'billHeaderList-section' : 'billHeaderList', 
 		'billHeaderEdit-section' : 'billHeaderEdit', 
 		'billDetilList-section' : 'billDetilList', 
 		'billDetilEdit-section' : 'billDetilEdit', 
+		'billRvList-section' : 'billRvList', 
+		'billRvEdit-section' : 'billRvEdit', 
 	}
 }

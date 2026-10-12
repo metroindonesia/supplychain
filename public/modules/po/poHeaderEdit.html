@@ -84,6 +84,26 @@
 		</div>
 		
 
+		<!-- Combobox: potype_id-->
+		<div id="poHeaderEdit-obj_potype_id-container" class="input-field" field="poHeaderEdit-obj_potype_id">
+			<label for="poHeaderEdit-obj_potype_id">
+				Type
+			</label>
+			<input id="poHeaderEdit-obj_potype_id" fgta5-component="Combobox"
+				placeholder="tpilih type" autocomplete="off" spellcheck="false"
+				binding="potype_id" 
+			data-tabindex="5"
+				
+			required
+				
+			invalid-message-required="tipe PO harus diisi"
+				
+			data-display="potype_name"
+				
+					>
+		</div>
+		
+
 		<!-- Datepicker: po_date-->
 		<div id="poHeaderEdit-obj_po_date-container" class="input-field" field="poHeaderEdit-obj_po_date">
 			<label for="poHeaderEdit-obj_po_date">
@@ -92,7 +112,7 @@
 			<input id="poHeaderEdit-obj_po_date" fgta5-component="Datepicker"
 				placeholder="date" autocomplete="off" spellcheck="false"
 				binding="po_date" 
-			data-tabindex="5"
+			data-tabindex="6"
 				
 					>
 		</div>
@@ -106,7 +126,7 @@
 			<input id="poHeaderEdit-obj_po_dateeta" fgta5-component="Datepicker"
 				placeholder="po_dateeta" autocomplete="off" spellcheck="false"
 				binding="po_dateeta" 
-			data-tabindex="6"
+			data-tabindex="7"
 				
 					>
 		</div>
@@ -120,7 +140,7 @@
 			<input id="poHeaderEdit-obj_po_descr" fgta5-component="Textbox"
 				placeholder="descr" autocomplete="off" spellcheck="false"
 				binding="po_descr" 
-			data-tabindex="7"
+			data-tabindex="8"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -138,7 +158,7 @@
 			<input id="poHeaderEdit-obj_brand_id" fgta5-component="Combobox"
 				placeholder="brand_id" autocomplete="off" spellcheck="false"
 				binding="brand_id" 
-			data-tabindex="8"
+			data-tabindex="9"
 				
 			data-display="brand_name"
 				
@@ -154,7 +174,7 @@
 			<input id="poHeaderEdit-obj_sea_id" fgta5-component="Combobox"
 				placeholder="sea_id" autocomplete="off" spellcheck="false"
 				binding="sea_id" 
-			data-tabindex="9"
+			data-tabindex="10"
 				
 			data-display="sea_name"
 				
@@ -170,7 +190,7 @@
 			<input id="poHeaderEdit-obj_partner_id" fgta5-component="Combobox"
 				placeholder="partner_id" autocomplete="off" spellcheck="false"
 				binding="partner_id" 
-			data-tabindex="10"
+			data-tabindex="11"
 				
 			data-display="partner_name"
 				
@@ -186,7 +206,7 @@
 			<input id="poHeaderEdit-obj_curr_id" fgta5-component="Combobox"
 				placeholder="currency" autocomplete="off" spellcheck="false"
 				binding="curr_id" 
-			data-tabindex="11"
+			data-tabindex="12"
 				
 			data-display="curr_name"
 				
@@ -194,17 +214,17 @@
 		</div>
 		
 
-		<!-- Numberbox: po_subtotalitem-->
-		<div id="poHeaderEdit-obj_po_subtotalitem-container" class="input-field" field="poHeaderEdit-obj_po_subtotalitem">
-			<label for="poHeaderEdit-obj_po_subtotalitem">
-				Subt. Item
+		<!-- Numberbox: po_totalfob-->
+		<div id="poHeaderEdit-obj_po_totalfob-container" class="input-field" field="poHeaderEdit-obj_po_totalfob">
+			<label for="poHeaderEdit-obj_po_totalfob">
+				Total FOB
 			</label>
-			<input id="poHeaderEdit-obj_po_subtotalitem" fgta5-component="Numberbox"
-				placeholder="subtotal item" autocomplete="off" spellcheck="false"
-				binding="po_subtotalitem" 
+			<input id="poHeaderEdit-obj_po_totalfob" fgta5-component="Numberbox"
+				placeholder="total FOB" autocomplete="off" spellcheck="false"
+				binding="po_totalfob" 
 			value="0"
 				
-			data-tabindex="12"
+			data-tabindex="13"
 				
 			precision="2"
 				
@@ -216,17 +236,37 @@
 		</div>
 		
 
-		<!-- Numberbox: po_subtotaltax-->
-		<div id="poHeaderEdit-obj_po_subtotaltax-container" class="input-field" field="poHeaderEdit-obj_po_subtotaltax">
-			<label for="poHeaderEdit-obj_po_subtotaltax">
-				Subt. Tax
+		<!-- Numberbox: po_totaladd-->
+		<div id="poHeaderEdit-obj_po_totaladd-container" class="input-field" field="poHeaderEdit-obj_po_totaladd">
+			<label for="poHeaderEdit-obj_po_totaladd">
+				Add Cost
 			</label>
-			<input id="poHeaderEdit-obj_po_subtotaltax" fgta5-component="Numberbox"
-				placeholder="subtotal tax" autocomplete="off" spellcheck="false"
-				binding="po_subtotaltax" 
+			<input id="poHeaderEdit-obj_po_totaladd" fgta5-component="Numberbox"
+				placeholder="additional cost" autocomplete="off" spellcheck="false"
+				binding="po_totaladd" 
 			value="0"
 				
-			data-tabindex="13"
+			data-tabindex="14"
+				
+			maxlength="9"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: po_totaltax-->
+		<div id="poHeaderEdit-obj_po_totaltax-container" class="input-field" field="poHeaderEdit-obj_po_totaltax">
+			<label for="poHeaderEdit-obj_po_totaltax">
+				Total Tax
+			</label>
+			<input id="poHeaderEdit-obj_po_totaltax" fgta5-component="Numberbox"
+				placeholder="total tax" autocomplete="off" spellcheck="false"
+				binding="po_totaltax" 
+			value="0"
+				
+			data-tabindex="15"
 				
 			maxlength="12"
 				
@@ -244,7 +284,7 @@
 			<input id="poHeaderEdit-obj_tax_id" fgta5-component="Combobox"
 				placeholder="NONE" autocomplete="off" spellcheck="false"
 				binding="tax_id" 
-			data-tabindex="14"
+			data-tabindex="16"
 				
 			data-display="tax_value"
 				
@@ -262,7 +302,7 @@
 				binding="tax_value" 
 			value="0"
 				
-			data-tabindex="15"
+			data-tabindex="17"
 				
 			precision="2"
 				
@@ -282,7 +322,7 @@
 			<input id="poHeaderEdit-obj_tax_isinclude" fgta5-component="Checkbox"
 				placeholder="" autocomplete="off" spellcheck="false"
 				binding="tax_isinclude" 
-			data-tabindex="16"
+			data-tabindex="18"
 				
 			type="checkbox"
 				
@@ -292,17 +332,17 @@
 		</div>
 		
 
-		<!-- Numberbox: po_subtotalqty-->
-		<div id="poHeaderEdit-obj_po_subtotalqty-container" class="input-field" field="poHeaderEdit-obj_po_subtotalqty">
-			<label for="poHeaderEdit-obj_po_subtotalqty">
-				Subt. Qty
+		<!-- Numberbox: po_totalqty-->
+		<div id="poHeaderEdit-obj_po_totalqty-container" class="input-field" field="poHeaderEdit-obj_po_totalqty">
+			<label for="poHeaderEdit-obj_po_totalqty">
+				Total Qty
 			</label>
-			<input id="poHeaderEdit-obj_po_subtotalqty" fgta5-component="Numberbox"
+			<input id="poHeaderEdit-obj_po_totalqty" fgta5-component="Numberbox"
 				placeholder="subtotal qty" autocomplete="off" spellcheck="false"
-				binding="po_subtotalqty" 
+				binding="po_totalqty" 
 			value="0"
 				
-			data-tabindex="17"
+			data-tabindex="19"
 				
 			precision="2"
 				
@@ -314,17 +354,17 @@
 		</div>
 		
 
-		<!-- Numberbox: po_subtotal-->
-		<div id="poHeaderEdit-obj_po_subtotal-container" class="input-field" field="poHeaderEdit-obj_po_subtotal">
-			<label for="poHeaderEdit-obj_po_subtotal">
-				Subtotal
+		<!-- Numberbox: po_total-->
+		<div id="poHeaderEdit-obj_po_total-container" class="input-field" field="poHeaderEdit-obj_po_total">
+			<label for="poHeaderEdit-obj_po_total">
+				Total
 			</label>
-			<input id="poHeaderEdit-obj_po_subtotal" fgta5-component="Numberbox"
-				placeholder="subtotal" autocomplete="off" spellcheck="false"
-				binding="po_subtotal" 
+			<input id="poHeaderEdit-obj_po_total" fgta5-component="Numberbox"
+				placeholder="total" autocomplete="off" spellcheck="false"
+				binding="po_total" 
 			value="0"
 				
-			data-tabindex="18"
+			data-tabindex="20"
 				
 			precision="2"
 				
@@ -351,6 +391,14 @@
 				<div data-label><a href="javascript:void(0)" data-target-section="poItemList"
 						data-current-section="poHeaderEdit">
 						Items
+					</a></div>
+				<div data-info>&nbsp</div>
+			</div>
+			
+			<div class="panel-detil-row" id="poHeaderEdit-info-cost-row">
+				<div data-label><a href="javascript:void(0)" data-target-section="poCostList"
+						data-current-section="poHeaderEdit">
+						Additional Cost
 					</a></div>
 				<div data-info>&nbsp</div>
 			</div>

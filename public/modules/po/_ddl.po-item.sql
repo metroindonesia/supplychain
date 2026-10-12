@@ -27,6 +27,36 @@ comment on column public."poitem".sku_id is '';
 
 
 -- =============================================
+-- FIELD: product_id bigint
+-- =============================================
+-- ADD product_id
+alter table public."poitem" add product_id bigint  ;
+comment on column public."poitem".product_id is '';
+
+-- MODIFY product_id
+alter table public."poitem"
+	alter column product_id type bigint,
+	ALTER COLUMN product_id DROP DEFAULT,
+	ALTER COLUMN product_id DROP NOT NULL;
+comment on column public."poitem".product_id is '';
+
+
+-- =============================================
+-- FIELD: isusedecimal boolean
+-- =============================================
+-- ADD isusedecimal
+alter table public."poitem" add isusedecimal boolean not null default false;
+comment on column public."poitem".isusedecimal is '';
+
+-- MODIFY isusedecimal
+alter table public."poitem"
+	alter column isusedecimal type boolean,
+	ALTER COLUMN isusedecimal SET DEFAULT false,
+	ALTER COLUMN isusedecimal SET NOT NULL;
+comment on column public."poitem".isusedecimal is '';
+
+
+-- =============================================
 -- FIELD: product_code text
 -- =============================================
 -- ADD product_code
@@ -102,6 +132,36 @@ comment on column public."poitem".poitem_qty is '';
 
 
 -- =============================================
+-- FIELD: poitem_fob decimal(18, 2)
+-- =============================================
+-- ADD poitem_fob
+alter table public."poitem" add poitem_fob decimal(18, 2) not null default 0;
+comment on column public."poitem".poitem_fob is '';
+
+-- MODIFY poitem_fob
+alter table public."poitem"
+	alter column poitem_fob type decimal(18, 2),
+	ALTER COLUMN poitem_fob SET DEFAULT 0,
+	ALTER COLUMN poitem_fob SET NOT NULL;
+comment on column public."poitem".poitem_fob is '';
+
+
+-- =============================================
+-- FIELD: curr_id smallint
+-- =============================================
+-- ADD curr_id
+alter table public."poitem" add curr_id smallint  ;
+comment on column public."poitem".curr_id is '';
+
+-- MODIFY curr_id
+alter table public."poitem"
+	alter column curr_id type smallint,
+	ALTER COLUMN curr_id DROP DEFAULT,
+	ALTER COLUMN curr_id DROP NOT NULL;
+comment on column public."poitem".curr_id is '';
+
+
+-- =============================================
 -- FIELD: uom_id smallint
 -- =============================================
 -- ADD uom_id
@@ -114,21 +174,6 @@ alter table public."poitem"
 	ALTER COLUMN uom_id DROP DEFAULT,
 	ALTER COLUMN uom_id DROP NOT NULL;
 comment on column public."poitem".uom_id is '';
-
-
--- =============================================
--- FIELD: poitem_value decimal(18, 2)
--- =============================================
--- ADD poitem_value
-alter table public."poitem" add poitem_value decimal(18, 2) not null default 0;
-comment on column public."poitem".poitem_value is '';
-
--- MODIFY poitem_value
-alter table public."poitem"
-	alter column poitem_value type decimal(18, 2),
-	ALTER COLUMN poitem_value SET DEFAULT 0,
-	ALTER COLUMN poitem_value SET NOT NULL;
-comment on column public."poitem".poitem_value is '';
 
 
 -- =============================================
@@ -248,6 +293,8 @@ CREATE INDEX idx$public$poitem$_timestamp ON public.poitem (_timestamp);
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE public."poitem" DROP CONSTRAINT fk$public$poitem$sku_id;
+ALTER TABLE public."poitem" DROP CONSTRAINT fk$public$poitem$product_id;
+ALTER TABLE public."poitem" DROP CONSTRAINT fk$public$poitem$curr_id;
 ALTER TABLE public."poitem" DROP CONSTRAINT fk$public$poitem$uom_id;
 
 
@@ -261,6 +308,28 @@ ALTER TABLE public."poitem"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$poitem$sku_id;
 CREATE INDEX idx_fk$public$poitem$sku_id ON public."poitem"(sku_id);	
+
+
+ALTER TABLE public."poitem"
+	ADD CONSTRAINT fk$public$poitem$product_id
+	FOREIGN KEY (product_id)
+	REFERENCES public."product"(product_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$poitem$product_id;
+CREATE INDEX idx_fk$public$poitem$product_id ON public."poitem"(product_id);	
+
+
+ALTER TABLE public."poitem"
+	ADD CONSTRAINT fk$public$poitem$curr_id
+	FOREIGN KEY (curr_id)
+	REFERENCES public."curr"(curr_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$poitem$curr_id;
+CREATE INDEX idx_fk$public$poitem$curr_id ON public."poitem"(curr_id);	
 
 
 ALTER TABLE public."poitem"

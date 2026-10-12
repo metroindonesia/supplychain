@@ -8,6 +8,8 @@ import * as billHeaderList from './billHeaderList.mjs'
 import * as billHeaderEdit from './billHeaderEdit.mjs' 
 import * as billDetilList from './billDetilList.mjs' 
 import * as billDetilEdit from './billDetilEdit.mjs' 
+import * as billRvList from './billRvList.mjs' 
+import * as billRvEdit from './billRvEdit.mjs' 
 import * as Extender from './bill-ext.mjs'
 
 const app = Context.app
@@ -53,6 +55,8 @@ export default class extends Module {
 			billHeaderEdit, 
 			billDetilList, 
 			billDetilEdit, 
+			billRvList, 
+			billRvEdit, 
 		}
 
 		try {
@@ -77,6 +81,8 @@ export default class extends Module {
 				billHeaderEdit.init(self, args), 
 				billDetilList.init(self, args), 
 				billDetilEdit.init(self, args), 
+				billRvList.init(self, args), 
+				billRvEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -88,7 +94,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['billHeaderEdit', 'billDetilEdit']
+			const modNameList = ['billHeaderEdit', 'billDetilEdit', 'billRvEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false

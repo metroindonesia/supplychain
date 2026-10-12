@@ -6,6 +6,8 @@
 import Context from './mov-context.mjs'  
 import * as movHeaderList from './movHeaderList.mjs' 
 import * as movHeaderEdit from './movHeaderEdit.mjs' 
+import * as movItemList from './movItemList.mjs' 
+import * as movItemEdit from './movItemEdit.mjs' 
 import * as Extender from './mov-ext.mjs'
 
 const app = Context.app
@@ -49,6 +51,8 @@ export default class extends Module {
 		self.Modules = { 
 			movHeaderList, 
 			movHeaderEdit, 
+			movItemList, 
+			movItemEdit, 
 		}
 
 		try {
@@ -71,6 +75,8 @@ export default class extends Module {
 			await Promise.all([ 
 				movHeaderList.init(self, args), 
 				movHeaderEdit.init(self, args), 
+				movItemList.init(self, args), 
+				movItemEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -82,7 +88,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['movHeaderEdit']
+			const modNameList = ['movHeaderEdit', 'movItemEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false

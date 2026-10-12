@@ -45,7 +45,7 @@ const obj_mov_daterecv = frm.Inputs['movHeaderEdit-obj_mov_daterecv']
 const obj_mov_ref = frm.Inputs['movHeaderEdit-obj_mov_ref']
 const obj_mov_descr = frm.Inputs['movHeaderEdit-obj_mov_descr']
 const obj_mov_qty = frm.Inputs['movHeaderEdit-obj_mov_qty']
-const obj_mov_qtysend = frm.Inputs['movHeaderEdit-obj_mov_qtysend']
+const obj_mov_qtysent = frm.Inputs['movHeaderEdit-obj_mov_qtysent']
 const obj_mov_qtyrecv = frm.Inputs['movHeaderEdit-obj_mov_qtyrecv']
 const obj_mov_fobvalue = frm.Inputs['movHeaderEdit-obj_mov_fobvalue']
 const obj_mov_fobidr = frm.Inputs['movHeaderEdit-obj_mov_fobidr']
@@ -807,6 +807,10 @@ async function  frm_locked(self, evt) {
 		btn_edit.disabled = true
 	}
 
+	
+	// trigger lock event di item
+	self.Modules.movItemList.headerLocked(self)
+	self.Modules.movItemEdit.headerLocked(self)
 		
 
 }
@@ -847,6 +851,10 @@ async function  frm_unlocked(self, evt) {
 		fn(self, frm, CurrentState)
 	}
 
+	
+	// trigger unlock event di item
+	self.Modules.movItemList.headerUnlocked(self)
+	self.Modules.movItemEdit.headerUnlocked(self)	
 		
 }
 
@@ -918,7 +926,7 @@ async function btn_new_click(self, evt) {
 			mov_datesent: new Date(),
 			mov_daterecv: new Date(),
 			mov_qty: 0,
-			mov_qtysend: 0,
+			mov_qtysent: 0,
 			mov_qtyrecv: 0,
 			mov_fobvalue: 0,
 			mov_fobidr: 0,
