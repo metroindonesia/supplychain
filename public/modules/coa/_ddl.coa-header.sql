@@ -128,6 +128,14 @@ CREATE INDEX idx$public$coa$_timestamp ON public.coa (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."coa"
+	drop constraint uq$public$coa$coa_code;
+
+alter table public."coa"
+	drop constraint uq$public$coa$coa_name;
+	
+
 -- Add unique index 
 alter table  public."coa"
 	add constraint uq$public$coa$coa_name unique (coa_name); 

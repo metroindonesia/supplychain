@@ -55,6 +55,7 @@ const obj_movitem_landedcost = frm.Inputs['movItemEdit-obj_movitem_landedcost']
 const obj_movitem_value = frm.Inputs['movItemEdit-obj_movitem_value']
 const obj_poitem_id = frm.Inputs['movItemEdit-obj_poitem_id']
 const obj_uom_id = frm.Inputs['movItemEdit-obj_uom_id']
+const obj_expdate = frm.Inputs['movItemEdit-obj_expdate']
 const obj_mov_id = frm.Inputs['movItemEdit-obj_mov_id']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
@@ -751,6 +752,7 @@ async function btn_new_click(self, evt) {
 			movitem_addidr: 0,
 			movitem_landedcost: 0,
 			movitem_value: 0,
+			expdate: new Date(),
 		}
 
 

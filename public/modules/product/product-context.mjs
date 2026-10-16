@@ -19,6 +19,8 @@ export default {
 		productVarianceEdit: 'productVarianceEdit-section', 
 		productPropList: 'productPropList-section', 
 		productPropEdit: 'productPropEdit-section', 
+		productChannelList: 'productChannelList-section', 
+		productChannelEdit: 'productChannelEdit-section', 
 	},
 	SectionMap: { 
 		'productHeaderList-section' : 'productHeaderList', 
@@ -27,5 +29,7 @@ export default {
 		'productVarianceEdit-section' : 'productVarianceEdit', 
 		'productPropList-section' : 'productPropList', 
 		'productPropEdit-section' : 'productPropEdit', 
+		'productChannelList-section' : 'productChannelList', 
+		'productChannelEdit-section' : 'productChannelEdit', 
 	}
 }

@@ -282,6 +282,36 @@ comment on column public."movitem".uom_id is '';
 
 
 -- =============================================
+-- FIELD: expdate date
+-- =============================================
+-- ADD expdate
+alter table public."movitem" add expdate date  default now();
+comment on column public."movitem".expdate is '';
+
+-- MODIFY expdate
+alter table public."movitem"
+	alter column expdate type date,
+	ALTER COLUMN expdate SET DEFAULT now(),
+	ALTER COLUMN expdate DROP NOT NULL;
+comment on column public."movitem".expdate is '';
+
+
+-- =============================================
+-- FIELD: batch_id int
+-- =============================================
+-- ADD batch_id
+alter table public."movitem" add batch_id int  ;
+comment on column public."movitem".batch_id is '';
+
+-- MODIFY batch_id
+alter table public."movitem"
+	alter column batch_id type int,
+	ALTER COLUMN batch_id DROP DEFAULT,
+	ALTER COLUMN batch_id DROP NOT NULL;
+comment on column public."movitem".batch_id is '';
+
+
+-- =============================================
 -- FIELD: mov_id bigint
 -- =============================================
 -- ADD mov_id
@@ -381,6 +411,15 @@ CREATE INDEX idx$public$movitem$_timestamp ON public.movitem (_timestamp);
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$brand_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$sku_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$curr_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$poitem_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$uom_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$batch_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE public."movitem"
 	ADD CONSTRAINT fk$public$movitem$brand_id
@@ -436,9 +475,27 @@ ALTER TABLE public."movitem"
 DROP INDEX IF EXISTS public.idx_fk$public$movitem$uom_id;
 CREATE INDEX idx_fk$public$movitem$uom_id ON public."movitem"(uom_id);	
 
+
+ALTER TABLE public."movitem"
+	ADD CONSTRAINT fk$public$movitem$batch_id
+	FOREIGN KEY (batch_id)
+	REFERENCES public."batch"(batch_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$movitem$batch_id;
+CREATE INDEX idx_fk$public$movitem$batch_id ON public."movitem"(batch_id);	
+
 	
 
 
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Add unique index 
+alter table  public."movitem"
+	add constraint uq$public$movitem$poitem_id unique (mov_id, poitem_id); 
+
+alter table  public."movitem"
+	add constraint uq$public$movitem$sku_id unique (mov_id, sku_id); 
+

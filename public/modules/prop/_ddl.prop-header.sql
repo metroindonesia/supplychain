@@ -128,6 +128,11 @@ CREATE INDEX idx$public$prop$_timestamp ON public.prop (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."prop"
+	drop constraint uq$public$prop$prop_name;
+	
+
 -- Add unique index 
 alter table  public."prop"
 	add constraint uq$public$prop$prop_name unique (prop_name); 

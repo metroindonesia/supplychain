@@ -132,6 +132,12 @@
 		
 	}
 	
+	#movItemEdit-obj_expdate-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
 	#movItemEdit-obj_mov_id-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;

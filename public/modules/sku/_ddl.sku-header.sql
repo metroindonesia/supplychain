@@ -297,6 +297,21 @@ comment on column public."sku".isusedecimal is '';
 
 
 -- =============================================
+-- FIELD: minstock decimal(9, 2)
+-- =============================================
+-- ADD minstock
+alter table public."sku" add minstock decimal(9, 2) not null default 0;
+comment on column public."sku".minstock is '';
+
+-- MODIFY minstock
+alter table public."sku"
+	alter column minstock type decimal(9, 2),
+	ALTER COLUMN minstock SET DEFAULT 0,
+	ALTER COLUMN minstock SET NOT NULL;
+comment on column public."sku".minstock is '';
+
+
+-- =============================================
 -- FIELD: sea_id smallint
 -- =============================================
 -- ADD sea_id
@@ -324,6 +339,126 @@ alter table public."sku"
 	ALTER COLUMN iscf SET DEFAULT false,
 	ALTER COLUMN iscf SET NOT NULL;
 comment on column public."sku".iscf is '';
+
+
+-- =============================================
+-- FIELD: safetystock decimal(9, 2)
+-- =============================================
+-- ADD safetystock
+alter table public."sku" add safetystock decimal(9, 2) not null default 0;
+comment on column public."sku".safetystock is '';
+
+-- MODIFY safetystock
+alter table public."sku"
+	alter column safetystock type decimal(9, 2),
+	ALTER COLUMN safetystock SET DEFAULT 0,
+	ALTER COLUMN safetystock SET NOT NULL;
+comment on column public."sku".safetystock is '';
+
+
+-- =============================================
+-- FIELD: lastfob decimal(18, -25)
+-- =============================================
+-- ADD lastfob
+alter table public."sku" add lastfob decimal(18, -25) not null default 0;
+comment on column public."sku".lastfob is '';
+
+-- MODIFY lastfob
+alter table public."sku"
+	alter column lastfob type decimal(18, -25),
+	ALTER COLUMN lastfob SET DEFAULT 0,
+	ALTER COLUMN lastfob SET NOT NULL;
+comment on column public."sku".lastfob is '';
+
+
+-- =============================================
+-- FIELD: lastlandedcost int
+-- =============================================
+-- ADD lastlandedcost
+alter table public."sku" add lastlandedcost int not null default 0;
+comment on column public."sku".lastlandedcost is '';
+
+-- MODIFY lastlandedcost
+alter table public."sku"
+	alter column lastlandedcost type int,
+	ALTER COLUMN lastlandedcost SET DEFAULT 0,
+	ALTER COLUMN lastlandedcost SET NOT NULL;
+comment on column public."sku".lastlandedcost is '';
+
+
+-- =============================================
+-- FIELD: lastcogs int
+-- =============================================
+-- ADD lastcogs
+alter table public."sku" add lastcogs int not null default 0;
+comment on column public."sku".lastcogs is '';
+
+-- MODIFY lastcogs
+alter table public."sku"
+	alter column lastcogs type int,
+	ALTER COLUMN lastcogs SET DEFAULT 0,
+	ALTER COLUMN lastcogs SET NOT NULL;
+comment on column public."sku".lastcogs is '';
+
+
+-- =============================================
+-- FIELD: lastrv bigint
+-- =============================================
+-- ADD lastrv
+alter table public."sku" add lastrv bigint  ;
+comment on column public."sku".lastrv is '';
+
+-- MODIFY lastrv
+alter table public."sku"
+	alter column lastrv type bigint,
+	ALTER COLUMN lastrv DROP DEFAULT,
+	ALTER COLUMN lastrv DROP NOT NULL;
+comment on column public."sku".lastrv is '';
+
+
+-- =============================================
+-- FIELD: lastrvdate date
+-- =============================================
+-- ADD lastrvdate
+alter table public."sku" add lastrvdate date  default now();
+comment on column public."sku".lastrvdate is '';
+
+-- MODIFY lastrvdate
+alter table public."sku"
+	alter column lastrvdate type date,
+	ALTER COLUMN lastrvdate SET DEFAULT now(),
+	ALTER COLUMN lastrvdate DROP NOT NULL;
+comment on column public."sku".lastrvdate is '';
+
+
+-- =============================================
+-- FIELD: issp boolean
+-- =============================================
+-- ADD issp
+alter table public."sku" add issp boolean not null default false;
+comment on column public."sku".issp is '';
+
+-- MODIFY issp
+alter table public."sku"
+	alter column issp type boolean,
+	ALTER COLUMN issp SET DEFAULT false,
+	ALTER COLUMN issp SET NOT NULL;
+comment on column public."sku".issp is '';
+
+
+-- =============================================
+-- FIELD: retailprice decimal(18, 2)
+-- =============================================
+-- ADD retailprice
+alter table public."sku" add retailprice decimal(18, 2) not null default 0;
+comment on column public."sku".retailprice is '';
+
+-- MODIFY retailprice
+alter table public."sku"
+	alter column retailprice type decimal(18, 2),
+	ALTER COLUMN retailprice SET DEFAULT 0,
+	ALTER COLUMN retailprice SET NOT NULL;
+comment on column public."sku".retailprice is '';
 
 
 -- =============================================
@@ -421,6 +556,7 @@ ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$gro_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$ctg_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$uom_id;
 ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$sea_id;
+ALTER TABLE public."sku" DROP CONSTRAINT fk$public$sku$lastrv;
 
 
 -- Add Foreign Key Constraint  
@@ -522,6 +658,17 @@ ALTER TABLE public."sku"
 DROP INDEX IF EXISTS public.idx_fk$public$sku$sea_id;
 CREATE INDEX idx_fk$public$sku$sea_id ON public."sku"(sea_id);	
 
+
+ALTER TABLE public."sku"
+	ADD CONSTRAINT fk$public$sku$lastrv
+	FOREIGN KEY (lastrv)
+	REFERENCES public."mov"(mov_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$sku$lastrv;
+CREATE INDEX idx_fk$public$sku$lastrv ON public."sku"(lastrv);	
+
 	
 
 
@@ -541,5 +688,5 @@ alter table  public."sku"
 	add constraint uq$public$sku$sku_code unique (brand_id, sku_code); 
 
 alter table  public."sku"
-	add constraint uq$public$sku$sku_pair unique (brand_id, product_code, variance_code); 
+	add constraint uq$public$sku$sku_pair unique (brand_id, product_code, variance_code, skuopt_code); 
 

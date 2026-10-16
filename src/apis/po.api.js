@@ -208,6 +208,11 @@ async function po_headerList(self, body) {
 				const { potype_name } = await sqlUtil.lookupdb(db, 'public.potype', 'potype_id', row.potype_id)
 				row.potype_name = potype_name ?? null
 			}
+			// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = public.po.site_id)
+			if (row.site_id !== undefined) {
+				const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', row.site_id)
+				row.site_name = site_name ?? null
+			}
 			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 			if (row.brand_id !== undefined) {
 				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
@@ -217,6 +222,11 @@ async function po_headerList(self, body) {
 			if (row.sea_id !== undefined) {
 				const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', row.sea_id)
 				row.sea_name = sea_name ?? null
+			}
+			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.po.unit_id)
+			if (row.unit_id !== undefined) {
+				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name ?? null
 			}
 			// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
 			if (row.partner_id !== undefined) {
@@ -287,6 +297,11 @@ async function po_headerOpen(self, body) {
 			const { potype_name } = await sqlUtil.lookupdb(db, 'public.potype', 'potype_id', data.potype_id)
 			data.potype_name = potype_name ?? null
 		}
+		// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = public.po.site_id)
+		if (data.site_id !== undefined) {
+			const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', data.site_id)
+			data.site_name = site_name ?? null
+		}
 		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
 		if (data.brand_id !== undefined) {
 			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
@@ -296,6 +311,11 @@ async function po_headerOpen(self, body) {
 		if (data.sea_id !== undefined) {
 			const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', data.sea_id)
 			data.sea_name = sea_name ?? null
+		}
+		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.po.unit_id)
+		if (data.unit_id !== undefined) {
+			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name ?? null
 		}
 		// lookup: partner_name dari field partner_name pada table public.partner dimana (public.partner.partner_id = public.po.partner_id)
 		if (data.partner_id !== undefined) {

@@ -6,6 +6,8 @@
 import Context from './sku-context.mjs'  
 import * as skuHeaderList from './skuHeaderList.mjs' 
 import * as skuHeaderEdit from './skuHeaderEdit.mjs' 
+import * as skuBufferList from './skuBufferList.mjs' 
+import * as skuBufferEdit from './skuBufferEdit.mjs' 
 import * as Extender from './sku-ext.mjs'
 
 const app = Context.app
@@ -49,6 +51,8 @@ export default class extends Module {
 		self.Modules = { 
 			skuHeaderList, 
 			skuHeaderEdit, 
+			skuBufferList, 
+			skuBufferEdit, 
 		}
 
 		try {
@@ -71,6 +75,8 @@ export default class extends Module {
 			await Promise.all([ 
 				skuHeaderList.init(self, args), 
 				skuHeaderEdit.init(self, args), 
+				skuBufferList.init(self, args), 
+				skuBufferEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -82,7 +88,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['skuHeaderEdit']
+			const modNameList = ['skuHeaderEdit', 'skuBufferEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -113,7 +119,7 @@ async function render(self) {
 		Module.renderFooterButtons(footerButtonsContainer)
 	
 		// Setup Icon
-		Crsl.setIconUrl('')
+		Crsl.setIconUrl('public/modules/sku/sku.svg')
 
 
 		// Set listener untuk section carousel

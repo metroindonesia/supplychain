@@ -15,9 +15,13 @@ export default {
 	Sections: { 
 		skuHeaderList: 'skuHeaderList-section', 
 		skuHeaderEdit: 'skuHeaderEdit-section', 
+		skuBufferList: 'skuBufferList-section', 
+		skuBufferEdit: 'skuBufferEdit-section', 
 	},
 	SectionMap: { 
 		'skuHeaderList-section' : 'skuHeaderList', 
 		'skuHeaderEdit-section' : 'skuHeaderEdit', 
+		'skuBufferList-section' : 'skuBufferList', 
+		'skuBufferEdit-section' : 'skuBufferEdit', 
 	}
 }

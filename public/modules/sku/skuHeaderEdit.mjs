@@ -56,8 +56,12 @@ const obj_gro_id = frm.Inputs['skuHeaderEdit-obj_gro_id']
 const obj_ctg_id = frm.Inputs['skuHeaderEdit-obj_ctg_id']
 const obj_uom_id = frm.Inputs['skuHeaderEdit-obj_uom_id']
 const obj_isusedecimal = frm.Inputs['skuHeaderEdit-obj_isusedecimal']
+const obj_minstock = frm.Inputs['skuHeaderEdit-obj_minstock']
 const obj_sea_id = frm.Inputs['skuHeaderEdit-obj_sea_id']
-const obj_iscf = frm.Inputs['skuHeaderEdit-obj_iscf']	
+const obj_iscf = frm.Inputs['skuHeaderEdit-obj_iscf']
+const obj_safetystock = frm.Inputs['skuHeaderEdit-obj_safetystock']
+const obj_issp = frm.Inputs['skuHeaderEdit-obj_issp']
+const obj_retailprice = frm.Inputs['skuHeaderEdit-obj_retailprice']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -875,6 +879,10 @@ async function  frm_locked(self, evt) {
 		btn_edit.disabled = true
 	}
 
+	
+	// trigger lock event di buffer
+	self.Modules.skuBufferList.headerLocked(self)
+	self.Modules.skuBufferEdit.headerLocked(self)
 		
 
 }
@@ -915,6 +923,10 @@ async function  frm_unlocked(self, evt) {
 		fn(self, frm, CurrentState)
 	}
 
+	
+	// trigger unlock event di buffer
+	self.Modules.skuBufferList.headerUnlocked(self)
+	self.Modules.skuBufferEdit.headerUnlocked(self)	
 		
 }
 
@@ -981,6 +993,9 @@ async function btn_new_click(self, evt) {
 
 		// inisiasi data baru
 		const datainit = {
+			minstock: 0,
+			safetystock: 0,
+			retailprice: 0,
 		}
 
 

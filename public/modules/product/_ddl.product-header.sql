@@ -337,7 +337,6 @@ CREATE INDEX idx$public$product$_timestamp ON public.product (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$sea_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$model_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$uom_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$brand_id;
@@ -345,6 +344,7 @@ ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$variancetype_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$skuopt;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$gro_id;
 ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$ctg_id;
+ALTER TABLE public."product" DROP CONSTRAINT fk$public$product$sea_id;
 
 
 -- Add Foreign Key Constraint  

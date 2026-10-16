@@ -805,6 +805,10 @@ async function  frm_locked(self, evt) {
 	// trigger lock event di prop
 	self.Modules.productPropList.headerLocked(self)
 	self.Modules.productPropEdit.headerLocked(self)
+	
+	// trigger lock event di channel
+	self.Modules.productChannelList.headerLocked(self)
+	self.Modules.productChannelEdit.headerLocked(self)
 		
 
 }
@@ -853,6 +857,10 @@ async function  frm_unlocked(self, evt) {
 	// trigger unlock event di prop
 	self.Modules.productPropList.headerUnlocked(self)
 	self.Modules.productPropEdit.headerUnlocked(self)	
+	
+	// trigger unlock event di channel
+	self.Modules.productChannelList.headerUnlocked(self)
+	self.Modules.productChannelEdit.headerUnlocked(self)	
 		
 }
 

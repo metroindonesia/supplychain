@@ -639,6 +639,11 @@ async function mov_itemList(self, body) {
 				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
 				row.uom_name = uom_name ?? null
 			}
+			// lookup: batch_date dari field batch_date pada table public.batch dimana (public.batch.batch_id = public.mov.batch_id)
+			if (row.batch_id !== undefined) {
+				const { batch_date } = await sqlUtil.lookupdb(db, 'public.batch', 'batch_id', row.batch_id)
+				row.batch_date = batch_date ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
@@ -720,6 +725,11 @@ async function mov_itemOpen(self, body) {
 		if (data.uom_id !== undefined) {
 			const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', data.uom_id)
 			data.uom_name = uom_name ?? null
+		}
+		// lookup: batch_date dari field batch_date pada table public.batch dimana (public.batch.batch_id = public.mov.batch_id)
+		if (data.batch_id !== undefined) {
+			const { batch_date } = await sqlUtil.lookupdb(db, 'public.batch', 'batch_id', data.batch_id)
+			data.batch_date = batch_date ?? null
 		}
 		  
 		// lookup data createby

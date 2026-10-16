@@ -128,6 +128,11 @@ CREATE INDEX idx$public$seagro$_timestamp ON public.seagro (_timestamp);
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."seagro"
+	drop constraint uq$public$seagro$seagro_name;
+	
+
 -- Add unique index 
 alter table  public."seagro"
 	add constraint uq$public$seagro$seagro_name unique (seagro_name); 

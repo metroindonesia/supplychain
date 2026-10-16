@@ -136,7 +136,7 @@ async function potype_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `potype_id = \${searchtext} OR potype_name ILIKE '%' || \${searchtext} || '%'`,
+		searchtext: `potype_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {

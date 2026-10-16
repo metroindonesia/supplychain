@@ -20,7 +20,8 @@ const headerSectionName = 'header'
 const headerTableName = 'public.product' 
 const headerPrimaryKey = 'product_id' 
 const varianceTableName = 'public.variance'  
-const propTableName = 'public.productprop'  	
+const propTableName = 'public.productprop'  
+const channelTableName = 'public.productchannel'  	
 
 // api: account
 export default class extends Api {
@@ -61,6 +62,14 @@ export default class extends Api {
 	async propCreate(body) { return await product_propCreate(this, body) }
 	async propDelete(body) { return await product_propDelete(this, body) }
 	async propDeleteRows(body) { return await product_propDeleteRows(this, body) }
+	
+	// channel	
+	async channelList(body) { return await product_channelList(this, body) }
+	async channelOpen(body) { return await product_channelOpen(this, body) }
+	async channelUpdate(body) { return await product_channelUpdate(this, body)}
+	async channelCreate(body) { return await product_channelCreate(this, body) }
+	async channelDelete(body) { return await product_channelDelete(this, body) }
+	async channelDeleteRows(body) { return await product_channelDeleteRows(this, body) }
 			
 }	
 
@@ -564,6 +573,37 @@ async function product_headerDelete(self, body) {
 
 					product_log(self, body, startTime, propTableName, rowprop.productprop_id, 'DELETE', {rowdata: deletedRow})
 					product_log(self, body, startTime, headerTableName, rowprop.product_id, 'DELETE ROW PROP', {productprop_id: rowprop.productprop_id, tablename: propTableName}, `removed: ${rowprop.productprop_id}`)
+
+
+				}	
+			}
+
+			// hapus data channel
+			{
+				const sql = `select * from ${channelTableName} where product_id=\${product_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowchannel of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.channelDeleting === 'function') {
+						// export async function channelDeleting(self, tx, rowchannel, logMetadata) {}
+						await Extender.channelDeleting(self, tx, rowchannel, logMetadata)
+					}
+
+					const param = {productchannel_id: rowchannel.productchannel_id}
+					const cmd = sqlUtil.createDeleteCommand(channelTableName, ['productchannel_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.channelDeleted === 'function') {
+						// export async function channelDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.channelDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					product_log(self, body, startTime, channelTableName, rowchannel.productchannel_id, 'DELETE', {rowdata: deletedRow})
+					product_log(self, body, startTime, headerTableName, rowchannel.product_id, 'DELETE ROW CHANNEL', {productchannel_id: rowchannel.productchannel_id, tablename: channelTableName}, `removed: ${rowchannel.productchannel_id}`)
 
 
 				}	
@@ -1427,6 +1467,423 @@ async function product_propDeleteRows(self, body) {
 		const fn = Extender[fn_name]
 		if (typeof fn === 'function') {
 			// export async function propRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// channel	
+
+async function product_channelList(self, body) {
+	const tablename = channelTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		product_id: `product_id=try_cast_bigint(\${product_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.productchannel_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.channelListCriteria === 'function') {
+			// export async function channelListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.channelListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: channel_name dari field channel_name pada table public.channel dimana (public.channel.channel_id = public.product.channel_id)
+			if (row.channel_id !== undefined) {
+				const { channel_name } = await sqlUtil.lookupdb(db, 'public.channel', 'channel_id', row.channel_id)
+				row.channel_name = channel_name ?? null
+			}
+			 
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function product_channelOpen(self, body) {
+	const tablename = channelTableName
+
+	try {
+		const { id } = body 
+		const criteria = { productchannel_id: id }
+		const searchMap = { productchannel_id: `productchannel_id = \${productchannel_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: channel_name dari field channel_name pada table public.channel dimana (public.channel.channel_id = public.product.channel_id)
+		if (data.channel_id !== undefined) {
+			const { channel_name } = await sqlUtil.lookupdb(db, 'public.channel', 'channel_id', data.channel_id)
+			data.channel_name = channel_name ?? null
+		}
+		  
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function channelOpen(self, db, data) {}
+		if (typeof Extender.channelOpen === 'function') {
+			// export async function channelOpen(self, db, data) {}
+			await Extender.channelOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function product_channelCreate(self, body) {
+	const { source='product', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = channelTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'channel', 
+				doc_id: ''	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.productchannel_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.channelCreating === 'function') {
+				// export async function channelCreating(self, tx, data, seqdata, args) {}
+				await Extender.channelCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.product_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.channelCreated === 'function') {
+				// export async function channelCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.channelCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			product_log(self, body, startTime, tablename, ret.productchannel_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function product_channelUpdate(self, body) {
+	const { source='product', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = channelTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {productchannel_id: data.productchannel_id}
+			const sql = `select * from ${channelTableName} where productchannel_id=\${productchannel_id}`
+			const rowchannel = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.channelUpdating === 'function') {
+				// export async function channelUpdating(self, tx, data) {}
+				await Extender.channelUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['productchannel_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowchannel.product_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.channelUpdated === 'function') {
+				// export async function channelUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.channelUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			product_log(self, body, startTime, tablename, data.productchannel_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function product_channelDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = channelTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {productchannel_id: id}
+			const sql = `select * from ${channelTableName} where productchannel_id=\${productchannel_id}`
+			const rowchannel = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.channelDeleting === 'function') {
+				// export async function channelDeleting(self, tx, rowchannel, logMetadata) {}
+				await Extender.channelDeleting(self, tx, rowchannel, logMetadata)
+			}
+
+			const param = {productchannel_id: rowchannel.productchannel_id}
+			const cmd = sqlUtil.createDeleteCommand(channelTableName, ['productchannel_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowchannel.product_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.channelDeleted === 'function') {
+				// export async function channelDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.channelDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			product_log(self, body, startTime, channelTableName, rowchannel.productchannel_id, 'DELETE', {rowdata: deletedRow})
+			product_log(self, body, startTime, headerTableName, rowchannel.product_id, 'DELETE ROW CHANNEL', {productchannel_id: rowchannel.productchannel_id, tablename: channelTableName}, `removed: ${rowchannel.productchannel_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function product_channelDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = channelTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let product_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {productchannel_id: id}
+				const sql = `select * from ${channelTableName} where productchannel_id=\${productchannel_id}`
+				const rowchannel = await tx.oneOrNone(sql, dataToRemove)
+				product_id = rowchannel.product_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.channelDeleting === 'function') {
+					// async function channelDeleting(self, tx, rowchannel, logMetadata) {}
+					await Extender.channelDeleting(self, tx, rowchannel, logMetadata)
+				}
+
+				const param = {productchannel_id: rowchannel.productchannel_id}
+				const cmd = sqlUtil.createDeleteCommand(channelTableName, ['productchannel_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowchannel.product_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.channelDeleted === 'function') {
+					// export async function channelDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.channelDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				product_log(self, body, startTime, channelTableName, rowchannel.productchannel_id, 'DELETE', {rowdata: deletedRow})
+				product_log(self, body, startTime, headerTableName, rowchannel.product_id, 'DELETE ROW CHANNEL', {productchannel_id: rowchannel.productchannel_id, tablename: channelTableName}, `removed: ${rowchannel.productchannel_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			product_id: product_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'channelRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function channelRowsDeleted(self, db, res) {}
 			await fn(self, db, res)
 		}
 

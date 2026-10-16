@@ -43,9 +43,11 @@ const obj_isapproved = frm.Inputs['poHeaderEdit-obj_isapproved']
 const obj_potype_id = frm.Inputs['poHeaderEdit-obj_potype_id']
 const obj_po_date = frm.Inputs['poHeaderEdit-obj_po_date']
 const obj_po_dateeta = frm.Inputs['poHeaderEdit-obj_po_dateeta']
+const obj_site_id = frm.Inputs['poHeaderEdit-obj_site_id']
 const obj_po_descr = frm.Inputs['poHeaderEdit-obj_po_descr']
 const obj_brand_id = frm.Inputs['poHeaderEdit-obj_brand_id']
 const obj_sea_id = frm.Inputs['poHeaderEdit-obj_sea_id']
+const obj_unit_id = frm.Inputs['poHeaderEdit-obj_unit_id']
 const obj_partner_id = frm.Inputs['poHeaderEdit-obj_partner_id']
 const obj_curr_id = frm.Inputs['poHeaderEdit-obj_curr_id']
 const obj_po_totalfob = frm.Inputs['poHeaderEdit-obj_po_totalfob']
@@ -193,6 +195,63 @@ export async function init(self, args) {
 	})
 	
 	
+	// Combobox: obj_site_id
+	obj_site_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_site_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_site_id_selecting(self, obj_site_id, frm, evt) {}
+			fn_selecting(self, obj_site_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'site/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_site_id_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_site_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.site_id, row.site_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
 	// Combobox: obj_brand_id
 	obj_brand_id.addEventListener('selecting', async (evt)=>{
 		
@@ -293,6 +352,63 @@ export async function init(self, args) {
 
 				for (var row of result.data) {
 					evt.detail.addRow(row.sea_id, row.sea_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_unit_id
+	obj_unit_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_unit_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt) {}
+			fn_selecting(self, obj_unit_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'unit/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.unit_id, row.unit_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -502,8 +618,10 @@ export async function openSelectedData(self, params) {
 	let mask = $fgta5.Modal.createMask()
 	try {
 		obj_potype_id.clear()
+		obj_site_id.clear()
 		obj_brand_id.clear()
 		obj_sea_id.clear()
+		obj_unit_id.clear()
 		obj_partner_id.clear()
 		obj_curr_id.clear()
 		obj_tax_id.clear()

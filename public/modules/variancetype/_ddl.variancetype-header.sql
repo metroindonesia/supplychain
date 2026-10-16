@@ -113,6 +113,11 @@ CREATE INDEX idx$public$variancetype$_timestamp ON public.variancetype (_timesta
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table public."variancetype"
+	drop constraint uq$public$variancetype$variancetype_name;
+	
+
 -- Add unique index 
 alter table  public."variancetype"
 	add constraint uq$public$variancetype$variancetype_name unique (variancetype_name); 

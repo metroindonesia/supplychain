@@ -102,6 +102,21 @@ comment on column public."po".po_dateeta is '';
 
 
 -- =============================================
+-- FIELD: site_id int
+-- =============================================
+-- ADD site_id
+alter table public."po" add site_id int  ;
+comment on column public."po".site_id is '';
+
+-- MODIFY site_id
+alter table public."po"
+	alter column site_id type int,
+	ALTER COLUMN site_id DROP DEFAULT,
+	ALTER COLUMN site_id DROP NOT NULL;
+comment on column public."po".site_id is '';
+
+
+-- =============================================
 -- FIELD: po_descr text
 -- =============================================
 -- ADD po_descr
@@ -144,6 +159,21 @@ alter table public."po"
 	ALTER COLUMN sea_id DROP DEFAULT,
 	ALTER COLUMN sea_id DROP NOT NULL;
 comment on column public."po".sea_id is '';
+
+
+-- =============================================
+-- FIELD: unit_id int
+-- =============================================
+-- ADD unit_id
+alter table public."po" add unit_id int  ;
+comment on column public."po".unit_id is '';
+
+-- MODIFY unit_id
+alter table public."po"
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column public."po".unit_id is '';
 
 
 -- =============================================
@@ -383,8 +413,10 @@ CREATE INDEX idx$public$po$_timestamp ON public.po (_timestamp);
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$potype_id;
+ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$site_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$brand_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$sea_id;
+ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$unit_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$partner_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$curr_id;
 ALTER TABLE public."po" DROP CONSTRAINT fk$public$po$tax_id;
@@ -400,6 +432,17 @@ ALTER TABLE public."po"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$po$potype_id;
 CREATE INDEX idx_fk$public$po$potype_id ON public."po"(potype_id);	
+
+
+ALTER TABLE public."po"
+	ADD CONSTRAINT fk$public$po$site_id
+	FOREIGN KEY (site_id)
+	REFERENCES public."site"(site_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$po$site_id;
+CREATE INDEX idx_fk$public$po$site_id ON public."po"(site_id);	
 
 
 ALTER TABLE public."po"
@@ -422,6 +465,17 @@ ALTER TABLE public."po"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$po$sea_id;
 CREATE INDEX idx_fk$public$po$sea_id ON public."po"(sea_id);	
+
+
+ALTER TABLE public."po"
+	ADD CONSTRAINT fk$public$po$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES public."unit"(unit_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$po$unit_id;
+CREATE INDEX idx_fk$public$po$unit_id ON public."po"(unit_id);	
 
 
 ALTER TABLE public."po"

@@ -18,7 +18,8 @@ import * as Extender from './extenders/sku.apiext.js'
 const moduleName = 'sku'
 const headerSectionName = 'header'
 const headerTableName = 'public.sku' 
-const headerPrimaryKey = 'sku_id' 	
+const headerPrimaryKey = 'sku_id' 
+const bufferTableName = 'public.skubuffer'  	
 
 // api: account
 export default class extends Api {
@@ -43,6 +44,14 @@ export default class extends Api {
 	async headerCreate(body) { return await sku_headerCreate(this, body)}
 	async headerDelete(body) { return await sku_headerDelete(this, body) }
 
+	
+	// buffer	
+	async bufferList(body) { return await sku_bufferList(this, body) }
+	async bufferOpen(body) { return await sku_bufferOpen(this, body) }
+	async bufferUpdate(body) { return await sku_bufferUpdate(this, body)}
+	async bufferCreate(body) { return await sku_bufferCreate(this, body) }
+	async bufferDelete(body) { return await sku_bufferDelete(this, body) }
+	async bufferDeleteRows(body) { return await sku_bufferDeleteRows(this, body) }
 			
 }	
 
@@ -233,6 +242,11 @@ async function sku_headerList(self, body) {
 				const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', row.sea_id)
 				row.sea_name = sea_name ?? null
 			}
+			// lookup: lastrv_doc dari field mov_doc pada table public.mov dimana (public.mov.mov_id = public.sku.lastrv)
+			if (row.lastrv !== undefined) {
+				const { mov_doc } = await sqlUtil.lookupdb(db, 'public.mov', 'mov_id', row.lastrv)
+				row.lastrv_doc = mov_doc ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -326,6 +340,11 @@ async function sku_headerOpen(self, body) {
 		if (data.sea_id !== undefined) {
 			const { sea_name } = await sqlUtil.lookupdb(db, 'public.sea', 'sea_id', data.sea_id)
 			data.sea_name = sea_name ?? null
+		}
+		// lookup: lastrv_doc dari field mov_doc pada table public.mov dimana (public.mov.mov_id = public.sku.lastrv)
+		if (data.lastrv !== undefined) {
+			const { mov_doc } = await sqlUtil.lookupdb(db, 'public.mov', 'mov_id', data.lastrv)
+			data.lastrv_doc = mov_doc ?? null
 		}
 		 
 		// lookup data createby
@@ -502,6 +521,39 @@ async function sku_headerDelete(self, body) {
 			}
 
 			
+			// hapus data buffer
+			{
+				const sql = `select * from ${bufferTableName} where sku_id=\${sku_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowbuffer of rows) {
+					
+					const logMetadata = {}
+					
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.bufferDeleting === 'function') {
+						// export async function bufferDeleting(self, tx, rowbuffer, logMetadata) {}
+						await Extender.bufferDeleting(self, tx, rowbuffer, logMetadata)
+					}
+
+					const param = {skubuffer_id: rowbuffer.skubuffer_id}
+					const cmd = sqlUtil.createDeleteCommand(bufferTableName, ['skubuffer_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.bufferDeleted === 'function') {
+						// export async function bufferDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.bufferDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					sku_log(self, body, startTime, bufferTableName, rowbuffer.skubuffer_id, 'DELETE', {rowdata: deletedRow})
+					sku_log(self, body, startTime, headerTableName, rowbuffer.sku_id, 'DELETE ROW BUFFER', {skubuffer_id: rowbuffer.skubuffer_id, tablename: bufferTableName}, `removed: ${rowbuffer.skubuffer_id}`)
+
+
+				}	
+			}
+
+			
+			
 
 			// hapus data header
 			const cmd = sqlUtil.createDeleteCommand(tablename, ['sku_id'])
@@ -528,5 +580,422 @@ async function sku_headerDelete(self, body) {
 	}
 }
 
+
+
+// buffer	
+
+async function sku_bufferList(self, body) {
+	const tablename = bufferTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		sku_id: `sku_id=try_cast_bigint(\${sku_id}, 0)`,
+	};
+
+
+	if (Object.keys(sort).length === 0) {
+		sort.skubuffer_id = 'asc'
+	}
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria, tablename }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.bufferListCriteria === 'function') {
+			// export async function bufferListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.bufferListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: args.tablename, 
+			columns, 
+			whereClause, 
+			sort: args.sqlSort ?? sort, 
+			limit:max_rows+1, 
+			offset, 
+			queryParams
+		})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = public.sku.site_id)
+			if (row.site_id !== undefined) {
+				const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', row.site_id)
+				row.site_name = site_name ?? null
+			}
+			 
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+
+		const listData = {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+		if (typeof Extender.detilList === 'function') {
+			// export async function detilList(self, listData, args) {}
+			await Extender.detilList(self, listData, args)
+		}
+
+		return listData
+	} catch (err) {
+		throw err
+	}
+}
+
+async function sku_bufferOpen(self, body) {
+	const tablename = bufferTableName
+
+	try {
+		const { id } = body 
+		const criteria = { skubuffer_id: id }
+		const searchMap = { skubuffer_id: `skubuffer_id = \${skubuffer_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: site_name dari field site_name pada table public.site dimana (public.site.site_id = public.sku.site_id)
+		if (data.site_id !== undefined) {
+			const { site_name } = await sqlUtil.lookupdb(db, 'public.site', 'site_id', data.site_id)
+			data.site_name = site_name ?? null
+		}
+		  
+		// lookup data createby
+		if (data._createby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		if (data._modifyby !== undefined) {
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+
+		// pasang extender untuk olah data
+		// export async function bufferOpen(self, db, data) {}
+		if (typeof Extender.bufferOpen === 'function') {
+			// export async function bufferOpen(self, db, data) {}
+			await Extender.bufferOpen(self, db, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function sku_bufferCreate(self, body) {
+	const { source='sku', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = bufferTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._createby = user_id
+		data._createdate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'buffer', 
+				doc_id: ''	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.doc_id)
+			data.skubuffer_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.bufferCreating === 'function') {
+				// export async function bufferCreating(self, tx, data, seqdata, args) {}
+				await Extender.bufferCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: data.sku_id
+			})
+
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.bufferCreated === 'function') {
+				// export async function bufferCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.bufferCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			sku_log(self, body, startTime, tablename, ret.skubuffer_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function sku_bufferUpdate(self, body) {
+	const { source='sku', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = bufferTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+		const data_timestamp = (new Date()).toISOString()
+
+		data._modifyby = user_id
+		data._modifydate = data_timestamp
+		data._timestamp = data_timestamp
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToUpdate = {skubuffer_id: data.skubuffer_id}
+			const sql = `select * from ${bufferTableName} where skubuffer_id=\${skubuffer_id}`
+			const rowbuffer = await tx.oneOrNone(sql, dataToUpdate)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.bufferUpdating === 'function') {
+				// export async function bufferUpdating(self, tx, data) {}
+				await Extender.bufferUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['skubuffer_id'])
+			const ret = await cmd.execute(data)
+			
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowbuffer.sku_id
+			})
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.bufferUpdated === 'function') {
+				// export async function bufferUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.bufferUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			sku_log(self, body, startTime, tablename, data.skubuffer_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function sku_bufferDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = bufferTableName
+
+	try {
+
+		const data_timestamp = (new Date()).toISOString()
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {skubuffer_id: id}
+			const sql = `select * from ${bufferTableName} where skubuffer_id=\${skubuffer_id}`
+			const rowbuffer = await tx.oneOrNone(sql, dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.bufferDeleting === 'function') {
+				// export async function bufferDeleting(self, tx, rowbuffer, logMetadata) {}
+				await Extender.bufferDeleting(self, tx, rowbuffer, logMetadata)
+			}
+
+			const param = {skubuffer_id: rowbuffer.skubuffer_id}
+			const cmd = sqlUtil.createDeleteCommand(bufferTableName, ['skubuffer_id'])
+			const deletedRow = await cmd.execute(param)
+
+
+			// update timestamp pada header
+			tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+				_timestamp: data_timestamp,
+				pk: rowbuffer.sku_id
+			})
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.bufferDeleted === 'function') {
+				// export async function bufferDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.bufferDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			sku_log(self, body, startTime, bufferTableName, rowbuffer.skubuffer_id, 'DELETE', {rowdata: deletedRow})
+			sku_log(self, body, startTime, headerTableName, rowbuffer.sku_id, 'DELETE ROW BUFFER', {skubuffer_id: rowbuffer.skubuffer_id, tablename: bufferTableName}, `removed: ${rowbuffer.skubuffer_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function sku_bufferDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = bufferTableName
+
+
+	try {
+
+
+		const data_timestamp = (new Date()).toISOString()
+
+		let sku_id
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {skubuffer_id: id}
+				const sql = `select * from ${bufferTableName} where skubuffer_id=\${skubuffer_id}`
+				const rowbuffer = await tx.oneOrNone(sql, dataToRemove)
+				sku_id = rowbuffer.sku_id
+
+				const logMetadata = {}
+
+				
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.bufferDeleting === 'function') {
+					// async function bufferDeleting(self, tx, rowbuffer, logMetadata) {}
+					await Extender.bufferDeleting(self, tx, rowbuffer, logMetadata)
+				}
+
+				const param = {skubuffer_id: rowbuffer.skubuffer_id}
+				const cmd = sqlUtil.createDeleteCommand(bufferTableName, ['skubuffer_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// update timestamp pada header
+				tx.none(`update ${headerTableName} set _timestamp=$[_timestamp] where ${headerPrimaryKey}=$[pk]`, {
+					_timestamp: data_timestamp,
+					pk: rowbuffer.sku_id
+				})
+				
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.bufferDeleted === 'function') {
+					// export async function bufferDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.bufferDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				sku_log(self, body, startTime, bufferTableName, rowbuffer.skubuffer_id, 'DELETE', {rowdata: deletedRow})
+				sku_log(self, body, startTime, headerTableName, rowbuffer.sku_id, 'DELETE ROW BUFFER', {skubuffer_id: rowbuffer.skubuffer_id, tablename: bufferTableName}, `removed: ${rowbuffer.skubuffer_id}`)
+			}
+		})
+		
+
+		const res = {
+			deleted: true,
+			sku_id: sku_id,
+			message: ''
+		}
+
+		// apabila ada keperluan update info / pemrosesan data setelah hapus multirow, lakukan di extender
+		const fn_name = 'bufferRowsDeleted'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			// export async function bufferRowsDeleted(self, db, res) {}
+			await fn(self, db, res)
+		}
+
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
 
 	

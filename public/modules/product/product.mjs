@@ -10,6 +10,8 @@ import * as productVarianceList from './productVarianceList.mjs'
 import * as productVarianceEdit from './productVarianceEdit.mjs' 
 import * as productPropList from './productPropList.mjs' 
 import * as productPropEdit from './productPropEdit.mjs' 
+import * as productChannelList from './productChannelList.mjs' 
+import * as productChannelEdit from './productChannelEdit.mjs' 
 import * as Extender from './product-ext.mjs'
 
 const app = Context.app
@@ -57,6 +59,8 @@ export default class extends Module {
 			productVarianceEdit, 
 			productPropList, 
 			productPropEdit, 
+			productChannelList, 
+			productChannelEdit, 
 		}
 
 		try {
@@ -83,6 +87,8 @@ export default class extends Module {
 				productVarianceEdit.init(self, args), 
 				productPropList.init(self, args), 
 				productPropEdit.init(self, args), 
+				productChannelList.init(self, args), 
+				productChannelEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -94,7 +100,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['productHeaderEdit', 'productVarianceEdit', 'productPropEdit']
+			const modNameList = ['productHeaderEdit', 'productVarianceEdit', 'productPropEdit', 'productChannelEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -125,7 +131,7 @@ async function render(self) {
 		Module.renderFooterButtons(footerButtonsContainer)
 	
 		// Setup Icon
-		Crsl.setIconUrl('')
+		Crsl.setIconUrl('public/modules/product/product.svg')
 
 
 		// Set listener untuk section carousel

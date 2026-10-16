@@ -1,0 +1,19 @@
+#movrvHeaderEdit-obj_mov_version-container .fgta5-entry-input-wrapper,
+#movrvHeaderEdit-obj_mov_version {
+	width: 50px;
+}
+
+
+#movrvHeaderEdit-obj_commit-container {
+	margin-left: 35px;
+}
+
+
+#movrvHeaderEdit-obj_curr_id-container {
+	margin-left: 35px;
+}
+
+#movrvHeaderEdit-obj_curr_id-container .fgta5-entry-input-wrapper,
+#movrvHeaderEdit-obj_curr_id-display {
+	width: 80px;
+}

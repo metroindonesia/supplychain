@@ -125,7 +125,7 @@ async function render(self) {
 		Module.renderFooterButtons(footerButtonsContainer)
 	
 		// Setup Icon
-		Crsl.setIconUrl('')
+		Crsl.setIconUrl('public/modules/bill/bill.svg')
 
 
 		// Set listener untuk section carousel
