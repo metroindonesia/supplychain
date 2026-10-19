@@ -96,6 +96,12 @@
 		
 	}
 	
+	#poItemEdit-obj_isedtract-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
 	#poItemEdit-obj_po_id-container {
 		grid-row: 1;
 		grid-column: 1 / span 2;

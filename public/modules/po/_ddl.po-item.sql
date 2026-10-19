@@ -192,6 +192,51 @@ comment on column public."poitem".poitem_subtotal is '';
 
 
 -- =============================================
+-- FIELD: isedtrack boolean
+-- =============================================
+-- ADD isedtrack
+alter table public."poitem" add isedtrack boolean not null default false;
+comment on column public."poitem".isedtrack is '';
+
+-- MODIFY isedtrack
+alter table public."poitem"
+	alter column isedtrack type boolean,
+	ALTER COLUMN isedtrack SET DEFAULT false,
+	ALTER COLUMN isedtrack SET NOT NULL;
+comment on column public."poitem".isedtrack is '';
+
+
+-- =============================================
+-- FIELD: brand_id int
+-- =============================================
+-- ADD brand_id
+alter table public."poitem" add brand_id int  ;
+comment on column public."poitem".brand_id is '';
+
+-- MODIFY brand_id
+alter table public."poitem"
+	alter column brand_id type int,
+	ALTER COLUMN brand_id DROP DEFAULT,
+	ALTER COLUMN brand_id DROP NOT NULL;
+comment on column public."poitem".brand_id is '';
+
+
+-- =============================================
+-- FIELD: unit_id int
+-- =============================================
+-- ADD unit_id
+alter table public."poitem" add unit_id int  ;
+comment on column public."poitem".unit_id is '';
+
+-- MODIFY unit_id
+alter table public."poitem"
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column public."poitem".unit_id is '';
+
+
+-- =============================================
 -- FIELD: po_id bigint
 -- =============================================
 -- ADD po_id
@@ -341,6 +386,28 @@ ALTER TABLE public."poitem"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS public.idx_fk$public$poitem$uom_id;
 CREATE INDEX idx_fk$public$poitem$uom_id ON public."poitem"(uom_id);	
+
+
+ALTER TABLE public."poitem"
+	ADD CONSTRAINT fk$public$poitem$brand_id
+	FOREIGN KEY (brand_id)
+	REFERENCES public."brand"(brand_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$poitem$brand_id;
+CREATE INDEX idx_fk$public$poitem$brand_id ON public."poitem"(brand_id);	
+
+
+ALTER TABLE public."poitem"
+	ADD CONSTRAINT fk$public$poitem$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES public."unit"(unit_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$poitem$unit_id;
+CREATE INDEX idx_fk$public$poitem$unit_id ON public."poitem"(unit_id);	
 
 	
 

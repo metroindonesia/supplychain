@@ -624,40 +624,40 @@ async function movrv_itemList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
-			if (row.brand_id !== undefined) {
-				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
-				row.brand_name = brand_name ?? null
+			// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
+			if (row.poitem_id !== undefined) {
+				const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', row.poitem_id)
+				row.sku_name = sku_name ?? null
 			}
 			// lookup: sku_code dari field sku_code pada table public.sku dimana (public.sku.sku_id = public.mov.sku_id)
 			if (row.sku_id !== undefined) {
 				const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', row.sku_id)
 				row.sku_code = sku_code ?? null
 			}
-			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
-			if (row.curr_id !== undefined) {
-				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
-				row.curr_name = curr_name ?? null
+			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
+			if (row.brand_id !== undefined) {
+				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
+				row.brand_name = brand_name ?? null
 			}
-			// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
-			if (row.poitem_id !== undefined) {
-				const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', row.poitem_id)
-				row.sku_name = sku_name ?? null
+			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.mov.unit_id)
+			if (row.unit_id !== undefined) {
+				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name ?? null
 			}
 			// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.mov.uom_id)
 			if (row.uom_id !== undefined) {
 				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
 				row.uom_name = uom_name ?? null
 			}
+			// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
+			if (row.curr_id !== undefined) {
+				const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name ?? null
+			}
 			// lookup: batch_date dari field batch_date pada table public.batch dimana (public.batch.batch_id = public.mov.batch_id)
 			if (row.batch_id !== undefined) {
 				const { batch_date } = await sqlUtil.lookupdb(db, 'public.batch', 'batch_id', row.batch_id)
 				row.batch_date = batch_date ?? null
-			}
-			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.mov.unit_id)
-			if (row.unit_id !== undefined) {
-				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
-				row.unit_name = unit_name ?? null
 			}
 			 
 			// pasang extender di sini
@@ -716,40 +716,40 @@ async function movrv_itemOpen(self, body) {
 		}	
 
 
-		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
-		if (data.brand_id !== undefined) {
-			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
-			data.brand_name = brand_name ?? null
+		// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
+		if (data.poitem_id !== undefined) {
+			const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', data.poitem_id)
+			data.sku_name = sku_name ?? null
 		}
 		// lookup: sku_code dari field sku_code pada table public.sku dimana (public.sku.sku_id = public.mov.sku_id)
 		if (data.sku_id !== undefined) {
 			const { sku_code } = await sqlUtil.lookupdb(db, 'public.sku', 'sku_id', data.sku_id)
 			data.sku_code = sku_code ?? null
 		}
-		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
-		if (data.curr_id !== undefined) {
-			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
-			data.curr_name = curr_name ?? null
+		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.mov.brand_id)
+		if (data.brand_id !== undefined) {
+			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
+			data.brand_name = brand_name ?? null
 		}
-		// lookup: sku_name dari field sku_name pada table public.poitem dimana (public.poitem.poitem_id = public.mov.poitem_id)
-		if (data.poitem_id !== undefined) {
-			const { sku_name } = await sqlUtil.lookupdb(db, 'public.poitem', 'poitem_id', data.poitem_id)
-			data.sku_name = sku_name ?? null
+		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.mov.unit_id)
+		if (data.unit_id !== undefined) {
+			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name ?? null
 		}
 		// lookup: uom_name dari field uom_name pada table public.uom dimana (public.uom.uom_id = public.mov.uom_id)
 		if (data.uom_id !== undefined) {
 			const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', data.uom_id)
 			data.uom_name = uom_name ?? null
 		}
+		// lookup: curr_name dari field curr_name pada table public.curr dimana (public.curr.curr_id = public.mov.curr_id)
+		if (data.curr_id !== undefined) {
+			const { curr_name } = await sqlUtil.lookupdb(db, 'public.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name ?? null
+		}
 		// lookup: batch_date dari field batch_date pada table public.batch dimana (public.batch.batch_id = public.mov.batch_id)
 		if (data.batch_id !== undefined) {
 			const { batch_date } = await sqlUtil.lookupdb(db, 'public.batch', 'batch_id', data.batch_id)
 			data.batch_date = batch_date ?? null
-		}
-		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.mov.unit_id)
-		if (data.unit_id !== undefined) {
-			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
-			data.unit_name = unit_name ?? null
 		}
 		  
 		// lookup data createby

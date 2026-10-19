@@ -357,15 +357,15 @@ comment on column public."sku".safetystock is '';
 
 
 -- =============================================
--- FIELD: lastfob decimal(18, -25)
+-- FIELD: lastfob decimal(18, 2)
 -- =============================================
 -- ADD lastfob
-alter table public."sku" add lastfob decimal(18, -25) not null default 0;
+alter table public."sku" add lastfob decimal(18, 2) not null default 0;
 comment on column public."sku".lastfob is '';
 
 -- MODIFY lastfob
 alter table public."sku"
-	alter column lastfob type decimal(18, -25),
+	alter column lastfob type decimal(18, 2),
 	ALTER COLUMN lastfob SET DEFAULT 0,
 	ALTER COLUMN lastfob SET NOT NULL;
 comment on column public."sku".lastfob is '';
@@ -447,18 +447,63 @@ comment on column public."sku".issp is '';
 
 
 -- =============================================
--- FIELD: retailprice decimal(18, 2)
+-- FIELD: baseprice decimal(18, 2)
 -- =============================================
--- ADD retailprice
-alter table public."sku" add retailprice decimal(18, 2) not null default 0;
-comment on column public."sku".retailprice is '';
+-- ADD baseprice
+alter table public."sku" add baseprice decimal(18, 2) not null default 0;
+comment on column public."sku".baseprice is '';
 
--- MODIFY retailprice
+-- MODIFY baseprice
 alter table public."sku"
-	alter column retailprice type decimal(18, 2),
-	ALTER COLUMN retailprice SET DEFAULT 0,
-	ALTER COLUMN retailprice SET NOT NULL;
-comment on column public."sku".retailprice is '';
+	alter column baseprice type decimal(18, 2),
+	ALTER COLUMN baseprice SET DEFAULT 0,
+	ALTER COLUMN baseprice SET NOT NULL;
+comment on column public."sku".baseprice is '';
+
+
+-- =============================================
+-- FIELD: discrate decimal(5, 2)
+-- =============================================
+-- ADD discrate
+alter table public."sku" add discrate decimal(5, 2) not null default 0;
+comment on column public."sku".discrate is '';
+
+-- MODIFY discrate
+alter table public."sku"
+	alter column discrate type decimal(5, 2),
+	ALTER COLUMN discrate SET DEFAULT 0,
+	ALTER COLUMN discrate SET NOT NULL;
+comment on column public."sku".discrate is '';
+
+
+-- =============================================
+-- FIELD: discvalue decimal(5, 2)
+-- =============================================
+-- ADD discvalue
+alter table public."sku" add discvalue decimal(5, 2) not null default 0;
+comment on column public."sku".discvalue is '';
+
+-- MODIFY discvalue
+alter table public."sku"
+	alter column discvalue type decimal(5, 2),
+	ALTER COLUMN discvalue SET DEFAULT 0,
+	ALTER COLUMN discvalue SET NOT NULL;
+comment on column public."sku".discvalue is '';
+
+
+-- =============================================
+-- FIELD: sellprice decimal(18, 2)
+-- =============================================
+-- ADD sellprice
+alter table public."sku" add sellprice decimal(18, 2) not null default 0;
+comment on column public."sku".sellprice is '';
+
+-- MODIFY sellprice
+alter table public."sku"
+	alter column sellprice type decimal(18, 2),
+	ALTER COLUMN sellprice SET DEFAULT 0,
+	ALTER COLUMN sellprice SET NOT NULL;
+comment on column public."sku".sellprice is '';
 
 
 -- =============================================

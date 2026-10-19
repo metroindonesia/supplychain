@@ -49,6 +49,7 @@ const obj_poitem_fob = frm.Inputs['poItemEdit-obj_poitem_fob']
 const obj_curr_id = frm.Inputs['poItemEdit-obj_curr_id']
 const obj_uom_id = frm.Inputs['poItemEdit-obj_uom_id']
 const obj_poitem_subtotal = frm.Inputs['poItemEdit-obj_poitem_subtotal']
+const obj_isedtract = frm.Inputs['poItemEdit-obj_isedtract']
 const obj_po_id = frm.Inputs['poItemEdit-obj_po_id']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')

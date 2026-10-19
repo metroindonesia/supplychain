@@ -162,13 +162,43 @@
 		
 	}
 	
+	#skuHeaderEdit-obj_lastcogs-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#skuHeaderEdit-obj_lastrvdate-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
 	#skuHeaderEdit-obj_issp-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;
 		
 	}
 	
-	#skuHeaderEdit-obj_retailprice-container {
+	#skuHeaderEdit-obj_baseprice-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#skuHeaderEdit-obj_discrate-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#skuHeaderEdit-obj_discvalue-container {
+		grid-row: auto;
+		grid-column: 1 / span 2;
+		
+	}
+	
+	#skuHeaderEdit-obj_sellprice-container {
 		grid-row: auto;
 		grid-column: 1 / span 2;
 		

@@ -60,8 +60,13 @@ const obj_minstock = frm.Inputs['skuHeaderEdit-obj_minstock']
 const obj_sea_id = frm.Inputs['skuHeaderEdit-obj_sea_id']
 const obj_iscf = frm.Inputs['skuHeaderEdit-obj_iscf']
 const obj_safetystock = frm.Inputs['skuHeaderEdit-obj_safetystock']
+const obj_lastcogs = frm.Inputs['skuHeaderEdit-obj_lastcogs']
+const obj_lastrvdate = frm.Inputs['skuHeaderEdit-obj_lastrvdate']
 const obj_issp = frm.Inputs['skuHeaderEdit-obj_issp']
-const obj_retailprice = frm.Inputs['skuHeaderEdit-obj_retailprice']	
+const obj_baseprice = frm.Inputs['skuHeaderEdit-obj_baseprice']
+const obj_discrate = frm.Inputs['skuHeaderEdit-obj_discrate']
+const obj_discvalue = frm.Inputs['skuHeaderEdit-obj_discvalue']
+const obj_sellprice = frm.Inputs['skuHeaderEdit-obj_sellprice']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -995,7 +1000,12 @@ async function btn_new_click(self, evt) {
 		const datainit = {
 			minstock: 0,
 			safetystock: 0,
-			retailprice: 0,
+			lastcogs: 0,
+			lastrvdate: new Date(),
+			baseprice: 0,
+			discrate: 0,
+			discvalue: 0,
+			sellprice: 0,
 		}
 
 

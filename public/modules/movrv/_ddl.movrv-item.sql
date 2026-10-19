@@ -12,18 +12,18 @@ comment on table public."movitem" is '';
 
 
 -- =============================================
--- FIELD: brand_id int
+-- FIELD: poitem_id bigint
 -- =============================================
--- ADD brand_id
-alter table public."movitem" add brand_id int  ;
-comment on column public."movitem".brand_id is '';
+-- ADD poitem_id
+alter table public."movitem" add poitem_id bigint  ;
+comment on column public."movitem".poitem_id is '';
 
--- MODIFY brand_id
+-- MODIFY poitem_id
 alter table public."movitem"
-	alter column brand_id type int,
-	ALTER COLUMN brand_id DROP DEFAULT,
-	ALTER COLUMN brand_id DROP NOT NULL;
-comment on column public."movitem".brand_id is '';
+	alter column poitem_id type bigint,
+	ALTER COLUMN poitem_id DROP DEFAULT,
+	ALTER COLUMN poitem_id DROP NOT NULL;
+comment on column public."movitem".poitem_id is '';
 
 
 -- =============================================
@@ -39,6 +39,66 @@ alter table public."movitem"
 	ALTER COLUMN sku_id DROP DEFAULT,
 	ALTER COLUMN sku_id DROP NOT NULL;
 comment on column public."movitem".sku_id is '';
+
+
+-- =============================================
+-- FIELD: isedtrack boolean
+-- =============================================
+-- ADD isedtrack
+alter table public."movitem" add isedtrack boolean not null default false;
+comment on column public."movitem".isedtrack is '';
+
+-- MODIFY isedtrack
+alter table public."movitem"
+	alter column isedtrack type boolean,
+	ALTER COLUMN isedtrack SET DEFAULT false,
+	ALTER COLUMN isedtrack SET NOT NULL;
+comment on column public."movitem".isedtrack is '';
+
+
+-- =============================================
+-- FIELD: isusedecimal boolean
+-- =============================================
+-- ADD isusedecimal
+alter table public."movitem" add isusedecimal boolean not null default false;
+comment on column public."movitem".isusedecimal is '';
+
+-- MODIFY isusedecimal
+alter table public."movitem"
+	alter column isusedecimal type boolean,
+	ALTER COLUMN isusedecimal SET DEFAULT false,
+	ALTER COLUMN isusedecimal SET NOT NULL;
+comment on column public."movitem".isusedecimal is '';
+
+
+-- =============================================
+-- FIELD: brand_id int
+-- =============================================
+-- ADD brand_id
+alter table public."movitem" add brand_id int  ;
+comment on column public."movitem".brand_id is '';
+
+-- MODIFY brand_id
+alter table public."movitem"
+	alter column brand_id type int,
+	ALTER COLUMN brand_id DROP DEFAULT,
+	ALTER COLUMN brand_id DROP NOT NULL;
+comment on column public."movitem".brand_id is '';
+
+
+-- =============================================
+-- FIELD: unit_id int
+-- =============================================
+-- ADD unit_id
+alter table public."movitem" add unit_id int  ;
+comment on column public."movitem".unit_id is '';
+
+-- MODIFY unit_id
+alter table public."movitem"
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column public."movitem".unit_id is '';
 
 
 -- =============================================
@@ -102,6 +162,51 @@ comment on column public."movitem".sku_name is '';
 
 
 -- =============================================
+-- FIELD: movitem_qtyrecv decimal(9, 2)
+-- =============================================
+-- ADD movitem_qtyrecv
+alter table public."movitem" add movitem_qtyrecv decimal(9, 2) not null default 0;
+comment on column public."movitem".movitem_qtyrecv is '';
+
+-- MODIFY movitem_qtyrecv
+alter table public."movitem"
+	alter column movitem_qtyrecv type decimal(9, 2),
+	ALTER COLUMN movitem_qtyrecv SET DEFAULT 0,
+	ALTER COLUMN movitem_qtyrecv SET NOT NULL;
+comment on column public."movitem".movitem_qtyrecv is '';
+
+
+-- =============================================
+-- FIELD: uom_id smallint
+-- =============================================
+-- ADD uom_id
+alter table public."movitem" add uom_id smallint  ;
+comment on column public."movitem".uom_id is '';
+
+-- MODIFY uom_id
+alter table public."movitem"
+	alter column uom_id type smallint,
+	ALTER COLUMN uom_id DROP DEFAULT,
+	ALTER COLUMN uom_id DROP NOT NULL;
+comment on column public."movitem".uom_id is '';
+
+
+-- =============================================
+-- FIELD: expdate date
+-- =============================================
+-- ADD expdate
+alter table public."movitem" add expdate date  default now();
+comment on column public."movitem".expdate is '';
+
+-- MODIFY expdate
+alter table public."movitem"
+	alter column expdate type date,
+	ALTER COLUMN expdate SET DEFAULT now(),
+	ALTER COLUMN expdate DROP NOT NULL;
+comment on column public."movitem".expdate is '';
+
+
+-- =============================================
 -- FIELD: movitem_qty decimal(9, 2)
 -- =============================================
 -- ADD movitem_qty
@@ -129,21 +234,6 @@ alter table public."movitem"
 	ALTER COLUMN movitem_qtysent SET DEFAULT 0,
 	ALTER COLUMN movitem_qtysent SET NOT NULL;
 comment on column public."movitem".movitem_qtysent is '';
-
-
--- =============================================
--- FIELD: movitem_qtyrecv decimal(9, 2)
--- =============================================
--- ADD movitem_qtyrecv
-alter table public."movitem" add movitem_qtyrecv decimal(9, 2) not null default 0;
-comment on column public."movitem".movitem_qtyrecv is '';
-
--- MODIFY movitem_qtyrecv
-alter table public."movitem"
-	alter column movitem_qtyrecv type decimal(9, 2),
-	ALTER COLUMN movitem_qtyrecv SET DEFAULT 0,
-	ALTER COLUMN movitem_qtyrecv SET NOT NULL;
-comment on column public."movitem".movitem_qtyrecv is '';
 
 
 -- =============================================
@@ -252,51 +342,6 @@ comment on column public."movitem".movitem_value is '';
 
 
 -- =============================================
--- FIELD: poitem_id bigint
--- =============================================
--- ADD poitem_id
-alter table public."movitem" add poitem_id bigint  ;
-comment on column public."movitem".poitem_id is '';
-
--- MODIFY poitem_id
-alter table public."movitem"
-	alter column poitem_id type bigint,
-	ALTER COLUMN poitem_id DROP DEFAULT,
-	ALTER COLUMN poitem_id DROP NOT NULL;
-comment on column public."movitem".poitem_id is '';
-
-
--- =============================================
--- FIELD: uom_id smallint
--- =============================================
--- ADD uom_id
-alter table public."movitem" add uom_id smallint  ;
-comment on column public."movitem".uom_id is '';
-
--- MODIFY uom_id
-alter table public."movitem"
-	alter column uom_id type smallint,
-	ALTER COLUMN uom_id DROP DEFAULT,
-	ALTER COLUMN uom_id DROP NOT NULL;
-comment on column public."movitem".uom_id is '';
-
-
--- =============================================
--- FIELD: expdate date
--- =============================================
--- ADD expdate
-alter table public."movitem" add expdate date  default now();
-comment on column public."movitem".expdate is '';
-
--- MODIFY expdate
-alter table public."movitem"
-	alter column expdate type date,
-	ALTER COLUMN expdate SET DEFAULT now(),
-	ALTER COLUMN expdate DROP NOT NULL;
-comment on column public."movitem".expdate is '';
-
-
--- =============================================
 -- FIELD: batch_id int
 -- =============================================
 -- ADD batch_id
@@ -309,21 +354,6 @@ alter table public."movitem"
 	ALTER COLUMN batch_id DROP DEFAULT,
 	ALTER COLUMN batch_id DROP NOT NULL;
 comment on column public."movitem".batch_id is '';
-
-
--- =============================================
--- FIELD: unit_id int
--- =============================================
--- ADD unit_id
-alter table public."movitem" add unit_id int  ;
-comment on column public."movitem".unit_id is '';
-
--- MODIFY unit_id
-alter table public."movitem"
-	alter column unit_id type int,
-	ALTER COLUMN unit_id DROP DEFAULT,
-	ALTER COLUMN unit_id DROP NOT NULL;
-comment on column public."movitem".unit_id is '';
 
 
 -- =============================================
@@ -427,25 +457,25 @@ CREATE INDEX idx$public$movitem$_timestamp ON public.movitem (_timestamp);
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$brand_id;
-ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$sku_id;
-ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$curr_id;
 ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$poitem_id;
-ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$uom_id;
-ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$batch_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$sku_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$brand_id;
 ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$unit_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$uom_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$curr_id;
+ALTER TABLE public."movitem" DROP CONSTRAINT fk$public$movitem$batch_id;
 
 
 -- Add Foreign Key Constraint  
 ALTER TABLE public."movitem"
-	ADD CONSTRAINT fk$public$movitem$brand_id
-	FOREIGN KEY (brand_id)
-	REFERENCES public."brand"(brand_id);
+	ADD CONSTRAINT fk$public$movitem$poitem_id
+	FOREIGN KEY (poitem_id)
+	REFERENCES public."poitem"(poitem_id);
 
 
 -- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$movitem$brand_id;
-CREATE INDEX idx_fk$public$movitem$brand_id ON public."movitem"(brand_id);	
+DROP INDEX IF EXISTS public.idx_fk$public$movitem$poitem_id;
+CREATE INDEX idx_fk$public$movitem$poitem_id ON public."movitem"(poitem_id);	
 
 
 ALTER TABLE public."movitem"
@@ -460,25 +490,25 @@ CREATE INDEX idx_fk$public$movitem$sku_id ON public."movitem"(sku_id);
 
 
 ALTER TABLE public."movitem"
-	ADD CONSTRAINT fk$public$movitem$curr_id
-	FOREIGN KEY (curr_id)
-	REFERENCES public."curr"(curr_id);
+	ADD CONSTRAINT fk$public$movitem$brand_id
+	FOREIGN KEY (brand_id)
+	REFERENCES public."brand"(brand_id);
 
 
 -- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$movitem$curr_id;
-CREATE INDEX idx_fk$public$movitem$curr_id ON public."movitem"(curr_id);	
+DROP INDEX IF EXISTS public.idx_fk$public$movitem$brand_id;
+CREATE INDEX idx_fk$public$movitem$brand_id ON public."movitem"(brand_id);	
 
 
 ALTER TABLE public."movitem"
-	ADD CONSTRAINT fk$public$movitem$poitem_id
-	FOREIGN KEY (poitem_id)
-	REFERENCES public."poitem"(poitem_id);
+	ADD CONSTRAINT fk$public$movitem$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES public."unit"(unit_id);
 
 
 -- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$movitem$poitem_id;
-CREATE INDEX idx_fk$public$movitem$poitem_id ON public."movitem"(poitem_id);	
+DROP INDEX IF EXISTS public.idx_fk$public$movitem$unit_id;
+CREATE INDEX idx_fk$public$movitem$unit_id ON public."movitem"(unit_id);	
 
 
 ALTER TABLE public."movitem"
@@ -493,6 +523,17 @@ CREATE INDEX idx_fk$public$movitem$uom_id ON public."movitem"(uom_id);
 
 
 ALTER TABLE public."movitem"
+	ADD CONSTRAINT fk$public$movitem$curr_id
+	FOREIGN KEY (curr_id)
+	REFERENCES public."curr"(curr_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$movitem$curr_id;
+CREATE INDEX idx_fk$public$movitem$curr_id ON public."movitem"(curr_id);	
+
+
+ALTER TABLE public."movitem"
 	ADD CONSTRAINT fk$public$movitem$batch_id
 	FOREIGN KEY (batch_id)
 	REFERENCES public."batch"(batch_id);
@@ -502,17 +543,6 @@ ALTER TABLE public."movitem"
 DROP INDEX IF EXISTS public.idx_fk$public$movitem$batch_id;
 CREATE INDEX idx_fk$public$movitem$batch_id ON public."movitem"(batch_id);	
 
-
-ALTER TABLE public."movitem"
-	ADD CONSTRAINT fk$public$movitem$unit_id
-	FOREIGN KEY (unit_id)
-	REFERENCES public."unit"(unit_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS public.idx_fk$public$movitem$unit_id;
-CREATE INDEX idx_fk$public$movitem$unit_id ON public."movitem"(unit_id);	
-
 	
 
 
@@ -521,10 +551,10 @@ CREATE INDEX idx_fk$public$movitem$unit_id ON public."movitem"(unit_id);
 -- =============================================
 -- Drop existing unique index 
 alter table public."movitem"
-	drop constraint uq$public$movitem$sku_id;
+	drop constraint uq$public$movitem$poitem_id;
 
 alter table public."movitem"
-	drop constraint uq$public$movitem$poitem_id;
+	drop constraint uq$public$movitem$sku_id;
 	
 
 -- Add unique index 

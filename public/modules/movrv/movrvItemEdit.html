@@ -15,7 +15,7 @@
 	
 
 		<!-- Textbox: movitem_id-->
-		<div id="movrvItemEdit-obj_movitem_id-container" class="input-field" field="movrvItemEdit-obj_movitem_id">
+		<div id="movrvItemEdit-obj_movitem_id-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_id">
 			<label for="movrvItemEdit-obj_movitem_id">
 				Movitem_id
 			</label>
@@ -32,24 +32,24 @@
 		</div>
 		
 
-		<!-- Combobox: brand_id-->
-		<div id="movrvItemEdit-obj_brand_id-container" class="input-field" field="movrvItemEdit-obj_brand_id">
-			<label for="movrvItemEdit-obj_brand_id">
-				Brand
+		<!-- Combobox: poitem_id-->
+		<div id="movrvItemEdit-obj_poitem_id-container" class="input-field" field="movrvItemEdit-obj_poitem_id">
+			<label for="movrvItemEdit-obj_poitem_id">
+				PO Item
 			</label>
-			<input id="movrvItemEdit-obj_brand_id" fgta5-component="Combobox"
-				placeholder="brand" autocomplete="off" spellcheck="false"
-				binding="brand_id" 
+			<input id="movrvItemEdit-obj_poitem_id" fgta5-component="Combobox"
+				placeholder="poitem" autocomplete="off" spellcheck="false"
+				binding="poitem_id" 
 			data-tabindex="2"
 				
-			data-display="brand_name"
+			data-display="sku_name"
 				
 					>
 		</div>
 		
 
 		<!-- Combobox: sku_id-->
-		<div id="movrvItemEdit-obj_sku_id-container" class="input-field" field="movrvItemEdit-obj_sku_id">
+		<div id="movrvItemEdit-obj_sku_id-container" class="input-field hidden" field="movrvItemEdit-obj_sku_id">
 			<label for="movrvItemEdit-obj_sku_id">
 				SKU
 			</label>
@@ -64,6 +64,78 @@
 		</div>
 		
 
+		<!-- Checkbox: isedtrack-->
+		<div id="movrvItemEdit-obj_isedtrack-container" class="input-field" field="movrvItemEdit-obj_isedtrack">
+			<label for="movrvItemEdit-obj_isedtrack">
+				Isedtrack
+			</label>
+			<input id="movrvItemEdit-obj_isedtrack" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="isedtrack" 
+			data-tabindex="4"
+				
+			type="checkbox"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Checkbox: isusedecimal-->
+		<div id="movrvItemEdit-obj_isusedecimal-container" class="input-field" field="movrvItemEdit-obj_isusedecimal">
+			<label for="movrvItemEdit-obj_isusedecimal">
+				Isusedecimal
+			</label>
+			<input id="movrvItemEdit-obj_isusedecimal" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="isusedecimal" 
+			data-tabindex="5"
+				
+			type="checkbox"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: brand_id-->
+		<div id="movrvItemEdit-obj_brand_id-container" class="input-field" field="movrvItemEdit-obj_brand_id">
+			<label for="movrvItemEdit-obj_brand_id">
+				Brand
+			</label>
+			<input id="movrvItemEdit-obj_brand_id" fgta5-component="Combobox"
+				placeholder="brand" autocomplete="off" spellcheck="false"
+				binding="brand_id" 
+			data-tabindex="6"
+				
+			data-display="brand_name"
+				
+			disabled
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: unit_id-->
+		<div id="movrvItemEdit-obj_unit_id-container" class="input-field" field="movrvItemEdit-obj_unit_id">
+			<label for="movrvItemEdit-obj_unit_id">
+				Unit
+			</label>
+			<input id="movrvItemEdit-obj_unit_id" fgta5-component="Combobox"
+				placeholder="unit" autocomplete="off" spellcheck="false"
+				binding="unit_id" 
+			data-tabindex="7"
+				
+			data-display="unit_name"
+				
+			disabled
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: product_code-->
 		<div id="movrvItemEdit-obj_product_code-container" class="input-field" field="movrvItemEdit-obj_product_code">
 			<label for="movrvItemEdit-obj_product_code">
@@ -72,11 +144,13 @@
 			<input id="movrvItemEdit-obj_product_code" fgta5-component="Textbox"
 				placeholder="code" autocomplete="off" spellcheck="false"
 				binding="product_code" 
-			data-tabindex="4"
+			data-tabindex="8"
 				
 			autocomplete="off" spellcheck="false"
 				
 			maxlength="30"
+				
+			disabled
 				
 					>
 		</div>
@@ -90,11 +164,13 @@
 			<input id="movrvItemEdit-obj_variance_code" fgta5-component="Textbox"
 				placeholder="variance_code" autocomplete="off" spellcheck="false"
 				binding="variance_code" 
-			data-tabindex="5"
+			data-tabindex="9"
 				
 			autocomplete="off" spellcheck="false"
 				
 			maxlength="30"
+				
+			disabled
 				
 					>
 		</div>
@@ -108,11 +184,13 @@
 			<input id="movrvItemEdit-obj_skuopt_code" fgta5-component="Textbox"
 				placeholder="options" autocomplete="off" spellcheck="false"
 				binding="skuopt_code" 
-			data-tabindex="6"
+			data-tabindex="10"
 				
 			autocomplete="off" spellcheck="false"
 				
 			maxlength="30"
+				
+			disabled
 				
 					>
 		</div>
@@ -126,51 +204,13 @@
 			<input id="movrvItemEdit-obj_sku_name" fgta5-component="Textbox"
 				placeholder="sku_name" autocomplete="off" spellcheck="false"
 				binding="sku_name" 
-			data-tabindex="7"
+			data-tabindex="11"
 				
 			autocomplete="off" spellcheck="false"
 				
 			maxlength="30"
 				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_qty-->
-		<div id="movrvItemEdit-obj_movitem_qty-container" class="input-field" field="movrvItemEdit-obj_movitem_qty">
-			<label for="movrvItemEdit-obj_movitem_qty">
-				Qty
-			</label>
-			<input id="movrvItemEdit-obj_movitem_qty" fgta5-component="Numberbox"
-				placeholder="qty" autocomplete="off" spellcheck="false"
-				binding="movitem_qty" 
-			value="0"
-				
-			data-tabindex="8"
-				
-			precision="2"
-				
-			maxlength="10"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_qtysent-->
-		<div id="movrvItemEdit-obj_movitem_qtysent-container" class="input-field" field="movrvItemEdit-obj_movitem_qtysent">
-			<label for="movrvItemEdit-obj_movitem_qtysent">
-				Sent
-			</label>
-			<input id="movrvItemEdit-obj_movitem_qtysent" fgta5-component="Numberbox"
-				placeholder="qty sent" autocomplete="off" spellcheck="false"
-				binding="movitem_qtysent" 
-			value="0"
-				
-			data-tabindex="9"
-				
-			precision="2"
-				
-			maxlength="10"
+			disabled
 				
 					>
 		</div>
@@ -186,161 +226,11 @@
 				binding="movitem_qtyrecv" 
 			value="0"
 				
-			data-tabindex="10"
+			data-tabindex="12"
 				
 			precision="2"
 				
 			maxlength="10"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_fobvalue-->
-		<div id="movrvItemEdit-obj_movitem_fobvalue-container" class="input-field" field="movrvItemEdit-obj_movitem_fobvalue">
-			<label for="movrvItemEdit-obj_movitem_fobvalue">
-				FOB Value
-			</label>
-			<input id="movrvItemEdit-obj_movitem_fobvalue" fgta5-component="Numberbox"
-				placeholder="fob value" autocomplete="off" spellcheck="false"
-				binding="movitem_fobvalue" 
-			value="0"
-				
-			data-tabindex="11"
-				
-			precision="2"
-				
-			maxlength="19"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_rate-->
-		<div id="movrvItemEdit-obj_movitem_rate-container" class="input-field" field="movrvItemEdit-obj_movitem_rate">
-			<label for="movrvItemEdit-obj_movitem_rate">
-				Rate
-			</label>
-			<input id="movrvItemEdit-obj_movitem_rate" fgta5-component="Numberbox"
-				placeholder="rate" autocomplete="off" spellcheck="false"
-				binding="movitem_rate" 
-			value="0"
-				
-			data-tabindex="12"
-				
-			maxlength="9"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: curr_id-->
-		<div id="movrvItemEdit-obj_curr_id-container" class="input-field" field="movrvItemEdit-obj_curr_id">
-			<label for="movrvItemEdit-obj_curr_id">
-				Curr
-			</label>
-			<input id="movrvItemEdit-obj_curr_id" fgta5-component="Combobox"
-				placeholder="curr" autocomplete="off" spellcheck="false"
-				binding="curr_id" 
-			data-tabindex="13"
-				
-			data-display="curr_name"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_fobidr-->
-		<div id="movrvItemEdit-obj_movitem_fobidr-container" class="input-field" field="movrvItemEdit-obj_movitem_fobidr">
-			<label for="movrvItemEdit-obj_movitem_fobidr">
-				FOB IDR
-			</label>
-			<input id="movrvItemEdit-obj_movitem_fobidr" fgta5-component="Numberbox"
-				placeholder="fob idr" autocomplete="off" spellcheck="false"
-				binding="movitem_fobidr" 
-			value="0"
-				
-			data-tabindex="14"
-				
-			precision="2"
-				
-			maxlength="19"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_addidr-->
-		<div id="movrvItemEdit-obj_movitem_addidr-container" class="input-field" field="movrvItemEdit-obj_movitem_addidr">
-			<label for="movrvItemEdit-obj_movitem_addidr">
-				Add IDR
-			</label>
-			<input id="movrvItemEdit-obj_movitem_addidr" fgta5-component="Numberbox"
-				placeholder="additional cost" autocomplete="off" spellcheck="false"
-				binding="movitem_addidr" 
-			value="0"
-				
-			data-tabindex="15"
-				
-			precision="2"
-				
-			maxlength="19"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_landedcost-->
-		<div id="movrvItemEdit-obj_movitem_landedcost-container" class="input-field" field="movrvItemEdit-obj_movitem_landedcost">
-			<label for="movrvItemEdit-obj_movitem_landedcost">
-				Landed Cost
-			</label>
-			<input id="movrvItemEdit-obj_movitem_landedcost" fgta5-component="Numberbox"
-				placeholder="landed cost" autocomplete="off" spellcheck="false"
-				binding="movitem_landedcost" 
-			value="0"
-				
-			data-tabindex="16"
-				
-			precision="2"
-				
-			maxlength="19"
-				
-					>
-		</div>
-		
-
-		<!-- Numberbox: movitem_value-->
-		<div id="movrvItemEdit-obj_movitem_value-container" class="input-field" field="movrvItemEdit-obj_movitem_value">
-			<label for="movrvItemEdit-obj_movitem_value">
-				Value
-			</label>
-			<input id="movrvItemEdit-obj_movitem_value" fgta5-component="Numberbox"
-				placeholder="cogs" autocomplete="off" spellcheck="false"
-				binding="movitem_value" 
-			value="0"
-				
-			data-tabindex="17"
-				
-			precision="2"
-				
-			maxlength="19"
-				
-					>
-		</div>
-		
-
-		<!-- Combobox: poitem_id-->
-		<div id="movrvItemEdit-obj_poitem_id-container" class="input-field" field="movrvItemEdit-obj_poitem_id">
-			<label for="movrvItemEdit-obj_poitem_id">
-				PO Item
-			</label>
-			<input id="movrvItemEdit-obj_poitem_id" fgta5-component="Combobox"
-				placeholder="poitem" autocomplete="off" spellcheck="false"
-				binding="poitem_id" 
-			data-tabindex="18"
-				
-			data-display="sku_name"
 				
 					>
 		</div>
@@ -354,9 +244,11 @@
 			<input id="movrvItemEdit-obj_uom_id" fgta5-component="Combobox"
 				placeholder="uom" autocomplete="off" spellcheck="false"
 				binding="uom_id" 
-			data-tabindex="19"
+			data-tabindex="13"
 				
 			data-display="uom_name"
+				
+			disabled
 				
 					>
 		</div>
@@ -370,23 +262,181 @@
 			<input id="movrvItemEdit-obj_expdate" fgta5-component="Datepicker"
 				placeholder="expdate" autocomplete="off" spellcheck="false"
 				binding="expdate" 
-			data-tabindex="20"
+			data-tabindex="14"
 				
 					>
 		</div>
 		
 
-		<!-- Combobox: unit_id-->
-		<div id="movrvItemEdit-obj_unit_id-container" class="input-field" field="movrvItemEdit-obj_unit_id">
-			<label for="movrvItemEdit-obj_unit_id">
-				Unit
+		<!-- Numberbox: movitem_qty-->
+		<div id="movrvItemEdit-obj_movitem_qty-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_qty">
+			<label for="movrvItemEdit-obj_movitem_qty">
+				Qty
 			</label>
-			<input id="movrvItemEdit-obj_unit_id" fgta5-component="Combobox"
-				placeholder="unit" autocomplete="off" spellcheck="false"
-				binding="unit_id" 
+			<input id="movrvItemEdit-obj_movitem_qty" fgta5-component="Numberbox"
+				placeholder="qty" autocomplete="off" spellcheck="false"
+				binding="movitem_qty" 
+			value="0"
+				
+			data-tabindex="15"
+				
+			precision="2"
+				
+			maxlength="10"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_qtysent-->
+		<div id="movrvItemEdit-obj_movitem_qtysent-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_qtysent">
+			<label for="movrvItemEdit-obj_movitem_qtysent">
+				Sent
+			</label>
+			<input id="movrvItemEdit-obj_movitem_qtysent" fgta5-component="Numberbox"
+				placeholder="qty sent" autocomplete="off" spellcheck="false"
+				binding="movitem_qtysent" 
+			value="0"
+				
+			data-tabindex="16"
+				
+			precision="2"
+				
+			maxlength="10"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_fobvalue-->
+		<div id="movrvItemEdit-obj_movitem_fobvalue-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_fobvalue">
+			<label for="movrvItemEdit-obj_movitem_fobvalue">
+				FOB Value
+			</label>
+			<input id="movrvItemEdit-obj_movitem_fobvalue" fgta5-component="Numberbox"
+				placeholder="fob value" autocomplete="off" spellcheck="false"
+				binding="movitem_fobvalue" 
+			value="0"
+				
+			data-tabindex="17"
+				
+			precision="2"
+				
+			maxlength="19"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_rate-->
+		<div id="movrvItemEdit-obj_movitem_rate-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_rate">
+			<label for="movrvItemEdit-obj_movitem_rate">
+				Rate
+			</label>
+			<input id="movrvItemEdit-obj_movitem_rate" fgta5-component="Numberbox"
+				placeholder="rate" autocomplete="off" spellcheck="false"
+				binding="movitem_rate" 
+			value="0"
+				
+			data-tabindex="18"
+				
+			maxlength="9"
+				
+					>
+		</div>
+		
+
+		<!-- Combobox: curr_id-->
+		<div id="movrvItemEdit-obj_curr_id-container" class="input-field hidden" field="movrvItemEdit-obj_curr_id">
+			<label for="movrvItemEdit-obj_curr_id">
+				Curr
+			</label>
+			<input id="movrvItemEdit-obj_curr_id" fgta5-component="Combobox"
+				placeholder="curr" autocomplete="off" spellcheck="false"
+				binding="curr_id" 
+			data-tabindex="19"
+				
+			data-display="curr_name"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_fobidr-->
+		<div id="movrvItemEdit-obj_movitem_fobidr-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_fobidr">
+			<label for="movrvItemEdit-obj_movitem_fobidr">
+				FOB IDR
+			</label>
+			<input id="movrvItemEdit-obj_movitem_fobidr" fgta5-component="Numberbox"
+				placeholder="fob idr" autocomplete="off" spellcheck="false"
+				binding="movitem_fobidr" 
+			value="0"
+				
+			data-tabindex="20"
+				
+			precision="2"
+				
+			maxlength="19"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_addidr-->
+		<div id="movrvItemEdit-obj_movitem_addidr-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_addidr">
+			<label for="movrvItemEdit-obj_movitem_addidr">
+				Add IDR
+			</label>
+			<input id="movrvItemEdit-obj_movitem_addidr" fgta5-component="Numberbox"
+				placeholder="additional cost" autocomplete="off" spellcheck="false"
+				binding="movitem_addidr" 
+			value="0"
+				
+			data-tabindex="21"
+				
+			precision="2"
+				
+			maxlength="19"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_landedcost-->
+		<div id="movrvItemEdit-obj_movitem_landedcost-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_landedcost">
+			<label for="movrvItemEdit-obj_movitem_landedcost">
+				Landed Cost
+			</label>
+			<input id="movrvItemEdit-obj_movitem_landedcost" fgta5-component="Numberbox"
+				placeholder="landed cost" autocomplete="off" spellcheck="false"
+				binding="movitem_landedcost" 
+			value="0"
+				
 			data-tabindex="22"
 				
-			data-display="unit_name"
+			precision="2"
+				
+			maxlength="19"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: movitem_value-->
+		<div id="movrvItemEdit-obj_movitem_value-container" class="input-field hidden" field="movrvItemEdit-obj_movitem_value">
+			<label for="movrvItemEdit-obj_movitem_value">
+				Value
+			</label>
+			<input id="movrvItemEdit-obj_movitem_value" fgta5-component="Numberbox"
+				placeholder="cogs" autocomplete="off" spellcheck="false"
+				binding="movitem_value" 
+			value="0"
+				
+			data-tabindex="23"
+				
+			precision="2"
+				
+			maxlength="19"
 				
 					>
 		</div>
@@ -400,7 +450,7 @@
 			<input id="movrvItemEdit-obj_mov_id" fgta5-component="Textbox"
 				placeholder="mov_id" autocomplete="off" spellcheck="false"
 				binding="mov_id" 
-			data-tabindex="23"
+			data-tabindex="25"
 				
 			autocomplete="off" spellcheck="false"
 				

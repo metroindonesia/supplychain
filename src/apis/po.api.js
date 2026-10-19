@@ -674,6 +674,16 @@ async function po_itemList(self, body) {
 				const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', row.uom_id)
 				row.uom_name = uom_name ?? null
 			}
+			// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
+			if (row.brand_id !== undefined) {
+				const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', row.brand_id)
+				row.brand_name = brand_name ?? null
+			}
+			// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.po.unit_id)
+			if (row.unit_id !== undefined) {
+				const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name ?? null
+			}
 			 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
@@ -750,6 +760,16 @@ async function po_itemOpen(self, body) {
 		if (data.uom_id !== undefined) {
 			const { uom_name } = await sqlUtil.lookupdb(db, 'public.uom', 'uom_id', data.uom_id)
 			data.uom_name = uom_name ?? null
+		}
+		// lookup: brand_name dari field brand_name pada table public.brand dimana (public.brand.brand_id = public.po.brand_id)
+		if (data.brand_id !== undefined) {
+			const { brand_name } = await sqlUtil.lookupdb(db, 'public.brand', 'brand_id', data.brand_id)
+			data.brand_name = brand_name ?? null
+		}
+		// lookup: unit_name dari field unit_name pada table public.unit dimana (public.unit.unit_id = public.po.unit_id)
+		if (data.unit_id !== undefined) {
+			const { unit_name } = await sqlUtil.lookupdb(db, 'public.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name ?? null
 		}
 		  
 		// lookup data createby

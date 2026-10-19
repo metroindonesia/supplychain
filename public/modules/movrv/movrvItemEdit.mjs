@@ -37,15 +37,21 @@ const btn_logs = document.getElementById('movrvItem-btn_logs')
 
 const frm = new $fgta5.Form('movrvItemEdit-frm');
 const obj_movitem_id = frm.Inputs['movrvItemEdit-obj_movitem_id']
-const obj_brand_id = frm.Inputs['movrvItemEdit-obj_brand_id']
+const obj_poitem_id = frm.Inputs['movrvItemEdit-obj_poitem_id']
 const obj_sku_id = frm.Inputs['movrvItemEdit-obj_sku_id']
+const obj_isedtrack = frm.Inputs['movrvItemEdit-obj_isedtrack']
+const obj_isusedecimal = frm.Inputs['movrvItemEdit-obj_isusedecimal']
+const obj_brand_id = frm.Inputs['movrvItemEdit-obj_brand_id']
+const obj_unit_id = frm.Inputs['movrvItemEdit-obj_unit_id']
 const obj_product_code = frm.Inputs['movrvItemEdit-obj_product_code']
 const obj_variance_code = frm.Inputs['movrvItemEdit-obj_variance_code']
 const obj_skuopt_code = frm.Inputs['movrvItemEdit-obj_skuopt_code']
 const obj_sku_name = frm.Inputs['movrvItemEdit-obj_sku_name']
+const obj_movitem_qtyrecv = frm.Inputs['movrvItemEdit-obj_movitem_qtyrecv']
+const obj_uom_id = frm.Inputs['movrvItemEdit-obj_uom_id']
+const obj_expdate = frm.Inputs['movrvItemEdit-obj_expdate']
 const obj_movitem_qty = frm.Inputs['movrvItemEdit-obj_movitem_qty']
 const obj_movitem_qtysent = frm.Inputs['movrvItemEdit-obj_movitem_qtysent']
-const obj_movitem_qtyrecv = frm.Inputs['movrvItemEdit-obj_movitem_qtyrecv']
 const obj_movitem_fobvalue = frm.Inputs['movrvItemEdit-obj_movitem_fobvalue']
 const obj_movitem_rate = frm.Inputs['movrvItemEdit-obj_movitem_rate']
 const obj_curr_id = frm.Inputs['movrvItemEdit-obj_curr_id']
@@ -53,10 +59,6 @@ const obj_movitem_fobidr = frm.Inputs['movrvItemEdit-obj_movitem_fobidr']
 const obj_movitem_addidr = frm.Inputs['movrvItemEdit-obj_movitem_addidr']
 const obj_movitem_landedcost = frm.Inputs['movrvItemEdit-obj_movitem_landedcost']
 const obj_movitem_value = frm.Inputs['movrvItemEdit-obj_movitem_value']
-const obj_poitem_id = frm.Inputs['movrvItemEdit-obj_poitem_id']
-const obj_uom_id = frm.Inputs['movrvItemEdit-obj_uom_id']
-const obj_expdate = frm.Inputs['movrvItemEdit-obj_expdate']
-const obj_unit_id = frm.Inputs['movrvItemEdit-obj_unit_id']
 const obj_mov_id = frm.Inputs['movrvItemEdit-obj_mov_id']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
@@ -106,20 +108,31 @@ export async function init(self, args) {
 
 
 	
-	// Combobox: obj_brand_id
-	obj_brand_id.addEventListener('selecting', async (evt)=>{
-		const fn_selecting_name = 'obj_brand_id_selecting'
+	// Combobox: obj_poitem_id
+	obj_poitem_id.addEventListener('selected', (evt)=>{
+		const fn_selected_name = 'obj_poitem_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_poitem_id_selected(self, obj_poitem_id, frm, evt) {}
+			fn_selected(self, obj_poitem_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_poitem_id_selected is not implemented')
+		}		
+	})
+	obj_poitem_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_poitem_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_brand_id_selecting(self, obj_brand_id, frm, evt) {}
-			fn_selecting(self, obj_brand_id, frm, evt)
+			// export async function obj_poitem_id_selecting(self, obj_poitem_id, frm, evt) {}
+			fn_selecting(self, obj_poitem_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = 'brand/header-list'
+			const url = 'po/item-list'
 			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
@@ -129,11 +142,11 @@ export async function init(self, args) {
 			evt.detail.CurrentState = CurrentState
 			
 			// buat function di extender:
-			// export function obj_brand_id_selecting_criteria(self, obj_brand_id, frm, criteria, sort, evt) {}
-			const fn_selecting_criteria_name = 'obj_brand_id_selecting_criteria'
+			// export function obj_poitem_id_selecting_criteria(self, obj_poitem_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_poitem_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_brand_id, frm, criteria, sort, evt)
+				fn_selecting_criteria(self, obj_poitem_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
@@ -146,7 +159,7 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.brand_id, row.brand_name, row)
+					evt.detail.addRow(row.poitem_id, row.sku_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -214,20 +227,33 @@ export async function init(self, args) {
 		}		
 	})
 	
-	// Combobox: obj_curr_id
-	obj_curr_id.addEventListener('selecting', async (evt)=>{
-		const fn_selecting_name = 'obj_curr_id_selecting'
+	// Checkbox: obj_isedtrack
+	obj_isedtrack.addEventListener('changed', (evt)=>{
+		const fn_changed_name = 'obj_isedtrack_changed'
+		const fn_changed = Extender[fn_changed_name]
+		if (typeof fn_changed === 'function') {
+			// create function di Extender:
+			// export async function obj_isedtrack_changed(self, obj_isedtrack, frm, evt) {}
+			fn_changed(self, obj_isedtrack, frm, evt)
+		} else {	
+			console.warn('Extender.obj_isedtrack_changed is not implemented')
+		}		
+	})
+	
+	// Combobox: obj_brand_id
+	obj_brand_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_brand_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt) {}
-			fn_selecting(self, obj_curr_id, frm, evt)
+			// export async function obj_brand_id_selecting(self, obj_brand_id, frm, evt) {}
+			fn_selecting(self, obj_brand_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = 'curr/header-list'
+			const url = 'brand/header-list'
 			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
@@ -237,11 +263,11 @@ export async function init(self, args) {
 			evt.detail.CurrentState = CurrentState
 			
 			// buat function di extender:
-			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {}
-			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
+			// export function obj_brand_id_selecting_criteria(self, obj_brand_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_brand_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt)
+				fn_selecting_criteria(self, obj_brand_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
@@ -254,7 +280,7 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.curr_id, row.curr_name, row)
+					evt.detail.addRow(row.brand_id, row.brand_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -268,20 +294,20 @@ export async function init(self, args) {
 		}		
 	})
 	
-	// Combobox: obj_poitem_id
-	obj_poitem_id.addEventListener('selecting', async (evt)=>{
-		const fn_selecting_name = 'obj_poitem_id_selecting'
+	// Combobox: obj_unit_id
+	obj_unit_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_unit_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_poitem_id_selecting(self, obj_poitem_id, frm, evt) {}
-			fn_selecting(self, obj_poitem_id, frm, evt)
+			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt) {}
+			fn_selecting(self, obj_unit_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = 'po/item-list'
+			const url = 'unit/header-list'
 			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
@@ -291,11 +317,11 @@ export async function init(self, args) {
 			evt.detail.CurrentState = CurrentState
 			
 			// buat function di extender:
-			// export function obj_poitem_id_selecting_criteria(self, obj_poitem_id, frm, criteria, sort, evt) {}
-			const fn_selecting_criteria_name = 'obj_poitem_id_selecting_criteria'
+			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_poitem_id, frm, criteria, sort, evt)
+				fn_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
@@ -308,7 +334,7 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.poitem_id, row.sku_name, row)
+					evt.detail.addRow(row.unit_id, row.unit_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -376,20 +402,20 @@ export async function init(self, args) {
 		}		
 	})
 	
-	// Combobox: obj_unit_id
-	obj_unit_id.addEventListener('selecting', async (evt)=>{
-		const fn_selecting_name = 'obj_unit_id_selecting'
+	// Combobox: obj_curr_id
+	obj_curr_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_curr_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt) {}
-			fn_selecting(self, obj_unit_id, frm, evt)
+			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt) {}
+			fn_selecting(self, obj_curr_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = 'unit/header-list'
+			const url = 'curr/header-list'
 			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
@@ -399,11 +425,11 @@ export async function init(self, args) {
 			evt.detail.CurrentState = CurrentState
 			
 			// buat function di extender:
-			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {}
-			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
+			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt)
+				fn_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
@@ -416,7 +442,7 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.unit_id, row.unit_name, row)
+					evt.detail.addRow(row.curr_id, row.curr_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -438,12 +464,12 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
-		obj_brand_id.clear()
-		obj_sku_id.clear()
-		obj_curr_id.clear()
 		obj_poitem_id.clear()
-		obj_uom_id.clear()
+		obj_sku_id.clear()
+		obj_brand_id.clear()
 		obj_unit_id.clear()
+		obj_uom_id.clear()
+		obj_curr_id.clear()
 		
 		const id = params.keyvalue
 		const data = await openData(self, id)
@@ -799,16 +825,16 @@ async function btn_new_click(self, evt) {
 		// inisiasi data baru
 		const datainit = {
 			mov_id,
+			movitem_qtyrecv: 0,
+			expdate: new Date(),
 			movitem_qty: 0,
 			movitem_qtysent: 0,
-			movitem_qtyrecv: 0,
 			movitem_fobvalue: 0,
 			movitem_rate: 0,
 			movitem_fobidr: 0,
 			movitem_addidr: 0,
 			movitem_landedcost: 0,
 			movitem_value: 0,
-			expdate: new Date(),
 		}
 
 
