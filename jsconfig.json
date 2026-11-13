@@ -2,10 +2,11 @@
   "compilerOptions": {
     "checkJs": false,
     "allowJs": true,
-    "module": "esnext",
+    "module": "nodenext",
     "target": "es2020",
-    "moduleResolution": "node",
-    "ignoreDeprecations": "6.0"
+    "moduleResolution": "nodenext"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
