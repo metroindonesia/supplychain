@@ -45,6 +45,10 @@ export default class extends Module {
 		})
 
 
+		// tambahkan class di body untuk menandakan bahwa ini adalah halaman login
+		document.body.classList.add('login-page')
+
+
 
 		try {
 			// inisiasi sisi server
