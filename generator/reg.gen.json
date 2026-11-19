@@ -1006,6 +1006,31 @@
           "fields": "sea_id"
         }
       }
+    },
+    "item": {
+      "id": "en-mwn6ayqv-8k090",
+      "name": "item",
+      "isheader": false,
+      "title": "Items",
+      "table": "public.regitem",
+      "pk": "{pk}",
+      "descr": "",
+      "skipRegenerateTable": false,
+      "formGridLayout": true,
+      "allowFormNew": true,
+      "allowFormEdit": true,
+      "allowRowAdd": true,
+      "allowRowRemove": true,
+      "allowRowEdit": true,
+      "identifierMethod": "manual",
+      "identifierPrefix": "",
+      "identifierBlock": "3",
+      "identifierLength": "6",
+      "bindHeadTitle": "",
+      "bindHeadDescr": "",
+      "Items": {},
+      "Uniques": {},
+      "Search": {}
     }
   },
   "uniques": {},
