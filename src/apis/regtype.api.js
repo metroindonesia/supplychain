@@ -211,7 +211,19 @@ async function regtype_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: model_name dari field model_name pada table public.model dimana (public.model.model_id = public.regtype.model_id)
+			if (row.model_id !== undefined) {
+				const { model_name } = await sqlUtil.lookupdb(db, 'public.model', 'model_id', row.model_id)
+				row.model_name = model_name ?? null
+			}
 			 
+			// field dengan tipedata json/jsonb	
+			{
+				if (row.header_mapping) {
+					row.header_mapping = JSON.stringify(row.header_mapping)
+				}
+			}
+			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
 				// export async function headerListRow(self, row, args) {}
@@ -260,7 +272,19 @@ async function regtype_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: model_name dari field model_name pada table public.model dimana (public.model.model_id = public.regtype.model_id)
+		if (data.model_id !== undefined) {
+			const { model_name } = await sqlUtil.lookupdb(db, 'public.model', 'model_id', data.model_id)
+			data.model_name = model_name ?? null
+		}
 		 
+		// field dengan tipedata json/jsonb	
+		{
+			if (data.header_mapping) {
+				data.header_mapping = JSON.stringify(data.header_mapping)
+			}
+		}
+		
 		// lookup data createby
 		if (data._createby !== undefined) {
 			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)

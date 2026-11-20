@@ -44,6 +44,22 @@
 		</div>
 		
 
+		<!-- Checkbox: regtype_isallowallbrand-->
+		<div id="regtypeHeaderEdit-obj_regtype_isallowallbrand-container" class="input-field" field="regtypeHeaderEdit-obj_regtype_isallowallbrand">
+			<label for="regtypeHeaderEdit-obj_regtype_isallowallbrand">
+				Allow All Brand
+			</label>
+			<input id="regtypeHeaderEdit-obj_regtype_isallowallbrand" fgta5-component="Checkbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="regtype_isallowallbrand" 
+			data-tabindex="3"
+				
+			type="checkbox"
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: regtype_name-->
 		<div id="regtypeHeaderEdit-obj_regtype_name-container" class="input-field" field="regtypeHeaderEdit-obj_regtype_name">
 			<label for="regtypeHeaderEdit-obj_regtype_name">
@@ -52,7 +68,7 @@
 			<input id="regtypeHeaderEdit-obj_regtype_name" fgta5-component="Textbox"
 				placeholder="tipe register" autocomplete="off" spellcheck="false"
 				binding="regtype_name" 
-			data-tabindex="3"
+			data-tabindex="4"
 				
 			character-case="uppercase"
 				
@@ -68,6 +84,26 @@
 		</div>
 		
 
+		<!-- Combobox: model_id-->
+		<div id="regtypeHeaderEdit-obj_model_id-container" class="input-field" field="regtypeHeaderEdit-obj_model_id">
+			<label for="regtypeHeaderEdit-obj_model_id">
+				Model
+			</label>
+			<input id="regtypeHeaderEdit-obj_model_id" fgta5-component="Combobox"
+				placeholder="pilih model" autocomplete="off" spellcheck="false"
+				binding="model_id" 
+			data-tabindex="5"
+				
+			required
+				
+			invalid-message-required="model harus diisi"
+				
+			data-display="model_name"
+				
+					>
+		</div>
+		
+
 		<!-- Textbox: regtype_descr-->
 		<div id="regtypeHeaderEdit-obj_regtype_descr-container" class="input-field" field="regtypeHeaderEdit-obj_regtype_descr">
 			<label for="regtypeHeaderEdit-obj_regtype_descr">
@@ -76,7 +112,7 @@
 			<input id="regtypeHeaderEdit-obj_regtype_descr" fgta5-component="Textbox"
 				placeholder="description" autocomplete="off" spellcheck="false"
 				binding="regtype_descr" 
-			data-tabindex="4"
+			data-tabindex="6"
 				
 			autocomplete="off" spellcheck="false"
 				
@@ -86,17 +122,75 @@
 		</div>
 		
 
-		<!-- Checkbox: regtype_isallowallbrand-->
-		<div id="regtypeHeaderEdit-obj_regtype_isallowallbrand-container" class="input-field" field="regtypeHeaderEdit-obj_regtype_isallowallbrand">
-			<label for="regtypeHeaderEdit-obj_regtype_isallowallbrand">
-				Allow All Brand
+		<!-- Textbox: header_valid-->
+		<div id="regtypeHeaderEdit-obj_header_valid-container" class="input-field" field="regtypeHeaderEdit-obj_header_valid">
+			<label for="regtypeHeaderEdit-obj_header_valid">
+				Valid Header
 			</label>
-			<input id="regtypeHeaderEdit-obj_regtype_isallowallbrand" fgta5-component="Checkbox"
-				placeholder="" autocomplete="off" spellcheck="false"
-				binding="regtype_isallowallbrand" 
-			data-tabindex="5"
+			<input id="regtypeHeaderEdit-obj_header_valid" fgta5-component="Textbox"
+				placeholder="valid header , using | as sparator" autocomplete="off" spellcheck="false"
+				binding="header_valid" 
+			data-tabindex="7"
 				
-			type="checkbox"
+			required
+				
+			invalid-message-required="Valid header harus diisi"
+				
+			description="gunakan pipe | untuk sparator"
+				
+			autocomplete="off" spellcheck="false"
+				
+			maxlength="1024"
+				
+					>
+		</div>
+		
+
+		<!-- Numberbox: header_atrow-->
+		<div id="regtypeHeaderEdit-obj_header_startrow-container" class="input-field" field="regtypeHeaderEdit-obj_header_startrow">
+			<label for="regtypeHeaderEdit-obj_header_startrow">
+				Header At Row
+			</label>
+			<input id="regtypeHeaderEdit-obj_header_startrow" fgta5-component="Numberbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="header_atrow" 
+			value="1"
+				
+			data-tabindex="8"
+				
+			maxlength="9"
+				
+			min="1"
+				
+			invalid-message-min="minimum value 1"
+				
+			max="200"
+				
+			invalid-message-max="maksimal value 200"
+				
+			digitgrouping="false"
+				
+					>
+		</div>
+		
+
+		<!-- Textbox: header_mapping-->
+		<div id="regtypeHeaderEdit-obj_header_mapping-container" class="input-field" field="regtypeHeaderEdit-obj_header_mapping">
+			<label for="regtypeHeaderEdit-obj_header_mapping">
+				Header Map
+			</label>
+			<input id="regtypeHeaderEdit-obj_header_mapping" fgta5-component="Textbox"
+				placeholder="" autocomplete="off" spellcheck="false"
+				binding="header_mapping" 
+			value="{}"
+				
+			data-tabindex="9"
+				
+			multiline
+				
+			autocomplete="off" spellcheck="false"
+				
+			maxlength="10000"
 				
 					>
 		</div>

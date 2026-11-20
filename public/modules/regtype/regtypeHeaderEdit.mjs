@@ -38,9 +38,13 @@ const btn_about = document.getElementById('regtypeHeader-btn_about')
 const frm = new $fgta5.Form('regtypeHeaderEdit-frm');
 const obj_regtype_id = frm.Inputs['regtypeHeaderEdit-obj_regtype_id']
 const obj_regtype_isdisabled = frm.Inputs['regtypeHeaderEdit-obj_regtype_isdisabled']
+const obj_regtype_isallowallbrand = frm.Inputs['regtypeHeaderEdit-obj_regtype_isallowallbrand']
 const obj_regtype_name = frm.Inputs['regtypeHeaderEdit-obj_regtype_name']
+const obj_model_id = frm.Inputs['regtypeHeaderEdit-obj_model_id']
 const obj_regtype_descr = frm.Inputs['regtypeHeaderEdit-obj_regtype_descr']
-const obj_regtype_isallowallbrand = frm.Inputs['regtypeHeaderEdit-obj_regtype_isallowallbrand']	
+const obj_header_valid = frm.Inputs['regtypeHeaderEdit-obj_header_valid']
+const obj_header_startrow = frm.Inputs['regtypeHeaderEdit-obj_header_startrow']
+const obj_header_mapping = frm.Inputs['regtypeHeaderEdit-obj_header_mapping']	
 const rec_timestamp = document.getElementById('fRecord-section-timestamp')
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
@@ -105,6 +109,63 @@ export async function init(self, args) {
 	}
 
 	
+	
+	// Combobox: obj_model_id
+	obj_model_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_model_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_model_id_selecting(self, obj_model_id, frm, evt) {}
+			fn_selecting(self, obj_model_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'model/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_model_id_selecting_criteria(self, obj_model_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_model_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_model_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.model_id, row.model_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -114,6 +175,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_model_id.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)
@@ -451,6 +513,8 @@ async function btn_new_click(self, evt) {
 
 		// inisiasi data baru
 		const datainit = {
+			header_atrow: 1,
+			header_mapping: '{}',
 		}
 
 

@@ -1,0 +1,26 @@
+
+contoh header validator
+NO|CTGID|ART|COL|SIZE|BARCODE|NAME|ORIGIN_GROUP|ORIGIN_CATEGORY|COLOR_NAME|GENDER|ORIGIN_PRICE|CURR|SELL_PRICE|QTY
+
+
+contoh mapping
+{
+	"NO":"regitem_line",
+	"ART":"regitem_product",
+	"COL":"regitem_variance",
+	"SIZE":"reg_option",
+	"BARCODE":"reg_barcode",
+	"NAME":"name",
+	"ORIGIN_GROUP":"origroup",
+	"ORIGIN_CATEGORY:"oricategory",
+	"COLOR_NAME":"color_name",
+	"GENDER":"gender",
+	"ORIGIN_PRICE":"oriprice",
+	"CURR":"curr",
+	"SELL_PRICE":"sellprice",
+	"QTY":"qty"
+}
+
+Data yang perlu
+reg_product
+reg

@@ -1,0 +1,119 @@
+/home/ubuntu/.gemini/bin/agy --hub --hub-port=36711 --app_data_dir=antigravity --add-dir=/home/ubuntu/Development/metroindonesia/supplychain
+
+
+nohup /home/ubuntu/.gemini/bin/agy --hub --hub-port=36711 --app_data_dir=antigravity --add-dir=/home/ubuntu/Development/metroindonesia/supplychain > ~/agy-hub.log 2>&1 &
+
+
+
+
+
+# cek agy yang running di port berapa saja
+ps -ef | grep -i agy && ss -tlnp | grep -iE 'agy|antigravity' || netstat -tlnp 2>/dev/null | grep -iE 'agy|antigravity'
+
+
+# cek  agy yang running di mode cli
+ps -ef | grep -E "agy|antigravity" | grep -v grep
+
+# atau
+
+pgrep -af "agy|antigravity"
+
+
+# untuk matikan semua agy
+killall agy
+killall -9 agy
+
+
+
+
+
+
+ Ada beberapa cara umum di Linux untuk menjalankan perintah tersebut di background agar tetap
+  berjalan meskipun sesi terminal/SSH ditutup:
+  ### 1. Menggunakan nohup (Paling Cepat & Sederhana)
+
+  Perintah ini menjalankan proses di background, mengabaikan sinyal hangup saat terminal ditutup,
+  dan menyimpan log output ke file agy-hub.log:
+
+    nohup /home/ubuntu/.gemini/bin/agy --hub --hub-port=36711 --app_data_dir=antigravity --add-dir=/home/ubuntu/Development/metroindonesia/supplychain > ~/agy-hub.log 2>&1 &
+
+  • Melihat log berjalan: tail -f ~/agy-hub.log
+  • Mengecek proses: ps aux | grep "agy --hub"
+  • Menghentikan proses: pkill -f "agy --hub"
+  ──────
+  ### 2. Menggunakan tmux (Direkomendasikan jika ingin bisa melihat tampilan interaktifnya       
+  kembali)
+  Jika agy --hub menampilkan antarmuka atau log yang ingin Anda pantau sewaktu-waktu:
+
+    # Menjalankan langsung di dalam sesi tmux bernama "agy-hub" di background (-d)
+    tmux new-session -d -s agy-hub "/home/ubuntu/.gemini/bin/agy --hub --hub-port=36711
+    --app_data_dir=antigravity --add-dir=/home/ubuntu/Development/metroindonesia/supplychain"
+  • Masuk kembali ke sesi untuk melihat status: tmux attach -t agy-hub
+  • Keluar dari sesi tanpa mematikan proses: Tekan Ctrl+B, lepas, lalu tekan D
+  • Menghentikan sesi: tmux kill-session -t agy-hub
+  ──────
+  ### 3. Menggunakan systemd (Paling Stabil & Otomatis Jalan Saat Server Reboot)
+
+  Jika ingin proses otomatis menyala kembali saat crash atau saat server restart:
+  1. Buat file service user:
+    mkdir -p ~/.config/systemd/user
+    nano ~/.config/systemd/user/agy-hub.service
+  2. Isi dengan konfigurasi berikut:
+    [Unit]
+    Description=Antigravity Hub Service
+    After=network.target
+
+    [Service]
+    Type=simple
+    WorkingDirectory=/home/ubuntu/Development/metroindonesia/supplychain
+    ExecStart=/home/ubuntu/.gemini/bin/agy --hub --hub-port=36711 --app_data_dir=antigravity
+    --add-dir=/home/ubuntu/Development/metroindonesia/supplychain
+    Restart=on-failure
+    RestartSec=5
+
+    [Install]
+    WantedBy=default.target
+
+  3. Aktifkan dan jalankan service:
+    systemctl --user daemon-reload
+    systemctl --user enable --now agy-hub.service
+    loginctl enable-linger $USER
+
+      • Cek status: systemctl --user status agy-hub.service
+      • Lihat log: journalctl --user -u agy-hub.service -f
+
+
+
+
+
+
+  Berikut beberapa cara untuk melihat dan mematikan proses di port 36711:
+  ### 1. Menggunakan fuser (Paling Cepat)
+
+  Langsung mematikan proses yang menggunakan port TCP 36711:
+
+    fuser -k 36711/tcp
+
+  ### 2. Menggunakan lsof (Cek PID terlebih dahulu)
+
+  Jika ingin melihat proses apa yang menggunakan port tersebut sebelum mematikannya:
+
+    # Cari PID yang menggunakan port 36711
+    lsof -i :36711
+
+    # Matikan berdasarkan PID yang muncul
+    kill -9 <PID>
+
+  Atau langsung dalam satu baris:
+
+    kill -9 $(lsof -t -i:36711)
+  ──────
+  ### 💡 Catatan Mengapa localhost:36711 Mengembalikan 404
+
+  Server agy --hub biasanya menghasilkan URL khusus (dengan path atau token autentikasi) saat
+  pertama kali dijalankan. Setelah Anda mematikan proses lama dan menjalankan ulang perintah
+  nohup, cek isi log-nya untuk melihat URL lengkap yang harus dibuka di browser:
+
+    cat ~/agy-hub.log
+
+

@@ -27,6 +27,21 @@ comment on column public."regtype".regtype_isdisabled is '';
 
 
 -- =============================================
+-- FIELD: regtype_isallowallbrand boolean
+-- =============================================
+-- ADD regtype_isallowallbrand
+alter table public."regtype" add regtype_isallowallbrand boolean not null default false;
+comment on column public."regtype".regtype_isallowallbrand is '';
+
+-- MODIFY regtype_isallowallbrand
+alter table public."regtype"
+	alter column regtype_isallowallbrand type boolean,
+	ALTER COLUMN regtype_isallowallbrand SET DEFAULT false,
+	ALTER COLUMN regtype_isallowallbrand SET NOT NULL;
+comment on column public."regtype".regtype_isallowallbrand is '';
+
+
+-- =============================================
 -- FIELD: regtype_name text
 -- =============================================
 -- ADD regtype_name
@@ -39,6 +54,21 @@ alter table public."regtype"
 	ALTER COLUMN regtype_name DROP DEFAULT,
 	ALTER COLUMN regtype_name DROP NOT NULL;
 comment on column public."regtype".regtype_name is '';
+
+
+-- =============================================
+-- FIELD: model_id int
+-- =============================================
+-- ADD model_id
+alter table public."regtype" add model_id int  ;
+comment on column public."regtype".model_id is '';
+
+-- MODIFY model_id
+alter table public."regtype"
+	alter column model_id type int,
+	ALTER COLUMN model_id DROP DEFAULT,
+	ALTER COLUMN model_id DROP NOT NULL;
+comment on column public."regtype".model_id is '';
 
 
 -- =============================================
@@ -57,18 +87,48 @@ comment on column public."regtype".regtype_descr is '';
 
 
 -- =============================================
--- FIELD: regtype_isallowallbrand boolean
+-- FIELD: header_valid text
 -- =============================================
--- ADD regtype_isallowallbrand
-alter table public."regtype" add regtype_isallowallbrand boolean not null default false;
-comment on column public."regtype".regtype_isallowallbrand is '';
+-- ADD header_valid
+alter table public."regtype" add header_valid text  ;
+comment on column public."regtype".header_valid is '';
 
--- MODIFY regtype_isallowallbrand
+-- MODIFY header_valid
 alter table public."regtype"
-	alter column regtype_isallowallbrand type boolean,
-	ALTER COLUMN regtype_isallowallbrand SET DEFAULT false,
-	ALTER COLUMN regtype_isallowallbrand SET NOT NULL;
-comment on column public."regtype".regtype_isallowallbrand is '';
+	alter column header_valid type text,
+	ALTER COLUMN header_valid DROP DEFAULT,
+	ALTER COLUMN header_valid DROP NOT NULL;
+comment on column public."regtype".header_valid is '';
+
+
+-- =============================================
+-- FIELD: header_atrow smallint
+-- =============================================
+-- ADD header_atrow
+alter table public."regtype" add header_atrow smallint not null default 1;
+comment on column public."regtype".header_atrow is '';
+
+-- MODIFY header_atrow
+alter table public."regtype"
+	alter column header_atrow type smallint,
+	ALTER COLUMN header_atrow SET DEFAULT 1,
+	ALTER COLUMN header_atrow SET NOT NULL;
+comment on column public."regtype".header_atrow is '';
+
+
+-- =============================================
+-- FIELD: header_mapping json
+-- =============================================
+-- ADD header_mapping
+alter table public."regtype" add header_mapping json not null ;
+comment on column public."regtype".header_mapping is '';
+
+-- MODIFY header_mapping
+alter table public."regtype"
+	alter column header_mapping type json,
+	ALTER COLUMN header_mapping DROP DEFAULT,
+	ALTER COLUMN header_mapping SET NOT NULL;
+comment on column public."regtype".header_mapping is '';
 
 
 -- =============================================
@@ -153,6 +213,25 @@ DROP INDEX IF EXISTS public.idx$public$regtype$_timestamp;
 CREATE INDEX idx$public$regtype$_timestamp ON public.regtype (_timestamp);
 
 
+-- =============================================
+-- FOREIGN KEY CONSTRAINT
+-- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE public."regtype" DROP CONSTRAINT fk$public$regtype$model_id;
+
+
+-- Add Foreign Key Constraint  
+ALTER TABLE public."regtype"
+	ADD CONSTRAINT fk$public$regtype$model_id
+	FOREIGN KEY (model_id)
+	REFERENCES public."model"(model_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS public.idx_fk$public$regtype$model_id;
+CREATE INDEX idx_fk$public$regtype$model_id ON public."regtype"(model_id);	
+
+	
 
 
 -- =============================================

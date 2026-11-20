@@ -31,7 +31,7 @@
         "onAutoForward": "silent"
       },
       "8080": {
-        "label": "Notifier",
+        "label": "Notifier Server",
         "onAutoForward": "silent"
       }
     }

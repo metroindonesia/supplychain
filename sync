@@ -1,3 +1,8 @@
 #!/bin/bash
 
 npm run sync-external-data -- "$@"
+
+
+
+# /home/ubuntu/.gemini/bin/agy --hub --hub-port=35575 --app_data_dir=antigravity --add-dir=/home/ubuntu/Development/metroindonesia/supplychain
+
